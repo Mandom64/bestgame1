@@ -17,6 +17,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Escape)) 
+        {
+            Application.Quit();
+        }
+        
         // Player movement
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
@@ -24,19 +29,6 @@ public class PlayerController : MonoBehaviour
         Vector3 tempVect = new Vector3(h, v, 0);
         tempVect = tempVect.normalized * runningSpeed * Time.deltaTime;
         player.MovePosition(player.transform.position + tempVect);
-
-        // Shoot bullet
-        Vector2 playerPos = player.transform.position;
-
-
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        // Check if the collision involves the "Objects" layer.
-        if (collision.gameObject.tag == "Walls")
-        {
-            Debug.Log("Player collided with an object!");
-        }
-    }
 }
