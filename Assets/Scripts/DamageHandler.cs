@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class DamageHandler : MonoBehaviour
 {
-    public WeaponType weaponType;
+    private WeaponType weaponType;
     
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        HealthSystem objectHit = collision.gameObject.GetComponent<HealthSystem>();
-        int damageAmount = getDamageAmountByType(weaponType);
-        if(objectHit != null)
-        {
-            objectHit.Damage(damageAmount);
+        if(collision.gameObject.CompareTag("Bullet"))
+        {   
+            HealthSystem objectHit = gameObject.GetComponent<HealthSystem>();
+            int damageAmount = getDamageAmountByType(WeaponType.Gun);
+            Debug.Log(objectHit);
+            if(objectHit != null)
+            {
+                Debug.Log(damageAmount);
+                objectHit.Damage(damageAmount);
+            }
         }
 
     }
@@ -23,8 +28,9 @@ public class DamageHandler : MonoBehaviour
         {
             case WeaponType.Gun:
                 return 10;
+            default:
+                return 0;
         }
-        return 0;
     }
 
 }

@@ -20,8 +20,8 @@ public class EnemyController : MonoBehaviour
     [SerializeField] public float timeToFlip = 5f;
     private Rigidbody2D myrb;
     private float timer = 0f;
+    private EnemyState currentState = EnemyState.Idle;
     
-    public EnemyState currentState = EnemyState.Idle;
 
     void Start()
     {
@@ -31,33 +31,35 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
-        
-        if(!isPlayerClose())
-            currentState = EnemyState.Idle;
-        else 
-            currentState = EnemyState.Engaged;
-        Debug.Log(currentState);
-
-        switch (currentState)
+        if(gameObject != null)
         {
-            case(EnemyState.Idle):
-                if(timer >= timeToFlip)
-                {
-                    Vector2 randomDir = RandomVector2(3.1415f*2, 0f);
-                    randomDir = randomDir.normalized * idleSpeed * Time.deltaTime;
-                    myrb.velocity = randomDir;
-                    timer = 0f;
-                }
-                break;
+            timer += Time.deltaTime;
 
-            case(EnemyState.Engaged):
-                var step =  engagedSpeed * Time.deltaTime; // calculate distance to move
-                transform.position = Vector3.MoveTowards(transform.position, 
-                    player.transform.position, step);
-                break;
-        }
-                
+            if(!isPlayerClose())
+                currentState = EnemyState.Idle;
+            else 
+                currentState = EnemyState.Engaged;
+            //Debug.Log(currentState);
+
+            switch (currentState)
+            {
+                case(EnemyState.Idle):
+                    if(timer >= timeToFlip)
+                    {
+                        Vector2 randomDir = RandomVector2(3.1415f*2, 0f);
+                        randomDir = randomDir.normalized * idleSpeed * Time.deltaTime;
+                        myrb.velocity = randomDir;
+                        timer = 0f;
+                    }
+                    break;
+
+                case(EnemyState.Engaged):
+                    var step =  engagedSpeed * Time.deltaTime; // calculate distance to move
+                    transform.position = Vector3.MoveTowards(transform.position, 
+                        player.transform.position, step);
+                    break;
+            }
+        }       
     }
 
     private bool isPlayerClose()

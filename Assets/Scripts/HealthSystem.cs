@@ -18,18 +18,13 @@ public class HealthSystem : MonoBehaviour
 
     public void Damage(int damageAmount)
     {
-        if (gameObject.CompareTag("Player"))
-        {
-            Debug.Log("true");
-            return;
-        }
-
         Debug.Log(health);
         Debug.Log(gameObject.name);
         health -= damageAmount;
         if(health < 0)
         {
             health = 0;
+            Debug.Log(gameObject + " is deleted!");
             Destroy(gameObject);
         }
     }

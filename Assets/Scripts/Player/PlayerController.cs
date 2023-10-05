@@ -26,9 +26,16 @@ public class PlayerController : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        Vector3 tempVect = new Vector3(h, v, 0);
-        tempVect = tempVect.normalized * runningSpeed * Time.deltaTime;
-        player.MovePosition(player.transform.position + tempVect);
+        Vector3 moveDirection = new Vector3(h, v, 0);
+        if(moveDirection != null)
+        {
+            Vector3 moveVector = moveDirection * runningSpeed * Time.deltaTime;
+            player.MovePosition(player.transform.position + moveVector);
+        }
+        else 
+        {
+            player.velocity = Vector3.zero;
+        }
     }
 
 }

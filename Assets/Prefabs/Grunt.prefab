@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d267893d7ee15d4a8afaa85edf634b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthMax: 85
+  healthMax: 40
 --- !u!114 &8267630558220306769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,6 +202,4 @@ MonoBehaviour:
   range: 3
   idleSpeed: 25
   engagedSpeed: 1
-  player: {fileID: 7370725614536340650, guid: 0adebadd19f2e6277b322b841f8f46c5, type: 3}
   timeToFlip: 1
-  currentState: 0

@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     private float timer = 0f;
-    private int spawnCounter = 0;
+    private List<GameObject> enemies = new List<GameObject>();
     [SerializeField]public int spawnLimit = 5;
     [SerializeField]public float timeToSpawn = 5f;
     [SerializeField]public GameObject enemy;
@@ -18,11 +18,20 @@ public class EnemySpawner : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
-        if((timer >= timeToSpawn) && (spawnCounter <= spawnLimit))
+        if((timer >= timeToSpawn) && (enemies.Count < spawnLimit))
         {
-            Instantiate(enemy, transform.position, Quaternion.identity);
-            spawnCounter++;
+            enemies.Add(Instantiate(enemy, transform.position, Quaternion.identity));
             timer = 0f;
         }
+
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            if(enemies[i] == null) 
+            {
+                enemies.RemoveAt(i);
+            }
+        }
+        //Debug.Log(enemies.Count);
     }
+
 }
