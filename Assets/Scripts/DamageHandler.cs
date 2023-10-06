@@ -14,11 +14,10 @@ public class DamageHandler : MonoBehaviour
         {   
             HealthSystem objectHit = gameObject.GetComponent<HealthSystem>();
             int damageAmount = getDamageAmountByType(WeaponType.Gun);
-            Debug.Log(objectHit);
             if(objectHit != null)
             {
-                Debug.Log(damageAmount);
                 objectHit.Damage(damageAmount);
+                Debug.Log(objectHit + " took " + damageAmount + " from a bullet");
             }
         }
         // Check if the collision is with an object on the "Wall" layer
@@ -29,12 +28,12 @@ public class DamageHandler : MonoBehaviour
             {
                 // Calculate damage based on velocity
                 float velocityMagnitude = collision.relativeVelocity.magnitude;
-                int damageAmmount = Mathf.RoundToInt(baseWallDamage + 
+                int damageAmount = Mathf.RoundToInt(baseWallDamage + 
                     velocityMagnitude * wallDamageMultiplier);
 
                 // Apply damage to the player
-                objectHit.Damage(damageAmmount);
-                Debug.Log(objectHit + " hit wall with " + damageAmmount);
+                objectHit.Damage(damageAmount);
+                Debug.Log(objectHit + " took " + damageAmount + " from a wall");
             }
         }
     }
