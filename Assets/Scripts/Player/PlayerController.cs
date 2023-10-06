@@ -4,38 +4,30 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
-    public Rigidbody2D player;
-    public float runningSpeed = 20.0f;
+    public Rigidbody2D my_rb;
+    public float moveSpeed = 5.0f;
 
     // Start is called before the first frame update
     void Start()
     {
-        player = GetComponent<Rigidbody2D>();
+        my_rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Close game if escape is pressed 
         if(Input.GetKeyDown(KeyCode.Escape)) 
         {
             Application.Quit();
         }
         
-        // Player movement
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
+        // Store user input as a movement vector
+        Vector3 userInput = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
 
-        Vector3 moveDirection = new Vector3(h, v, 0);
-        if(moveDirection != null)
-        {
-            Vector3 moveVector = moveDirection * runningSpeed * Time.deltaTime;
-            player.MovePosition(player.transform.position + moveVector);
-        }
-        else 
-        {
-            player.velocity = Vector3.zero;
-        }
+        // Apply the movement vector to the current position, which is
+        // multiplied by deltaTime and speed for a smooth MovePosition
+        my_rb.MovePosition(transform.position + userInput * moveSpeed * Time.deltaTime);
     }
 
 }

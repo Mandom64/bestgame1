@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7562215725066220184}
   - component: {fileID: 8267630558220306769}
   - component: {fileID: 4381312366579834403}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Grunt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,7 +173,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d267893d7ee15d4a8afaa85edf634b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthMax: 40
+  healthBar: {fileID: 0}
+  healthMax: 120
 --- !u!114 &8267630558220306769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,7 +187,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef04cca93bc19d744b739df1e360b48d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponType: 0
 --- !u!114 &4381312366579834403
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,5 +1,7 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthSystem : MonoBehaviour
 {
@@ -11,20 +13,20 @@ public class HealthSystem : MonoBehaviour
         this.health = healthMax;
     }
 
-    public int getHealth()
-    {
-        return health;
-    }
+    public int getHealth() { return health;}
+    public int getHealthMax() { return healthMax;}
 
     public void Damage(int damageAmount)
     {
-        Debug.Log(health);
-        Debug.Log(gameObject.name);
+        Debug.Log(gameObject.name + " took " + 
+            damageAmount + " damage!");
+
         health -= damageAmount;
+
         if(health < 0)
         {
-            health = 0;
             Debug.Log(gameObject + " is deleted!");
+            health = 0;
             Destroy(gameObject);
         }
     }

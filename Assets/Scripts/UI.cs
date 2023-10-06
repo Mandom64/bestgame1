@@ -10,10 +10,13 @@ public class UI : MonoBehaviour
     public float updateInterval = 0.5f;
     private float timer = 0f;
     public TextMeshProUGUI fpsCounter;
-    public TextMeshProUGUI healthBar;
+    public TextMeshProUGUI healthBarText;
+    public Slider healthBar;
+
     // Update is called once per frame
     void Update()
     {
+        // update FPS counter 
         timer += Time.deltaTime;
         if(timer >= updateInterval)
         {
@@ -21,14 +24,23 @@ public class UI : MonoBehaviour
             fpsCounter.text = currentFrameRate.ToString("0.00");
             timer = 0f;
         }
-        GameObject playerGameObject = GameObject.FindGameObjectWithTag("Player");
-        if(playerGameObject != null)
+        
+        updateHealthBarUI();   
+    }
+
+    public void updateHealthBarUI()
+    {
+        // Healthbar slider and text update
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if(playerObj != null)
         {
-            HealthSystem playerHealth = playerGameObject.GetComponent<HealthSystem>();
+            HealthSystem playerHealth = playerObj.GetComponent<HealthSystem>();
             if(playerHealth != null)
             {
-                healthBar.text = playerHealth.getHealth().ToString();
+                healthBarText.text = playerHealth.getHealth().ToString();
             }
+            float healthPercentage = (float)playerHealth.getHealth() / (float)playerHealth.getHealthMax();
+            healthBar.value = healthPercentage;          
         }
     }
 }
