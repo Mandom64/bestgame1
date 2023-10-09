@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum EnemyState
     {
@@ -19,6 +20,8 @@ public class EnemyController : MonoBehaviour
     private GameObject player;
     [SerializeField] public float timeToFlip = 5f;
     private Rigidbody2D myrb;
+    public Slider healthBar;
+    private RectTransform healthBarTransform;
     private float timer = 0f;
     private EnemyState currentState = EnemyState.Idle;
     
@@ -27,6 +30,7 @@ public class EnemyController : MonoBehaviour
     {
         player = GameObject.FindWithTag("Player");
         myrb = GetComponent<Rigidbody2D>();
+        healthBarTransform = healthBar.GetComponent<RectTransform>();
     }
     // Update is called once per frame
     void Update()
@@ -34,6 +38,8 @@ public class EnemyController : MonoBehaviour
         if(gameObject != null)
         {
             timer += Time.deltaTime;
+
+            showHealthBar();
 
             if(!isPlayerClose())
                 currentState = EnemyState.Idle;
@@ -71,9 +77,25 @@ public class EnemyController : MonoBehaviour
             return true;
     }
 
+    private void showHealthBar()
+    {
+        // Healthbar slider and text update
+        if(gameObject != null)
+        {
+            HealthSystem playerHealth = gameObject.GetComponent<HealthSystem>();
+            float healthPercentage = (float)playerHealth.getHealth() / (float)playerHealth.getHealthMax();
+            healthBar.value = healthPercentage;     
+            Vector2 screenPos = Camera.main.WorldToScreenPoint(transform.position);
+            Vector2 aboveSprite = screenPos;
+            aboveSprite.y += 25f;
+            // Update the position of the Slider's RectTransform
+            healthBarTransform.position = aboveSprite;     
+        }
+    }
     public Vector2 RandomVector2(float angle, float angleMin)
     {
         float random = UnityEngine.Random.value * angle + angleMin;
         return new Vector2(Mathf.Cos(random), Mathf.Sin(random));
     }
+    
 }

@@ -4,20 +4,30 @@ using UnityEngine;
 
 public class DamageHandler : MonoBehaviour
 {    
-    private WeaponType weaponType;
     public float baseWallDamage = 10.0f;
     public float wallDamageMultiplier = 7.5f;
     
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.CompareTag("Bullet"))
+        if (collision.gameObject.CompareTag("Bullet"))
         {   
             HealthSystem objectHit = gameObject.GetComponent<HealthSystem>();
-            int damageAmount = getDamageAmountByType(WeaponType.Gun);
+            float damageAmount = collision.gameObject.GetComponent<Damage>().damage;
             if(objectHit != null)
             {
                 objectHit.Damage(damageAmount);
-                Debug.Log(objectHit + " took " + damageAmount + " from a bullet");
+                Debug.Log(objectHit + " took " + damageAmount + " from a Bullet()");
+            }
+        }
+
+        if(collision.gameObject.CompareTag("Pellet"))
+        {   
+            HealthSystem objectHit = gameObject.GetComponent<HealthSystem>();
+            float damageAmount = collision.gameObject.GetComponent<Damage>().damage;
+            if(objectHit != null)
+            {
+                objectHit.Damage(damageAmount);
+                Debug.Log(objectHit + " took " + damageAmount + " from a Pellet[]");
             }
         }
         // Check if the collision is with an object on the "Wall" layer
@@ -33,19 +43,10 @@ public class DamageHandler : MonoBehaviour
 
                 // Apply damage to the player
                 objectHit.Damage(damageAmount);
-                Debug.Log(objectHit + " took " + damageAmount + " from a wall");
+                Debug.Log(objectHit + " took " + damageAmount + " from a WALL##");
             }
         }
     }
 
-    private int getDamageAmountByType(WeaponType weaponType)
-    {
-        switch(weaponType)
-        {
-            case WeaponType.Gun:
-                return 20;
-            default:
-                return 0;
-        }
-    }
+  
 }

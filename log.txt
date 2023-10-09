@@ -1,3 +1,6 @@
 Day to-do tasks!
 
-    3. Shove on wall mechanic prototype.
+    2.Gravity gun
+    4.Inventory system
+    5.HP/DMG system improvement
+    6.Enemy attack player

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6743292310605603481}
   - component: {fileID: 6469815668795011040}
   - component: {fileID: 4104631286273411124}
+  - component: {fileID: 2176839742027734491}
   m_Layer: 7
   m_Name: bullet
   m_TagString: Bullet
@@ -77,7 +78,7 @@ SpriteRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.990566, g: 0.7966605, b: 0.023362402, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -161,3 +162,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef04cca93bc19d744b739df1e360b48d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseWallDamage: 10
+  wallDamageMultiplier: 7.5
+--- !u!114 &2176839742027734491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3261428201285270749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 510b06d4b9487884b9dd50958eedb1df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 12.5

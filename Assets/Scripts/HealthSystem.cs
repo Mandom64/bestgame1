@@ -5,18 +5,16 @@ using UnityEngine.UI;
 
 public class HealthSystem : MonoBehaviour
 {
-    public int healthMax = 100;
-    private int health;
+    public float healthMax = 100;
+    private float health;
 
     public void Start()
     {
         this.health = healthMax;
     }
-
-    public int getHealth() { return health;}
-    public int getHealthMax() { return healthMax;}
-
-    public void Damage(int damageAmount)
+    public float getHealth() { return health;}
+    public float getHealthMax() { return healthMax;}
+    public void Damage(float damageAmount)
     {
         // Debug.Log(gameObject.name + " took " + 
         //     damageAmount + " damage!");
@@ -29,7 +27,6 @@ public class HealthSystem : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
     public void Heal(int healAmount)
     {
         health += healAmount;
