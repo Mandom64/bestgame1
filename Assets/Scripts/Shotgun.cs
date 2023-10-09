@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Shotgun : MonoBehaviour
 {
+    [Header("Shotgun parameters")]
     public GameObject pellet;
     public int pelletCount = 5;
     public float pelletSpeed = 1.0f;
     public float pelletDeathTimer = 3.0f;
-    public float spreadAmmount = 1.0f;
+    public float spread = 1.0f;
     public float cooldownTimer = 0.25f;
     private float timer = 0.0f;
 
@@ -41,7 +42,7 @@ public class Shotgun : MonoBehaviour
         Vector2 shootDir = (mousePos - transform.position).normalized;
         for (int i = 0; i < pelletCount; i++)
         {  
-            shootDir = RotateVector2(shootDir, spreadAmmount).normalized;
+            shootDir = RotateVector2(shootDir, spread).normalized;
             GameObject pelletInstance = Instantiate(pellet, transform.position, Quaternion.identity);
             Rigidbody2D rb_pellet = pelletInstance.GetComponent<Rigidbody2D>();
             rb_pellet.velocity = shootDir * pelletSpeed;

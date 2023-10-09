@@ -101,5 +101,5 @@ MonoBehaviour:
   pelletCount: 5
   pelletSpeed: 15
   pelletDeathTimer: 1.5
-  spreadAmmount: 2.5
+  spread: 3.75
   cooldownTimer: 1

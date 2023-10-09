@@ -32,7 +32,7 @@ public class EnemyController : MonoBehaviour
         myrb = GetComponent<Rigidbody2D>();
         healthBarTransform = healthBar.GetComponent<RectTransform>();
     }
-    // Update is called once per frame
+
     void Update()
     {
         if(gameObject != null)
@@ -92,6 +92,7 @@ public class EnemyController : MonoBehaviour
             healthBarTransform.position = aboveSprite;     
         }
     }
+    
     public Vector2 RandomVector2(float angle, float angleMin)
     {
         float random = UnityEngine.Random.value * angle + angleMin;

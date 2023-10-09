@@ -16,6 +16,7 @@ public class DamageHandler : MonoBehaviour
             if(objectHit != null)
             {
                 objectHit.Damage(damageAmount);
+                Destroy(collision.gameObject);
                 Debug.Log(objectHit + " took " + damageAmount + " from a Bullet()");
             }
         }
@@ -27,6 +28,7 @@ public class DamageHandler : MonoBehaviour
             if(objectHit != null)
             {
                 objectHit.Damage(damageAmount);
+                Destroy(collision.gameObject);
                 Debug.Log(objectHit + " took " + damageAmount + " from a Pellet[]");
             }
         }
