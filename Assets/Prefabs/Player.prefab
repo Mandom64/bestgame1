@@ -174,7 +174,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   my_rb: {fileID: 7501896838270304041}
+  inventoryObject: {fileID: 6783265323322517004, guid: 8f6d4aa6ceedf96aa9cd371d8fd97ab7, type: 3}
   moveSpeed: 5
+  grabbableLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  grabDistance: 2.5
 --- !u!114 &5188328213404047388
 MonoBehaviour:
   m_ObjectHideFlags: 0

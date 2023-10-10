@@ -9,6 +9,12 @@ public class FollowPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Close game if escape is pressed 
+        if(Input.GetKeyDown(KeyCode.Escape)) 
+        {
+            Application.Quit();
+        }
+        
         transform.position = player.transform.position + new Vector3(0, 0, -5);
     }
 }

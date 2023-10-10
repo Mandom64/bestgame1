@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Shotgun : MonoBehaviour
 {
+    public Rigidbody2D my_rb;
     [Header("Shotgun parameters")]
     public GameObject pellet;
     public int pelletCount = 5;
@@ -13,9 +14,10 @@ public class Shotgun : MonoBehaviour
     public float cooldownTimer = 0.25f;
     private float timer = 0.0f;
 
+
     void Start()
     {
-
+        my_rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
