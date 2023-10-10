@@ -30146,6 +30146,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5670927908337547577, guid: 915a041a7b40eefefb4cc991441328b1, type: 3}
+      propertyPath: pelletCount
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 5670927908337547577, guid: 915a041a7b40eefefb4cc991441328b1, type: 3}
+      propertyPath: cooldownTimer
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 6003959164437050122, guid: 915a041a7b40eefefb4cc991441328b1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.19
@@ -30245,11 +30253,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4201346298903201681, guid: 52cf783ca3e5dc7afb7b678958a351ce, type: 3}
       propertyPath: spawnLimit
-      value: 10
+      value: 9999999
       objectReference: {fileID: 0}
     - target: {fileID: 4201346298903201681, guid: 52cf783ca3e5dc7afb7b678958a351ce, type: 3}
       propertyPath: timeToSpawn
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5322838257044725567, guid: 52cf783ca3e5dc7afb7b678958a351ce, type: 3}
       propertyPath: m_Name
