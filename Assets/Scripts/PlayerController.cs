@@ -3,17 +3,35 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
+
 public class PlayerController : MonoBehaviour
 {
+    private KeyCode[] keyboardNumbers = {
+        KeyCode.Alpha1,
+        KeyCode.Alpha2,
+        KeyCode.Alpha3,
+        KeyCode.Alpha4,
+        KeyCode.Alpha5,
+        KeyCode.Alpha6,
+        KeyCode.Alpha7,
+        KeyCode.Alpha8,
+        KeyCode.Alpha9,
+        KeyCode.Alpha0,
+    };
+
     [Header("Player parameters")]
     public Rigidbody2D my_rb;
     public GameObject inventoryObject;
     public float moveSpeed = 5.0f;
+    [Header("Audio sounds")]
+    public AudioSource dashSound;
+    public AudioSource itemTakenSound;
     private List<GameObject> inventory;
     private int currItem = 0;
     [Header("Grabbing parameters")]
     public LayerMask grabbableLayer;
     public float grabDistance = 2.5f;
+    public float grabCooldown = 1f;
     [Header("Dashing parameters")]
     public float dashForce = 50.0f;
     public float dashTime = 0.25f;
@@ -33,37 +51,57 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        timer += Time.deltaTime;
         if(!isDashing)
             MovePlayer();
 
-        if (Input.GetKey(KeyCode.E))
-            GrabObject();
-        if (Input.mouseScrollDelta.y != 0f)
-            SwapItems();
-        if (Input.GetKey(KeyCode.Space) 
-            && !isDashing && timer >= dashCooldown)
-        {
-            StartCoroutine(Dash());
-            timer = 0f;
-        }
-
         // Debugging button
-        if (Input.GetKey(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.T))
         {
             for(int i = 0; i < inventory.Count; i++)
             {
                 Debug.Log("Item " + i + " is " + inventory[i]);
             }
         }
-        Debug.Log(isDashing);
+    }
+
+    private void Update()
+    {
+        timer += Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.Space)
+            && !isDashing && timer >= dashCooldown)
+        {
+            StartCoroutine(Dash());
+            timer = 0f;
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && timer >= grabCooldown)
+        {
+            GrabObject();
+            timer = 0f;
+        }
+
+        if (Input.mouseScrollDelta.y != 0f)
+            ScrollSwapItems();
+        for (int i = 0; i < keyboardNumbers.Length; i++)
+        {
+            if (Input.GetKeyDown(keyboardNumbers[i]))
+            {
+                if (inventory.Count > 0)
+                {
+                    inventory[currItem].SetActive(false);
+                    inventory[i].SetActive(true);
+                    currItem = i;
+                    break;
+                }
+            }
+        }
     }
 
     public void MovePlayer()
     {
         Vector2 movement = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         movement.Normalize();
-        Debug.Log(movement);
         if(movement != Vector2.zero)
             my_rb.velocity = movement * moveSpeed;
         else
@@ -72,13 +110,21 @@ public class PlayerController : MonoBehaviour
 
     public void GrabObject()
     {
-        // Check if grabbable item is in front and grab it
+        // Check if grabbable item is around and grab it
         RaycastHit2D hit = Physics2D.Raycast(transform.position,
+            transform.up, grabDistance, grabbableLayer);
+        if(hit.collider == null)
+            hit = Physics2D.Raycast(transform.position,
             transform.right, grabDistance, grabbableLayer);
+        if(hit.collider == null)
+            hit = Physics2D.Raycast(transform.position,
+            -transform.up, grabDistance, grabbableLayer);
+        if (hit.collider == null)
+            hit = Physics2D.Raycast(transform.position,
+            -transform.right, grabDistance, grabbableLayer);
 
         if (hit.collider != null)
         {
-            Debug.Log("check");
             if (inventory.Count != 0)
             {
                 Debug.Log("currItem=" + currItem);
@@ -93,10 +139,14 @@ public class PlayerController : MonoBehaviour
             inventory.Add(grabbedObject);
             currItem = inventory.Count - 1;
             Debug.Log("current item is " + currItem);
+
+            if(itemTakenSound != null)
+                itemTakenSound.Play();
         }
         inventory[currItem].SetActive(true);
+
     }
-    public void SwapItems()
+    public void ScrollSwapItems()
     {
         // Check if scroll wheel is moved, 
         // then change current item used by player
@@ -113,16 +163,15 @@ public class PlayerController : MonoBehaviour
             }
             inventory[currItem].SetActive(true);
         }
-        
     }
 
-    //method to dash
     private IEnumerator Dash()
     {
         isDashing = true;
         my_rb.AddForce(my_rb.velocity * dashForce);
         yield return new WaitForSeconds(dashTime);
-        Debug.Log("dashed");
+        if(dashSound != null)
+            dashSound.Play();
         isDashing = false;
     }
 }

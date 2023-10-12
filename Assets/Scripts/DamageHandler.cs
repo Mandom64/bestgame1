@@ -6,7 +6,11 @@ public class DamageHandler : MonoBehaviour
 {    
     public float baseWallDamage = 10.0f;
     public float wallDamageMultiplier = 7.5f;
-    
+
+    public void Start()
+    {
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Bullet"))
@@ -34,7 +38,7 @@ public class DamageHandler : MonoBehaviour
         }
         // Check if the collision is with an object on the "Wall" layer
         if (collision.gameObject.CompareTag("Walls"))
-        {
+        {   
             HealthSystem objectHit = gameObject.GetComponent<HealthSystem>();
             if(objectHit != null)
             {

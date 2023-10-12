@@ -1,16 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class Shotgun : MonoBehaviour
 {
     public Rigidbody2D my_rb;
+    private AudioSource fireAudio;
     [Header("Shotgun parameters")]
     public GameObject pellet;
     public int pelletCount = 5;
     public float pelletSpeed = 1.0f;
+    public float pelletRandSpeed = 1.0f;
     public float pelletDeathTimer = 3.0f;
-    public float spread = 1.0f;
+    public float spread = 5.0f;
     public float cooldownTimer = 0.25f;
     private float timer = 0.0f;
 
@@ -18,6 +21,7 @@ public class Shotgun : MonoBehaviour
     void Start()
     {
         my_rb = GetComponent<Rigidbody2D>();
+        fireAudio = gameObject.GetComponent<AudioSource>();
     }
 
     void Update()
@@ -42,13 +46,24 @@ public class Shotgun : MonoBehaviour
     {
         Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
         Vector2 shootDir = (mousePos - transform.position).normalized;
+
         for (int i = 0; i < pelletCount; i++)
-        {  
-            shootDir = RotateVector2(shootDir, spread).normalized;
+        {
+            // Create random spread by alternating positive and negative angles
+            int randValue = Random.Range(0, 2);
+            if (randValue == 1)
+                shootDir = RotateVector2(shootDir, spread);
+            else
+                shootDir = RotateVector2(shootDir, -spread);
             GameObject pelletInstance = Instantiate(pellet, transform.position, Quaternion.identity);
             Rigidbody2D rb_pellet = pelletInstance.GetComponent<Rigidbody2D>();
-            rb_pellet.velocity = shootDir * pelletSpeed;
+            rb_pellet.AddForce(shootDir * randomPelletSpeed());
             Destroy(pelletInstance, pelletDeathTimer);
+        }
+        
+        if(fireAudio != null)
+        {
+            fireAudio.Play();
         }
     }
     private void EnableAiming()
@@ -75,6 +90,16 @@ public class Shotgun : MonoBehaviour
         float y = vector.x * Mathf.Sin(angleRadians) + vector.y * Mathf.Cos(angleRadians);
 
         return new Vector2(x, y);
+    }
+    public float randomPelletSpeed()
+    {
+        int randValue = Random.Range(0, 2);
+
+        if (randValue == 1)
+            return Random.Range(pelletSpeed, pelletSpeed + pelletRandSpeed);
+        else
+            return Random.Range(pelletSpeed, pelletSpeed - pelletRandSpeed);
+
     }
 
 }
