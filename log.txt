@@ -1,6 +1,4 @@
 Day to-do tasks!
 
-    2.Gravity gun
-    4.Inventory system
-    5.HP/DMG system improvement
-    6.Enemy attack player
+    1. Animations
+

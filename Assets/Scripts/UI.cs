@@ -36,7 +36,7 @@ public class UI : MonoBehaviour
         if(timer >= updateInterval)
         {
             currentFrameRate = 1.0f / Time.deltaTime;
-            fpsCounter.text = currentFrameRate.ToString("0.00");
+            fpsCounter.text = "FPS: " + currentFrameRate.ToString("0.00");
             timer = 0f;
         }
     }

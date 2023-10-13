@@ -55,7 +55,7 @@ public class Shotgun : MonoBehaviour
                 shootDir = RotateVector2(shootDir, spread);
             else
                 shootDir = RotateVector2(shootDir, -spread);
-            GameObject pelletInstance = Instantiate(pellet, transform.position, Quaternion.identity);
+            GameObject pelletInstance = Instantiate(pellet, transform.position, transform.rotation);
             Rigidbody2D rb_pellet = pelletInstance.GetComponent<Rigidbody2D>();
             rb_pellet.AddForce(shootDir * randomPelletSpeed());
             Destroy(pelletInstance, pelletDeathTimer);
@@ -66,6 +66,7 @@ public class Shotgun : MonoBehaviour
             fireAudio.Play();
         }
     }
+
     private void EnableAiming()
     {
         Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);

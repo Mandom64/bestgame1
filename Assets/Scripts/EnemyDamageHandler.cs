@@ -13,34 +13,35 @@ public class DamageHandler : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Bullet"))
+        GameObject objectHit = collision.gameObject;
+        if (objectHit.CompareTag("Bullet"))
         {   
-            HealthSystem objectHit = gameObject.GetComponent<HealthSystem>();
-            float damageAmount = collision.gameObject.GetComponent<Damage>().damage;
-            if(objectHit != null)
+            HealthSystem myHP = gameObject.GetComponent<HealthSystem>();
+            float damageAmount = objectHit.GetComponent<Damage>().damage;
+            if(myHP != null)
             {
-                objectHit.Damage(damageAmount);
-                Destroy(collision.gameObject);
-                Debug.Log(objectHit + " took " + damageAmount + " from a Bullet()");
+                myHP.Damage(damageAmount);
+                Destroy(objectHit);
+                Debug.Log(myHP + " took " + damageAmount + " from a Bullet()");
             }
         }
 
-        if(collision.gameObject.CompareTag("Pellet"))
+        if(objectHit.CompareTag("Pellet"))
         {   
-            HealthSystem objectHit = gameObject.GetComponent<HealthSystem>();
-            float damageAmount = collision.gameObject.GetComponent<Damage>().damage;
-            if(objectHit != null)
+            HealthSystem myHP = gameObject.GetComponent<HealthSystem>();
+            float damageAmount = objectHit.GetComponent<Damage>().damage;
+            if(myHP != null)
             {
-                objectHit.Damage(damageAmount);
-                Destroy(collision.gameObject);
+                myHP.Damage(damageAmount);
+                Destroy(objectHit);
                 Debug.Log(objectHit + " took " + damageAmount + " from a Pellet[]");
             }
         }
         // Check if the collision is with an object on the "Wall" layer
-        if (collision.gameObject.CompareTag("Walls"))
+        if (objectHit.CompareTag("Walls"))
         {   
-            HealthSystem objectHit = gameObject.GetComponent<HealthSystem>();
-            if(objectHit != null)
+            HealthSystem myHP = gameObject.GetComponent<HealthSystem>();
+            if(myHP != null)
             {
                 // Calculate damage based on velocity
                 float velocityMagnitude = collision.relativeVelocity.magnitude;
@@ -48,7 +49,7 @@ public class DamageHandler : MonoBehaviour
                     velocityMagnitude * wallDamageMultiplier);
 
                 // Apply damage to the player
-                objectHit.Damage(damageAmount);
+                myHP.Damage(damageAmount);
                 Debug.Log(objectHit + " took " + damageAmount + " from a WALL##");
             }
         }

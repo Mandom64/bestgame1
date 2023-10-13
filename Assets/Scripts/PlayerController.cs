@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private KeyCode[] keyboardNumbers = {
+    private KeyCode[] inventoryNumbers = {
         KeyCode.Alpha1,
         KeyCode.Alpha2,
         KeyCode.Alpha3,
@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D my_rb;
     public GameObject inventoryObject;
     public float moveSpeed = 5.0f;
+    public float baseWallDamage = 1f;
+    public float wallDamageMultiplier = 10f;
     [Header("Audio sounds")]
     public AudioSource dashSound;
     public AudioSource itemTakenSound;
@@ -41,7 +43,7 @@ public class PlayerController : MonoBehaviour
                                                                 
     void Start()
     {
-        Application.targetFrameRate = 9999;
+        Application.targetFrameRate = 1000;
         Inventory g_inventory = inventoryObject.GetComponent<Inventory>();
         inventory = g_inventory.inventoryList;
         currItem = g_inventory.currItem;
@@ -83,9 +85,9 @@ public class PlayerController : MonoBehaviour
 
         if (Input.mouseScrollDelta.y != 0f)
             ScrollSwapItems();
-        for (int i = 0; i < keyboardNumbers.Length; i++)
+        for (int i = 0; i < inventoryNumbers.Length; i++)
         {
-            if (Input.GetKeyDown(keyboardNumbers[i]))
+            if (Input.GetKeyDown(inventoryNumbers[i]))
             {
                 if (inventory.Count > 0)
                 {
@@ -143,8 +145,8 @@ public class PlayerController : MonoBehaviour
             if(itemTakenSound != null)
                 itemTakenSound.Play();
         }
-        inventory[currItem].SetActive(true);
-
+        if(inventory.Count != 0)
+            inventory[currItem].SetActive(true);
     }
     public void ScrollSwapItems()
     {
@@ -165,6 +167,39 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Handle damage
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        GameObject objectHit = collision.gameObject;
+        if (objectHit.layer == LayerMask.NameToLayer("Enemy Projectiles"))
+        {
+            if (objectHit.CompareTag("Bullet"))
+            {
+                HealthSystem playerHP = gameObject.GetComponent<HealthSystem>();
+                float damageAmount = objectHit.gameObject.GetComponent<Damage>().damage;
+                if (playerHP != null)
+                {
+                    playerHP.Damage(damageAmount);
+                    Destroy(objectHit);
+                    Debug.Log(playerHP + " took " + damageAmount + " from a Bullet()");
+                }
+            }
+
+            if (objectHit.gameObject.CompareTag("Pellet"))
+            {
+                HealthSystem objectHitHealth = gameObject.GetComponent<HealthSystem>();
+                float damageAmount = objectHit.gameObject.GetComponent<Damage>().damage;
+                if (objectHitHealth != null)
+                {
+                    objectHitHealth.Damage(damageAmount);
+                    Destroy(objectHit);
+                    Debug.Log(objectHitHealth + " took " + damageAmount + " from a Pellet[]");
+                }
+            }
+            
+        }
+    }
+    
     private IEnumerator Dash()
     {
         isDashing = true;
