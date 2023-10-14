@@ -18,6 +18,7 @@ public class UI : MonoBehaviour
 
     void Start()
     {
+        InventoryImage.enabled = false;
         playerObject = GameObject.FindGameObjectWithTag("Player");
     }
 
@@ -60,9 +61,15 @@ public class UI : MonoBehaviour
         Inventory inventory = inventoryObject.GetComponent<Inventory>();
         if(inventory != null && inventory.inventoryList.Count > 0)
         {
+            InventoryImage.enabled = true;
+            int itemToShow = playerObject.GetComponent<PlayerController>().currItem;
             SpriteRenderer currItemImage = 
-                inventory.inventoryList[inventory.currItem].GetComponent<SpriteRenderer>();
+                inventory.inventoryList[itemToShow].GetComponent<SpriteRenderer>();
             InventoryImage.sprite = currItemImage.sprite;
+        }
+        else if (inventory.inventoryList.Count == 0)
+        {
+            InventoryImage.enabled = false;
         }
     }
 }

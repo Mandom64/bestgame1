@@ -43,6 +43,14 @@ public class Revolver : MonoBehaviour
         Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
         Vector3 aimDir = (mousePos - transform.position).normalized;
         float angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
+        if (angle > 90f)
+        {
+            gameObject.GetComponent<SpriteRenderer>().flipY = true;
+        }
+        else
+        {
+            gameObject.GetComponent<SpriteRenderer>().flipY = false;
+        }
         transform.eulerAngles = new Vector3(0, 0, angle);
     }
 

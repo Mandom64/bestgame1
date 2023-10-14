@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Shotgun : MonoBehaviour
 {
-    public Rigidbody2D my_rb;
+    public Rigidbody2D body;
     private AudioSource fireAudio;
     [Header("Shotgun parameters")]
     public GameObject pellet;
@@ -20,7 +20,7 @@ public class Shotgun : MonoBehaviour
 
     void Start()
     {
-        my_rb = GetComponent<Rigidbody2D>();
+        body = GetComponent<Rigidbody2D>();
         fireAudio = gameObject.GetComponent<AudioSource>();
     }
 
@@ -72,6 +72,10 @@ public class Shotgun : MonoBehaviour
         Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
         Vector3 aimDir = (mousePos - transform.position).normalized;
         float angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
+        if(angle > 90f)
+            gameObject.GetComponent<SpriteRenderer>().flipY = true;
+        else
+            gameObject.GetComponent<SpriteRenderer>().flipY = false;
         transform.eulerAngles = new Vector3(0, 0, angle);
     }
 

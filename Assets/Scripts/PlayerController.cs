@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     };
 
     [Header("Player parameters")]
-    public Rigidbody2D my_rb;
+    public Rigidbody2D body;
     public GameObject inventoryObject;
     public float moveSpeed = 5.0f;
     public float baseWallDamage = 1f;
@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     public AudioSource dashSound;
     public AudioSource itemTakenSound;
     private List<GameObject> inventory;
-    private int currItem = 0;
+    public int currItem = 0;
     [Header("Grabbing parameters")]
     public LayerMask grabbableLayer;
     public float grabDistance = 2.5f;
@@ -46,8 +46,7 @@ public class PlayerController : MonoBehaviour
         Application.targetFrameRate = 1000;
         Inventory g_inventory = inventoryObject.GetComponent<Inventory>();
         inventory = g_inventory.inventoryList;
-        currItem = g_inventory.currItem;
-        my_rb = GetComponent<Rigidbody2D>();
+        body = GetComponent<Rigidbody2D>();
         grabbableLayer = LayerMask.GetMask("Grabbable Items");
     }
 
@@ -69,6 +68,8 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         timer += Time.deltaTime;
+
+        FlipSprites();
 
         if (Input.GetKeyDown(KeyCode.Space)
             && !isDashing && timer >= dashCooldown)
@@ -105,9 +106,18 @@ public class PlayerController : MonoBehaviour
         Vector2 movement = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         movement.Normalize();
         if(movement != Vector2.zero)
-            my_rb.velocity = movement * moveSpeed;
+            body.velocity = movement * moveSpeed;
         else
-            my_rb.velocity = Vector2.zero;
+            body.velocity = Vector2.zero;
+    }
+
+    public void FlipSprites()
+    {
+        float horizontalInput = Input.GetAxis("Horizontal");
+        if(horizontalInput > 0f)
+            body.GetComponent<SpriteRenderer>().flipX = false;
+        else if(horizontalInput < 0f)
+            body.GetComponent<SpriteRenderer>().flipX = true;
     }
 
     public void GrabObject()
@@ -184,18 +194,6 @@ public class PlayerController : MonoBehaviour
                     Debug.Log(playerHP + " took " + damageAmount + " from a Bullet()");
                 }
             }
-
-            if (objectHit.gameObject.CompareTag("Pellet"))
-            {
-                HealthSystem objectHitHealth = gameObject.GetComponent<HealthSystem>();
-                float damageAmount = objectHit.gameObject.GetComponent<Damage>().damage;
-                if (objectHitHealth != null)
-                {
-                    objectHitHealth.Damage(damageAmount);
-                    Destroy(objectHit);
-                    Debug.Log(objectHitHealth + " took " + damageAmount + " from a Pellet[]");
-                }
-            }
             
         }
     }
@@ -203,7 +201,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator Dash()
     {
         isDashing = true;
-        my_rb.AddForce(my_rb.velocity * dashForce);
+        body.AddForce(body.velocity * dashForce);
         yield return new WaitForSeconds(dashTime);
         if(dashSound != null)
             dashSound.Play();

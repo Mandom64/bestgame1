@@ -22,7 +22,7 @@ public class DamageHandler : MonoBehaviour
             {
                 myHP.Damage(damageAmount);
                 Destroy(objectHit);
-                Debug.Log(myHP + " took " + damageAmount + " from a Bullet()");
+                Debug.Log(gameObject.name + " took " + damageAmount + " from a Bullet");
             }
         }
 
@@ -34,7 +34,7 @@ public class DamageHandler : MonoBehaviour
             {
                 myHP.Damage(damageAmount);
                 Destroy(objectHit);
-                Debug.Log(objectHit + " took " + damageAmount + " from a Pellet[]");
+                Debug.Log(gameObject.name + " took " + damageAmount + " from a Pellet");
             }
         }
         // Check if the collision is with an object on the "Wall" layer
@@ -50,7 +50,7 @@ public class DamageHandler : MonoBehaviour
 
                 // Apply damage to the player
                 myHP.Damage(damageAmount);
-                Debug.Log(objectHit + " took " + damageAmount + " from a WALL##");
+                Debug.Log(gameObject.name + " took " + damageAmount + " from a WALL");
             }
         }
     }

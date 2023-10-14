@@ -77,8 +77,7 @@ public class EnemyController : MonoBehaviour
                         var step = engagedSpeed * Time.deltaTime; 
                         transform.position = Vector3.MoveTowards(transform.position,
                             player.transform.position, step);
-
-                        if(timer >= cooldownTimer)
+                        if (timer >= cooldownTimer)
                         {
                             Shoot(player);
                             timer = 0f;
@@ -94,6 +93,9 @@ public class EnemyController : MonoBehaviour
 
     private bool isPlayerClose()
     {
+        if(player == null)
+            return false;
+
         float distance = Vector3.Distance(transform.position, player.transform.position);
         if(distance >= range)
             return false;

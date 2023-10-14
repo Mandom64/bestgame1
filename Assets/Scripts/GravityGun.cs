@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class GravityGun : MonoBehaviour
 {
@@ -43,7 +44,7 @@ public class GravityGun : MonoBehaviour
                     timer = 0.0f;
                     Debug.Log("grab");
                 }
-                if(objectGrabbed != null)
+                if(objectGrabbed != null )
                 {
                     objectGrabbed.transform.position = holdPosition.position;
                 }
@@ -89,6 +90,10 @@ public class GravityGun : MonoBehaviour
                 fireAudio.Play();
             }
         }
+        else
+        {
+            hasGrabbed= false;
+        }
     }
 
     private void EnableAiming()
@@ -96,6 +101,14 @@ public class GravityGun : MonoBehaviour
         Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
         Vector3 aimDir = (mousePos - transform.position).normalized;
         float angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
+        if (angle > 90f)
+        {
+            gameObject.GetComponent<SpriteRenderer>().flipY = true;
+        }
+        else
+        {
+            gameObject.GetComponent<SpriteRenderer>().flipY = false;
+        }
         transform.eulerAngles = new Vector3(0, 0, angle);
     }
 

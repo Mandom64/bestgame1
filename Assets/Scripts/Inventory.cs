@@ -5,5 +5,4 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     public List<GameObject> inventoryList = new List<GameObject>();
-    public int currItem = 0;
 }
