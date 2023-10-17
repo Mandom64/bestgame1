@@ -6,14 +6,14 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
-enum butlerState
-    {
-        Idle,
-        Engaged,
-        Dead,
-    };
+enum ButlerState
+{
+    Idle,
+    Engaged,
+    Dead,
+};
 
-public class EyeController : MonoBehaviour
+public class ButlerController : MonoBehaviour
 {
     private Rigidbody2D body;
     private GameObject player;
@@ -21,35 +21,38 @@ public class EyeController : MonoBehaviour
     private RectTransform healthBarTransform;
     private ButlerState currentState = ButlerState.Idle;
     private LineRenderer lineToPlayer;
-    [Header("Eye Parameters")]
+    [Header("Butler Parameters")]
     public float range = 1f;
-    public float idleSpeed = 1f;
-    public float engagedSpeed = 15f;
+    public float idleSpeed = 15f;
+    public float engagedSpeed = 1f;
     public float timeToMove = 5f;
+    public float spawnCooldown = 3f;
+    public int ratLimit = 6;
+    public int RatsToSpawn = 2;
+    public GameObject rat;
+    private List<GameObject> rats = new List<GameObject>();
+
     public Slider healthBar;
-    [Header("Bullet Parameters")]
-    public GameObject bullet;
-    public float bulletSpeed = 15.0f;
-    public float bulletDeathTimer = 3.0f;
-    public float cooldownTimer = 0.5f;
-    
+   
 
     void Start()
     {
         player = GameObject.FindWithTag("Player");
         body = GetComponent<Rigidbody2D>();
-        healthBarTransform = healthBar.GetComponent<RectTransform>();
         lineToPlayer = GetComponent<LineRenderer>();
     }
 
     void Update()
     {
-        if(gameObject != null)
+        if (gameObject != null)
         {
             timer += Time.deltaTime;
-            showHealthBar();
+
+            if(healthBar != null) 
+                showHealthBar();
+
             // Check if im grabbed by gravity gun
-            if(gameObject.transform.parent == null || !gameObject.transform.parent.CompareTag("Weapon"))
+            if (gameObject.transform.parent == null || !gameObject.transform.parent.CompareTag("Weapon"))
             {
                 if (!isPlayerClose())
                     currentState = ButlerState.Idle;
@@ -74,12 +77,13 @@ public class EyeController : MonoBehaviour
                         DrawLineToPlayer();
 
                         // calculate distance to move
-                        var step = engagedSpeed * Time.deltaTime; 
+                        var step = engagedSpeed * Time.deltaTime;
                         transform.position = Vector3.MoveTowards(transform.position,
                             player.transform.position, step);
-                        if (timer >= cooldownTimer)
+                        if (timer >= spawnCooldown && rats.Count < ratLimit - 1)
                         {
-                            Shoot(player);
+                            SpawnRats();
+                            Debug.Log(rats.Count);
                             timer = 0f;
                         }
                         break;
@@ -88,50 +92,60 @@ public class EyeController : MonoBehaviour
                         break;
                 }
             }
-        }       
+        }
+    }
+
+    public void SpawnRats()
+    {
+        GetAliveRats();
+        if(rat != null)
+        {
+            for(int i = 0; i < RatsToSpawn; i++)
+            {
+                GameObject ratClone = Instantiate(rat, transform.position, Quaternion.identity);
+                if(ratClone != null)
+                    rats.Add(ratClone);
+            }
+        }
+    }
+
+    public void GetAliveRats()
+    {
+        foreach(GameObject rat in rats)
+        {
+            if (rat == null)
+                rats.Remove(rat);
+        }
     }
 
     private bool isPlayerClose()
     {
-        if(player == null)
+        if (player == null)
             return false;
 
         float distance = Vector3.Distance(transform.position, player.transform.position);
-        if(distance >= range)
+        if (distance >= range)
             return false;
-        else 
+        else
             return true;
     }
 
     private void showHealthBar()
     {
         // Healthbar slider and text update
-        if(gameObject != null)
+        if (gameObject != null)
         {
             HealthSystem playerHealth = gameObject.GetComponent<HealthSystem>();
             float healthPercentage = (float)playerHealth.getHealth() / (float)playerHealth.getHealthMax();
-            healthBar.value = healthPercentage;     
+            healthBar.value = healthPercentage;
             Vector2 screenPos = Camera.main.WorldToScreenPoint(transform.position);
             Vector2 aboveSprite = screenPos;
             aboveSprite.y += 25f;
             // Update the position of the Slider's RectTransform
-            healthBarTransform.position = aboveSprite;     
+            healthBar.transform.position = aboveSprite;
         }
     }
-    private void Shoot(GameObject objToShoot)
-    {
-        if (objToShoot != null)
-        {
-            Vector3 shootAtPos = objToShoot.transform.position;
-            Vector2 shootDir = (shootAtPos - transform.position).normalized;
-            GameObject bulletInstance = Instantiate(bullet, transform.position, Quaternion.identity);
-            Rigidbody2D bulletBody = bulletInstance.GetComponent<Rigidbody2D>();
-            bulletInstance.layer = LayerMask.NameToLayer("Enemy Projectiles");
-            bulletBody.velocity = shootDir * bulletSpeed;
-            Destroy(bulletInstance, bulletDeathTimer);
-        }
-    }
-    
+
     public void DrawLineToPlayer()
     {
         lineToPlayer.enabled = true;
@@ -152,5 +166,5 @@ public class EyeController : MonoBehaviour
         float random = UnityEngine.Random.value * angle + angleMin;
         return new Vector2(Mathf.Cos(random), Mathf.Sin(random));
     }
-    
+
 }
