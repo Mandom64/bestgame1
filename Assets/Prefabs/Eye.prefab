@@ -490,6 +490,7 @@ MonoBehaviour:
   bulletSpeed: 2.5
   bulletDeathTimer: 3
   cooldownTimer: 2
+  eye_dead: {fileID: -393214449, guid: 58982927945de414b83b75b60bbdd691, type: 3}
 --- !u!114 &7562215725066220184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -503,6 +504,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthMax: 120
+  deleteTimer: 3
 --- !u!114 &8267630558220306769
 MonoBehaviour:
   m_ObjectHideFlags: 0

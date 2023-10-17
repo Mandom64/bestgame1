@@ -17,6 +17,7 @@ public class ButlerController : MonoBehaviour
 {
     private Rigidbody2D body;
     private GameObject player;
+    private SpriteRenderer renderer;
     private float timer = 0.0f;
     private RectTransform healthBarTransform;
     private ButlerState currentState = ButlerState.Idle;
@@ -30,6 +31,12 @@ public class ButlerController : MonoBehaviour
     public int ratLimit = 6;
     public int RatsToSpawn = 2;
     public GameObject rat;
+    public Sprite butler_idle;
+    public Sprite butler_struck;
+    public Sprite butler_spawn;
+    public Sprite butler_dead;
+    public float drawTime = 0.5f;
+    Sprite currSprite = null;
     private List<GameObject> rats = new List<GameObject>();
 
     public Slider healthBar;
@@ -40,6 +47,9 @@ public class ButlerController : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         body = GetComponent<Rigidbody2D>();
         lineToPlayer = GetComponent<LineRenderer>();
+        renderer = GetComponent<SpriteRenderer>();
+        renderer.sprite = butler_idle;
+        currSprite = butler_idle;
     }
 
     void Update()
@@ -58,11 +68,17 @@ public class ButlerController : MonoBehaviour
                     currentState = ButlerState.Idle;
                 else
                     currentState = ButlerState.Engaged;
+
+                float butlerHP = body.GetComponent<HealthSystem>().getHealth();
+                if(butlerHP <= 0)
+                    currentState = ButlerState.Dead;
                 //Debug.Log(currentState);
 
                 switch (currentState)
                 {
                     case (ButlerState.Idle):
+                        currSprite = butler_idle;
+                        renderer.sprite = currSprite;
                         lineToPlayer.enabled = false;
                         if (timer >= timeToMove)
                         {
@@ -83,12 +99,20 @@ public class ButlerController : MonoBehaviour
                         if (timer >= spawnCooldown && rats.Count < ratLimit - 1)
                         {
                             SpawnRats();
-                            Debug.Log(rats.Count);
+                            StartCoroutine(DrawSprite(butler_spawn, 0.01f));
+                            
+                            //Debug.Log(rats.Count);
                             timer = 0f;
                         }
                         break;
 
                     case (ButlerState.Dead):
+
+                        Debug.Log("This is butlerstat dead hello!");
+                        body.velocity = Vector2.zero;
+                        lineToPlayer.enabled = false;
+                        currSprite = butler_dead;
+                        renderer.sprite = currSprite;
                         break;
                 }
             }
@@ -165,6 +189,13 @@ public class ButlerController : MonoBehaviour
     {
         float random = UnityEngine.Random.value * angle + angleMin;
         return new Vector2(Mathf.Cos(random), Mathf.Sin(random));
+    }
+    
+    public IEnumerator DrawSprite(Sprite spriteToDraw, float drawTime)
+    {
+        currSprite = spriteToDraw;
+        renderer.sprite = currSprite;
+        yield return new WaitForSeconds(drawTime);
     }
 
 }

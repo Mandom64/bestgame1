@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 17b11cbfc60592344be5639ffafc067e
+guid: e53cc788fa347094fb4026fa1967c3d2
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 300
+  spritePixelsToUnits: 256
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -123,13 +123,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Rat_0
+      name: Bullets_0
       rect:
         serializedVersion: 2
-        x: 59
-        y: 490
-        width: 280
-        height: 160
+        x: 67
+        y: 935
+        width: 289
+        height: 106
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -137,20 +137,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d119fef9c3674404cbecfe35d64f7013
-      internalID: 575124724
+      spriteID: 43cf1f8907793c042849910b812b652f
+      internalID: -1327701610
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rat_1
+      name: Bullets_1
       rect:
         serializedVersion: 2
-        x: 459
-        y: 496
-        width: 280
-        height: 154
+        x: 480
+        y: 925
+        width: 216
+        height: 144
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -158,20 +158,146 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 993d8fc3ecf32af4ebbe5d6b9df43c1d
-      internalID: 770624292
+      spriteID: 4584420d418cc194e830fb65aac07504
+      internalID: 604433068
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rat_2
+      name: Bullets_2
       rect:
         serializedVersion: 2
-        x: 859
+        x: 905
+        y: 932
+        width: 156
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b870b915d9338f340a68052f6d4fd851
+      internalID: -578438124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullets_3
+      rect:
+        serializedVersion: 2
+        x: 1273
+        y: 885
+        width: 280
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c46edd51672c78a449f01bf2f34c6e67
+      internalID: -2045094271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullets_4
+      rect:
+        serializedVersion: 2
+        x: 1685
+        y: 901
+        width: 201
+        height: 167
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 21b3bf2589bec9949983968c2a3aaa70
+      internalID: -563842539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullets_5
+      rect:
+        serializedVersion: 2
+        x: 2167
+        y: 970
+        width: 85
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17c4f541b6cf84647b0e311039aecf80
+      internalID: -684035130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullets_6
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 476
+        width: 166
+        height: 253
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: baf49294ce0612140939c159f8a380ac
+      internalID: 148397700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullets_7
+      rect:
+        serializedVersion: 2
+        x: 557
+        y: 477
+        width: 189
+        height: 245
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 957e3b1f238d03048af66ee2eef01010
+      internalID: 1382384361
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullets_9
+      rect:
+        serializedVersion: 2
+        x: 905
         y: 497
-        width: 280
-        height: 153
+        width: 227
+        height: 212
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -179,20 +305,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b75bf9d59abae3643a04c0dfdccb14eb
-      internalID: -345686060
+      spriteID: d184022e5ed3a7c429a3a7fb5743e510
+      internalID: 253742995
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rat_3
+      name: Bullets_10
       rect:
         serializedVersion: 2
-        x: 1259
-        y: 496
-        width: 280
-        height: 154
+        x: 1362
+        y: 484
+        width: 174
+        height: 254
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -200,20 +326,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 10bfaeba62e75a546989873a5fcba5d4
-      internalID: -1269213936
+      spriteID: c76e9ae7c2c84eb4b8dfc749759cb619
+      internalID: 1230353848
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rat_4
+      name: Bullets_11
       rect:
         serializedVersion: 2
-        x: 1660
-        y: 490
-        width: 280
-        height: 160
+        x: 2111
+        y: 523
+        width: 164
+        height: 150
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -221,20 +347,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2e8cdb80a7b66cf48be4da89d2e2fd65
-      internalID: 176854645
+      spriteID: 91985a8e8f8ed5347aaf4a83ccbdb007
+      internalID: 734738666
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rat_5
+      name: Bullets_13
       rect:
         serializedVersion: 2
-        x: 59
-        y: 90
-        width: 280
-        height: 160
+        x: 429
+        y: 102
+        width: 332
+        height: 212
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -242,20 +368,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5f8fd5d5b143b274790736429aaacb88
-      internalID: -1522438952
+      spriteID: b4e82b1445eafb54c94a49cdc7116c3d
+      internalID: -1043096165
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rat_6
+      name: Bullets_15
       rect:
         serializedVersion: 2
-        x: 459
-        y: 96
-        width: 280
-        height: 154
+        x: 939
+        y: 158
+        width: 157
+        height: 82
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -263,20 +389,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0ec42e6a9d319354c9c6fd62f085f1ac
-      internalID: 406297002
+      spriteID: b7ac297bcc5b9c341a64c6cd6eaa0c96
+      internalID: 1978692760
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rat_7
+      name: Bullets_16
       rect:
         serializedVersion: 2
-        x: 859
-        y: 97
-        width: 280
-        height: 153
+        x: 1308
+        y: 172
+        width: 214
+        height: 62
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -284,50 +410,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1bd514b5c4281de478124e6c816a2d44
-      internalID: -1701557206
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Rat_8
-      rect:
-        serializedVersion: 2
-        x: 1259
-        y: 96
-        width: 280
-        height: 154
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0bfd1cf3dddc71f48a8724bd20d0502c
-      internalID: -355168145
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Rat_9
-      rect:
-        serializedVersion: 2
-        x: 1660
-        y: 90
-        width: 280
-        height: 160
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0f63864fe044d95458cdd0db4876def0
-      internalID: 1976693059
+      spriteID: 03bad32411e4f884191bca9045635541
+      internalID: -2100125544
       vertices: []
       indices: 
       edges: []
@@ -343,16 +427,23 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Rat_0: 575124724
-      Rat_1: 770624292
-      Rat_2: -345686060
-      Rat_3: -1269213936
-      Rat_4: 176854645
-      Rat_5: -1522438952
-      Rat_6: 406297002
-      Rat_7: -1701557206
-      Rat_8: -355168145
-      Rat_9: 1976693059
+      Bullets_0: -1327701610
+      Bullets_1: 604433068
+      Bullets_10: 1230353848
+      Bullets_11: 734738666
+      Bullets_12: 439757903
+      Bullets_13: -1043096165
+      Bullets_14: 1357340747
+      Bullets_15: 1978692760
+      Bullets_16: -2100125544
+      Bullets_2: -578438124
+      Bullets_3: -2045094271
+      Bullets_4: -563842539
+      Bullets_5: -684035130
+      Bullets_6: 148397700
+      Bullets_7: 1382384361
+      Bullets_8: -999038462
+      Bullets_9: 253742995
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

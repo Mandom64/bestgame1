@@ -101,7 +101,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.2578125, y: 1.359375}
     newSize: {x: 1.28, y: 1.28}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -151,7 +151,7 @@ SpriteRenderer:
   m_SortingLayerID: 756463447
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 71f9c7103f46e6ce3bf5d6ea63e67f77, type: 3}
+  m_Sprite: {fileID: -1397525969, guid: cfeec2724184075408529b9a558ec940, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -366,13 +366,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1194320dea466145b713acddfc8953f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  my_rb: {fileID: 7501896838270304041}
+  body: {fileID: 0}
   inventoryObject: {fileID: 6783265323322517004, guid: 8f6d4aa6ceedf96aa9cd371d8fd97ab7, type: 3}
   moveSpeed: 5
   baseWallDamage: 1
   wallDamageMultiplier: 10
   dashSound: {fileID: -318081515884133566}
   itemTakenSound: {fileID: -3748084567148754692}
+  currItem: 0
   grabbableLayer:
     serializedVersion: 2
     m_Bits: 1024
@@ -394,3 +395,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthMax: 1000
+  deleteTimer: 3

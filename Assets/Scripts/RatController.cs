@@ -17,21 +17,21 @@ public class RatController : MonoBehaviour
 {
     private Rigidbody2D body;
     private GameObject player;
-    private float timer = 0.0f;
     private RectTransform healthBarTransform;
     private ratState currentState = ratState.Idle;
     private LineRenderer lineToPlayer;
     public AudioSource attackSound;
+    public Slider healthBar;
     [Header("Rat Parameters")]
     public float range = 1f;
+    public float timeToMove = 5f;
     public float idleSpeed = 15f;
     public float engagedSpeed = 1f;
-    public float timeToMove = 5f;
-    public float attackCooldown = 1f;
+    public float attackSpeed = 10f;
     public float attackTime = 1f;
-    public float attackForce = 10f;
-    public Slider healthBar;
+    public float attackCooldown = 5f;
     private bool isAttacking = false;
+    float timer = 0.0f;
    
 
     void Start()
@@ -39,71 +39,92 @@ public class RatController : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         body = GetComponent<Rigidbody2D>();
         lineToPlayer = GetComponent<LineRenderer>();
+        body.velocity = new Vector2(1,1);
     }
 
     private void FixedUpdate()
     {
-        if (gameObject != null)
+        if(gameObject != null)
         {
-            timer += Time.deltaTime;
-
-            if (healthBar != null)
-                showHealthBar();
-
             // Check if im grabbed by gravity gun
             if (gameObject.transform.parent == null || !gameObject.transform.parent.CompareTag("Weapon"))
             {
-                if (!isPlayerClose())
-                    currentState = ratState.Idle;
-                else
-                    currentState = ratState.Engaged;
-                //Debug.Log(currentState);
-
                 switch (currentState)
                 {
                     case (ratState.Idle):
-                        lineToPlayer.enabled = false;
+
                         if (timer >= timeToMove && !isAttacking)
                         {
                             Vector2 randomDir = RandomVector2(3.1415f * 2, 0f);
                             randomDir.Normalize();
-                            body.velocity = randomDir * idleSpeed * Time.deltaTime;
+                            body.velocity = randomDir * idleSpeed * Time.fixedDeltaTime;
                             timer = 0f;
                         }
                         break;
 
                     case (ratState.Engaged):
-                        DrawLineToPlayer();
 
                         // calculate distance to move
                         if (!isAttacking)
                         {
-                            var step = engagedSpeed * Time.deltaTime;
-                            transform.position = Vector3.MoveTowards(transform.position,
-                                player.transform.position, step);
+                            Vector2 movement = player.transform.position - transform.position;
+                            movement.Normalize();
+                            if (body.velocity != Vector2.zero)
+                                body.velocity = movement * engagedSpeed * Time.fixedDeltaTime;
+                            else
+                                body.velocity = Vector2.zero;
                         }
-                        if (timer >= attackCooldown && !isAttacking)
-                        {
-                            StartCoroutine(Attack());
-                            timer = 0f;
-                        }
+
                         break;
 
                     case (ratState.Dead):
                         break;
                 }
             }
-        }
+        }    
     }
     void Update()
     {
-        
+        timer += Time.deltaTime;
+
+        if (gameObject != null)
+        {
+            if (gameObject.transform.parent == null || !gameObject.transform.parent.CompareTag("Weapon"))
+            {
+                //Debug.Log("rat is attacking = " + isAttacking);
+                //Debug.Log("rat stat is = "  + currentState);
+                if (!isPlayerClose())
+                    currentState = ratState.Idle;
+                else
+                    currentState = ratState.Engaged;
+                switch (currentState)
+                {
+                    case (ratState.Idle):
+
+                        lineToPlayer.enabled = false;
+                        break;
+                    case (ratState.Engaged):
+
+                        DrawLineToPlayer();
+                        if (timer >= attackCooldown && !isAttacking)
+                        {
+                            StartCoroutine(Attack());
+                            timer = 0f;
+                        }
+
+                        break;
+                }
+                if (healthBar != null)
+                    showHealthBar();
+            }
+        }
+       
     }
 
     private IEnumerator Attack()
     {
         isAttacking = true;
-        body.AddForceAtPosition(body.velocity.normalized * attackForce, player.transform.position);
+        body.AddForce(body.velocity * attackSpeed * Time.fixedDeltaTime);
         yield return new WaitForSeconds(attackTime);
         if (attackSound != null)
             attackSound.Play();

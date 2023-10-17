@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Shotgun : MonoBehaviour
 {
-    public Rigidbody2D body;
+    Rigidbody2D body;
+    public GameObject muzzleFlash;
     private AudioSource fireAudio;
     [Header("Shotgun parameters")]
     public GameObject pellet;
@@ -15,6 +18,7 @@ public class Shotgun : MonoBehaviour
     public float pelletDeathTimer = 3.0f;
     public float spread = 5.0f;
     public float cooldownTimer = 0.25f;
+    public float muzzleDrawTime = 0.5f;
     private float timer = 0.0f;
 
 
@@ -22,6 +26,7 @@ public class Shotgun : MonoBehaviour
     {
         body = GetComponent<Rigidbody2D>();
         fireAudio = gameObject.GetComponent<AudioSource>();
+        muzzleFlash.SetActive(false);
     }
 
     void Update()
@@ -44,6 +49,7 @@ public class Shotgun : MonoBehaviour
 
     private void Shoot(int pelletCount)
     {
+        StartCoroutine(DrawMuzzleFlash());
         Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
         Vector2 shootDir = (mousePos - transform.position).normalized;
 
@@ -57,7 +63,7 @@ public class Shotgun : MonoBehaviour
                 shootDir = RotateVector2(shootDir, -spread);
             GameObject pelletInstance = Instantiate(pellet, transform.position, transform.rotation);
             Rigidbody2D rb_pellet = pelletInstance.GetComponent<Rigidbody2D>();
-            rb_pellet.AddForce(shootDir * randomPelletSpeed());
+            rb_pellet.AddForce(shootDir * RandomPelletSpeed());
             Destroy(pelletInstance, pelletDeathTimer);
         }
         
@@ -72,10 +78,10 @@ public class Shotgun : MonoBehaviour
         Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
         Vector3 aimDir = (mousePos - transform.position).normalized;
         float angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
-        if(angle > 90f)
-            gameObject.GetComponent<SpriteRenderer>().flipY = true;
-        else
+        if (angle > -90f && angle < 90f)
             gameObject.GetComponent<SpriteRenderer>().flipY = false;
+        else
+            gameObject.GetComponent<SpriteRenderer>().flipY = true;
         transform.eulerAngles = new Vector3(0, 0, angle);
     }
 
@@ -96,7 +102,8 @@ public class Shotgun : MonoBehaviour
 
         return new Vector2(x, y);
     }
-    public float randomPelletSpeed()
+
+    public float RandomPelletSpeed()
     {
         int randValue = Random.Range(0, 2);
 
@@ -105,6 +112,26 @@ public class Shotgun : MonoBehaviour
         else
             return Random.Range(pelletSpeed, pelletSpeed - pelletRandSpeed);
 
+    }
+
+    public void FlipSpriteY(GameObject obj)
+    {
+        Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
+        Vector3 aimDir = (mousePos - transform.position).normalized;
+        float angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
+        if (angle > -90f && angle < 90f)
+            obj.GetComponent<SpriteRenderer>().flipY = false;
+        else
+            obj.GetComponent<SpriteRenderer>().flipY = true;
+    }
+
+    private IEnumerator DrawMuzzleFlash()
+    { 
+        FlipSpriteY(muzzleFlash);
+        muzzleFlash.SetActive(true);
+        yield return new WaitForSeconds(muzzleDrawTime);
+        muzzleFlash.SetActive(false);
+        Debug.Log("hello!"); 
     }
 
 }

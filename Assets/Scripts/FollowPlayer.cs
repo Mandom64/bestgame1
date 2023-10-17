@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class FollowPlayer : MonoBehaviour
 {
-    public Transform player;
+    public GameObject player;
     public Camera mainCamera;
-    public float cameraMaxDistance = 2.5f;
+    public float cameraMaxDistance = 5f;
+    public float cameraMinDistance = 1f;
 
     private void Start()
     {
@@ -23,7 +24,7 @@ public class FollowPlayer : MonoBehaviour
         Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
         Vector2 distance = mousePos - mainCamera.transform.position;
         distance = Vector3.ClampMagnitude(distance, cameraMaxDistance);
-        mainCamera.transform.position = player.transform.position + (Vector3)distance + new Vector3(0, 0, -5);
+        mainCamera.transform.position = player.transform.position + (Vector3)distance / 7 + new Vector3(0, 0, -5);
     }
 
     public Vector3 GetMouseWorldPosition(Vector3 screenPos)

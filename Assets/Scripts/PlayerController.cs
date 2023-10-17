@@ -115,9 +115,9 @@ public class PlayerController : MonoBehaviour
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         if(horizontalInput > 0f)
-            body.GetComponent<SpriteRenderer>().flipX = false;
-        else if(horizontalInput < 0f)
             body.GetComponent<SpriteRenderer>().flipX = true;
+        else if(horizontalInput < 0f)
+            body.GetComponent<SpriteRenderer>().flipX = false;
     }
 
     public void GrabObject()

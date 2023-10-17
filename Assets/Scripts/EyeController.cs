@@ -6,7 +6,7 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
-enum butlerState
+enum eyeState
     {
         Idle,
         Engaged,
@@ -19,7 +19,7 @@ public class EyeController : MonoBehaviour
     private GameObject player;
     private float timer = 0.0f;
     private RectTransform healthBarTransform;
-    private ButlerState currentState = ButlerState.Idle;
+    private eyeState currentState = eyeState.Idle;
     private LineRenderer lineToPlayer;
     [Header("Eye Parameters")]
     public float range = 1f;
@@ -32,6 +32,9 @@ public class EyeController : MonoBehaviour
     public float bulletSpeed = 15.0f;
     public float bulletDeathTimer = 3.0f;
     public float cooldownTimer = 0.5f;
+    public Sprite eye_dead;
+    SpriteRenderer eyeRenderer;
+    
     
 
     void Start()
@@ -40,6 +43,7 @@ public class EyeController : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         healthBarTransform = healthBar.GetComponent<RectTransform>();
         lineToPlayer = GetComponent<LineRenderer>();
+        eyeRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -52,14 +56,18 @@ public class EyeController : MonoBehaviour
             if(gameObject.transform.parent == null || !gameObject.transform.parent.CompareTag("Weapon"))
             {
                 if (!isPlayerClose())
-                    currentState = ButlerState.Idle;
+                    currentState = eyeState.Idle;
                 else
-                    currentState = ButlerState.Engaged;
+                    currentState = eyeState.Engaged;
                 //Debug.Log(currentState);
+
+                float eyeHP = body.GetComponent<HealthSystem>().getHealth();
+                if (eyeHP <= 0)
+                    currentState = eyeState.Dead;
 
                 switch (currentState)
                 {
-                    case (ButlerState.Idle):
+                    case (eyeState.Idle):
                         lineToPlayer.enabled = false;
                         if (timer >= timeToMove)
                         {
@@ -70,7 +78,7 @@ public class EyeController : MonoBehaviour
                         }
                         break;
 
-                    case (ButlerState.Engaged):
+                    case (eyeState.Engaged):
                         DrawLineToPlayer();
 
                         // calculate distance to move
@@ -84,7 +92,10 @@ public class EyeController : MonoBehaviour
                         }
                         break;
 
-                    case (ButlerState.Dead):
+                    case (eyeState.Dead):
+                        body.velocity = Vector2.zero;
+                        lineToPlayer.enabled = false;
+                        eyeRenderer.sprite = eye_dead;
                         break;
                 }
             }
