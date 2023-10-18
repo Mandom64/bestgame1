@@ -17,7 +17,7 @@ public class ButlerController : MonoBehaviour
 {
     private Rigidbody2D body;
     private GameObject player;
-    private SpriteRenderer renderer;
+    private SpriteRenderer sRenderer;
     private float timer = 0.0f;
     private RectTransform healthBarTransform;
     private ButlerState currentState = ButlerState.Idle;
@@ -47,8 +47,8 @@ public class ButlerController : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         body = GetComponent<Rigidbody2D>();
         lineToPlayer = GetComponent<LineRenderer>();
-        renderer = GetComponent<SpriteRenderer>();
-        renderer.sprite = butler_idle;
+        sRenderer = GetComponent<SpriteRenderer>();
+        sRenderer.sprite = butler_idle;
         currSprite = butler_idle;
     }
 
@@ -78,7 +78,7 @@ public class ButlerController : MonoBehaviour
                 {
                     case (ButlerState.Idle):
                         currSprite = butler_idle;
-                        renderer.sprite = currSprite;
+                        sRenderer.sprite = currSprite;
                         lineToPlayer.enabled = false;
                         if (timer >= timeToMove)
                         {
@@ -110,9 +110,10 @@ public class ButlerController : MonoBehaviour
 
                         Debug.Log("This is butlerstat dead hello!");
                         body.velocity = Vector2.zero;
+                        gameObject.layer = LayerMask.NameToLayer("Dead Objects");
                         lineToPlayer.enabled = false;
                         currSprite = butler_dead;
-                        renderer.sprite = currSprite;
+                        sRenderer.sprite = currSprite;
                         break;
                 }
             }
@@ -194,7 +195,7 @@ public class ButlerController : MonoBehaviour
     public IEnumerator DrawSprite(Sprite spriteToDraw, float drawTime)
     {
         currSprite = spriteToDraw;
-        renderer.sprite = currSprite;
+        sRenderer.sprite = currSprite;
         yield return new WaitForSeconds(drawTime);
     }
 

@@ -6,10 +6,7 @@ public class DamageHandler : MonoBehaviour
 {    
     public float baseWallDamage = 10.0f;
     public float wallDamageMultiplier = 7.5f;
-
-    public void Start()
-    {
-    }
+    public float minWallDamage = 35f;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -47,10 +44,12 @@ public class DamageHandler : MonoBehaviour
                 float velocityMagnitude = collision.relativeVelocity.magnitude;
                 int damageAmount = Mathf.RoundToInt(baseWallDamage + 
                     velocityMagnitude * wallDamageMultiplier);
-
-                // Apply damage to the player
-                myHP.Damage(damageAmount);
-                Debug.Log(gameObject.name + " took " + damageAmount + " from a WALL");
+                if(damageAmount > minWallDamage)
+                {
+                    // Apply damage to the player
+                    myHP.Damage(damageAmount);
+                    Debug.Log(gameObject.name + " took " + damageAmount + " from a WALL");
+                }
             }
         }
     }

@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: flying
+  m_Name: Rat_king_run
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,13 +21,13 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: -417093352, guid: 17352d5ca7c912446959b4c70eef1a40, type: 3}
+      value: {fileID: -930480685, guid: cfeec2724184075408529b9a558ec940, type: 3}
     - time: 0.16666667
-      value: {fileID: -1676163953, guid: 17352d5ca7c912446959b4c70eef1a40, type: 3}
+      value: {fileID: -1366144027, guid: cfeec2724184075408529b9a558ec940, type: 3}
     - time: 0.33333334
-      value: {fileID: -1026051089, guid: 17352d5ca7c912446959b4c70eef1a40, type: 3}
+      value: {fileID: -1781071948, guid: cfeec2724184075408529b9a558ec940, type: 3}
     - time: 0.5
-      value: {fileID: 1925269421, guid: 17352d5ca7c912446959b4c70eef1a40, type: 3}
+      value: {fileID: -1461302481, guid: cfeec2724184075408529b9a558ec940, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -50,10 +50,10 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: -417093352, guid: 17352d5ca7c912446959b4c70eef1a40, type: 3}
-    - {fileID: -1676163953, guid: 17352d5ca7c912446959b4c70eef1a40, type: 3}
-    - {fileID: -1026051089, guid: 17352d5ca7c912446959b4c70eef1a40, type: 3}
-    - {fileID: 1925269421, guid: 17352d5ca7c912446959b4c70eef1a40, type: 3}
+    - {fileID: -930480685, guid: cfeec2724184075408529b9a558ec940, type: 3}
+    - {fileID: -1366144027, guid: cfeec2724184075408529b9a558ec940, type: 3}
+    - {fileID: -1781071948, guid: cfeec2724184075408529b9a558ec940, type: 3}
+    - {fileID: -1461302481, guid: cfeec2724184075408529b9a558ec940, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}

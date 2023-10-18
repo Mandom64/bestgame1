@@ -94,6 +94,7 @@ public class EyeController : MonoBehaviour
 
                     case (eyeState.Dead):
                         body.velocity = Vector2.zero;
+                        gameObject.layer = LayerMask.NameToLayer("Dead Objects");
                         lineToPlayer.enabled = false;
                         eyeRenderer.sprite = eye_dead;
                         break;

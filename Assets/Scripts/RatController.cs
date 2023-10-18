@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -112,6 +113,11 @@ public class RatController : MonoBehaviour
                             timer = 0f;
                         }
 
+                        break;
+                    case (ratState.Dead):
+                        body.velocity = Vector2.zero;
+                        gameObject.layer = LayerMask.NameToLayer("Dead Objects");
+                        lineToPlayer.enabled = false;
                         break;
                 }
                 if (healthBar != null)

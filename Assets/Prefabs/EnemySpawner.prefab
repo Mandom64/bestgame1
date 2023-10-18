@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4201346298903201681}
   - component: {fileID: 3070378375686788553}
   - component: {fileID: 3207244729468338158}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: EnemySpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -160,7 +160,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d267893d7ee15d4a8afaa85edf634b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthMax: 1
+  healthMax: 100
+  deleteTimer: 3
 --- !u!114 &3207244729468338158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,5 +174,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef04cca93bc19d744b739df1e360b48d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseWallDamage: 10
-  wallDamageMultiplier: 7.5
+  baseWallDamage: 0
+  wallDamageMultiplier: 0

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Revolver : MonoBehaviour
 {
     public GameObject bullet;
+    public AudioSource fireSound;
     public float bulletSpeed = 1.0f;
     public float bulletDeathTimer = 3.0f;
     public float cooldownTimer = 0.25f;
@@ -36,6 +37,9 @@ public class Revolver : MonoBehaviour
         Rigidbody2D rb_pellet = pelletInstance.GetComponent<Rigidbody2D>();
         rb_pellet.velocity = shootDir * bulletSpeed;
         Destroy(pelletInstance, bulletDeathTimer);
+
+        if(fireSound != null)
+            fireSound.Play();   
         
     }
     private void EnableAiming()

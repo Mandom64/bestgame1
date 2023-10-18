@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
     public float dashCooldown = 3f;
     private bool isDashing = false;
     private float timer = 0f;
+    private Animator mAnimator;
                                                                 
     void Start()
     {
@@ -48,12 +49,17 @@ public class PlayerController : MonoBehaviour
         inventory = g_inventory.inventoryList;
         body = GetComponent<Rigidbody2D>();
         grabbableLayer = LayerMask.GetMask("Grabbable Items");
+        mAnimator = GetComponent<Animator>();
     }
 
     void FixedUpdate()
     {
         if(!isDashing)
+        {
             MovePlayer();
+            //if (mAnimator != null)
+                //mAnimator.SetTrigger("run");
+        }
 
         // Debugging button
         if (Input.GetKeyDown(KeyCode.T))
@@ -194,7 +200,6 @@ public class PlayerController : MonoBehaviour
                     Debug.Log(playerHP + " took " + damageAmount + " from a Bullet()");
                 }
             }
-            
         }
     }
     

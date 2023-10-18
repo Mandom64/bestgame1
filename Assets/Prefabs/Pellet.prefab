@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   body: {fileID: 5708562326039491982}
-  bounceForce: 0.5
+  bounceForce: 0.7
 --- !u!61 &2137114374739173649
 BoxCollider2D:
   m_ObjectHideFlags: 0
