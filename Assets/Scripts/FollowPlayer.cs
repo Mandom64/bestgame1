@@ -16,15 +16,13 @@ public class FollowPlayer : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape)) 
+        if(Time.timeScale == 1)
         {
-            Application.Quit();
+            Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
+            Vector2 distance = mousePos - mainCamera.transform.position;
+            distance = Vector3.ClampMagnitude(distance, cameraMaxDistance);
+            mainCamera.transform.position = player.transform.position + (Vector3)distance / 7 + new Vector3(0, 0, -5);
         }
-
-        Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
-        Vector2 distance = mousePos - mainCamera.transform.position;
-        distance = Vector3.ClampMagnitude(distance, cameraMaxDistance);
-        mainCamera.transform.position = player.transform.position + (Vector3)distance / 7 + new Vector3(0, 0, -5);
     }
 
     public Vector3 GetMouseWorldPosition(Vector3 screenPos)

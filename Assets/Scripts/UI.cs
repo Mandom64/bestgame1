@@ -9,25 +9,50 @@ public class UI : MonoBehaviour
     private float currentFrameRate;
     public float updateInterval = 0.5f;
     private float timer = 0f;
-    private GameObject playerObject;
+    private GameObject player;
     public TextMeshProUGUI fpsCounter;
-    public TextMeshProUGUI healthBarText;
-    public Slider healthBar;
     public GameObject inventoryObject;
     public Image InventoryImage;
+    public Canvas options;
+    public Slider audioSlider;
+    public Image healthbar;
+    bool pauseGame = false;
 
     void Start()
     {
         InventoryImage.enabled = false;
-        playerObject = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
+        options.gameObject.SetActive(false);
+        audioSlider.value = 0.5f;
+        AudioListener.volume = audioSlider.value;
     }
 
     // Update is called once per frame
     void Update()
     {
-        updateFPScounterUI();
-        updateHealthBarUI();  
-        updateInventoryImgUI(); 
+        if(pauseGame)
+        {
+            AudioListener.volume = audioSlider.value;
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                pauseGame = false;
+                Time.timeScale = 1;
+                options.gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            updateFPScounterUI();
+            updateHealthBarUI();  
+            updateInventoryImgUI(); 
+            if(Input.GetKeyDown(KeyCode.Escape)) 
+            {
+                pauseGame = true;
+                Time.timeScale = 0;
+                options.gameObject.SetActive(true);
+            }
+
+        }
     }
 
     public void updateFPScounterUI()
@@ -44,15 +69,14 @@ public class UI : MonoBehaviour
     public void updateHealthBarUI()
     {
         // Healthbar slider and text update
-        if(playerObject != null)
+        if(player != null)
         {
-            HealthSystem playerHealth = playerObject.GetComponent<HealthSystem>();
+            HealthSystem playerHealth = player.GetComponent<HealthSystem>();
             if(playerHealth != null)
             {
-                healthBarText.text = playerHealth.getHealth().ToString();
+                float healthPercentage = (float)playerHealth.getHealth() / (float)playerHealth.getHealthMax();
+                healthbar.fillAmount = healthPercentage;
             }
-            float healthPercentage = (float)playerHealth.getHealth() / (float)playerHealth.getHealthMax();
-            healthBar.value = healthPercentage;          
         }
     }
 
@@ -62,7 +86,7 @@ public class UI : MonoBehaviour
         if(inventory != null && inventory.inventoryList.Count > 0)
         {
             InventoryImage.enabled = true;
-            int itemToShow = playerObject.GetComponent<PlayerController>().currItem;
+            int itemToShow = player.GetComponent<PlayerController>().currItem;
             SpriteRenderer currItemImage = 
                 inventory.inventoryList[itemToShow].GetComponent<SpriteRenderer>();
             InventoryImage.sprite = currItemImage.sprite;
@@ -71,5 +95,10 @@ public class UI : MonoBehaviour
         {
             InventoryImage.enabled = false;
         }
+    }
+
+    public void OnQuitButton()
+    {
+       Application.Quit();
     }
 }

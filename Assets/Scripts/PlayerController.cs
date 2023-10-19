@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -41,13 +41,15 @@ public class PlayerController : MonoBehaviour
     private bool isDashing = false;
     private float timer = 0f;
     private Animator mAnimator;
-                                                                
+    HealthSystem playerHP;
+
     void Start()
     {
         Application.targetFrameRate = 1000;
         Inventory g_inventory = inventoryObject.GetComponent<Inventory>();
         inventory = g_inventory.inventoryList;
         body = GetComponent<Rigidbody2D>();
+        playerHP = gameObject.GetComponent<HealthSystem>();
         grabbableLayer = LayerMask.GetMask("Grabbable Items");
         mAnimator = GetComponent<Animator>();
     }
@@ -74,6 +76,12 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         timer += Time.deltaTime;
+
+        if(playerHP.getHealth() <= 0f)
+        {
+            // When player dies load the game over scene
+           SceneManager.LoadScene(1);
+        }
 
         FlipSprites();
 
@@ -191,7 +199,7 @@ public class PlayerController : MonoBehaviour
         {
             if (objectHit.CompareTag("Bullet"))
             {
-                HealthSystem playerHP = gameObject.GetComponent<HealthSystem>();
+                
                 float damageAmount = objectHit.gameObject.GetComponent<Damage>().damage;
                 if (playerHP != null)
                 {

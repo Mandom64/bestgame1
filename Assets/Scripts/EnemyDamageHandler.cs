@@ -7,6 +7,14 @@ public class DamageHandler : MonoBehaviour
     public float baseWallDamage = 10.0f;
     public float wallDamageMultiplier = 7.5f;
     public float minWallDamage = 35f;
+    EnemyHealthbar healthbar;
+    Animator mAnimator;
+
+    public void Start()
+    {
+        healthbar = GetComponentInChildren<EnemyHealthbar>();
+        mAnimator = GetComponent<Animator>();
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -18,6 +26,11 @@ public class DamageHandler : MonoBehaviour
             if(myHP != null)
             {
                 myHP.Damage(damageAmount);
+                healthbar.UpdateHealthbarUI(myHP.getHealth(), myHP.healthMax);
+                if (mAnimator != null)
+                {
+                    mAnimator.SetBool("struck", true);
+                }
                 Destroy(objectHit);
                 Debug.Log(gameObject.name + " took " + damageAmount + " from a Bullet");
             }
@@ -30,6 +43,9 @@ public class DamageHandler : MonoBehaviour
             if(myHP != null)
             {
                 myHP.Damage(damageAmount);
+                healthbar.UpdateHealthbarUI(myHP.getHealth(), myHP.healthMax);
+                if (mAnimator != null)
+                    mAnimator.SetBool("struck", true);
                 Destroy(objectHit);
                 Debug.Log(gameObject.name + " took " + damageAmount + " from a Pellet");
             }
@@ -48,11 +64,13 @@ public class DamageHandler : MonoBehaviour
                 {
                     // Apply damage to the player
                     myHP.Damage(damageAmount);
+                    healthbar.UpdateHealthbarUI(myHP.getHealth(), myHP.healthMax);
+                    if(mAnimator != null)
+                        mAnimator.SetBool("struck", true);
                     Debug.Log(gameObject.name + " took " + damageAmount + " from a WALL");
                 }
             }
         }
     }
 
-  
 }

@@ -17,7 +17,7 @@ public class Revolver : MonoBehaviour
         Transform parent = transform.parent;
         if(parent != null)
         {
-            if(parent.CompareTag("Player"))
+            if(parent.CompareTag("Player") && Time.timeScale == 1)
             {
                 EnableAiming();
                 if(Input.GetMouseButton(0) && (timer >= cooldownTimer))

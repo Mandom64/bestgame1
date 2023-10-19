@@ -19,7 +19,6 @@ public class ButlerController : MonoBehaviour
     private GameObject player;
     private SpriteRenderer sRenderer;
     private float timer = 0.0f;
-    private RectTransform healthBarTransform;
     private ButlerState currentState = ButlerState.Idle;
     private LineRenderer lineToPlayer;
     [Header("Butler Parameters")]

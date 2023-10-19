@@ -18,7 +18,7 @@ public class GravityGun : MonoBehaviour
     private bool hasGrabbed = false;
     private GameObject objectGrabbed;
     LineRenderer lineToMouse;
-    // Start is called before the first frame update
+
     void Start()
     {
         grabbableLayer = LayerMask.GetMask("Enemies");
@@ -32,7 +32,7 @@ public class GravityGun : MonoBehaviour
         lineToMouse.enabled = false;
         if (parent != null)
         {
-            if (parent.CompareTag("Player"))
+            if (parent.CompareTag("Player") && Time.timeScale == 1)
             {
                 EnableAiming();
                 if(Input.GetMouseButtonDown(0) && hasGrabbed)

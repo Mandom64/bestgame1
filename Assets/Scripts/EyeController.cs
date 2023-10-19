@@ -18,7 +18,6 @@ public class EyeController : MonoBehaviour
     private Rigidbody2D body;
     private GameObject player;
     private float timer = 0.0f;
-    private RectTransform healthBarTransform;
     private eyeState currentState = eyeState.Idle;
     private LineRenderer lineToPlayer;
     [Header("Eye Parameters")]
@@ -34,6 +33,7 @@ public class EyeController : MonoBehaviour
     public float cooldownTimer = 0.5f;
     public Sprite eye_dead;
     SpriteRenderer eyeRenderer;
+    Animator mAnimator;
     
     
 
@@ -41,9 +41,11 @@ public class EyeController : MonoBehaviour
     {
         player = GameObject.FindWithTag("Player");
         body = GetComponent<Rigidbody2D>();
-        healthBarTransform = healthBar.GetComponent<RectTransform>();
         lineToPlayer = GetComponent<LineRenderer>();
         eyeRenderer = GetComponent<SpriteRenderer>();
+        mAnimator = GetComponent<Animator>();
+        if(mAnimator != null)
+            mAnimator.SetBool("running", true);
     }
 
     void Update()
@@ -51,10 +53,10 @@ public class EyeController : MonoBehaviour
         if(gameObject != null)
         {
             timer += Time.deltaTime;
-            showHealthBar();
             // Check if im grabbed by gravity gun
             if(gameObject.transform.parent == null || !gameObject.transform.parent.CompareTag("Weapon"))
             {
+                mAnimator.SetBool("struck", false);
                 if (!isPlayerClose())
                     currentState = eyeState.Idle;
                 else
@@ -68,6 +70,10 @@ public class EyeController : MonoBehaviour
                 switch (currentState)
                 {
                     case (eyeState.Idle):
+                        if (mAnimator != null)
+                        {
+                            mAnimator.SetBool("running", true);
+                        }
                         lineToPlayer.enabled = false;
                         if (timer >= timeToMove)
                         {
@@ -79,8 +85,11 @@ public class EyeController : MonoBehaviour
                         break;
 
                     case (eyeState.Engaged):
+                        if (mAnimator != null)
+                        {
+                            mAnimator.SetBool("running", true);
+                        }
                         DrawLineToPlayer();
-
                         // calculate distance to move
                         var step = engagedSpeed * Time.deltaTime; 
                         transform.position = Vector3.MoveTowards(transform.position,
@@ -93,6 +102,8 @@ public class EyeController : MonoBehaviour
                         break;
 
                     case (eyeState.Dead):
+                        if (mAnimator != null)
+                            mAnimator.SetBool("dead", true);
                         body.velocity = Vector2.zero;
                         gameObject.layer = LayerMask.NameToLayer("Dead Objects");
                         lineToPlayer.enabled = false;
@@ -115,21 +126,6 @@ public class EyeController : MonoBehaviour
             return true;
     }
 
-    private void showHealthBar()
-    {
-        // Healthbar slider and text update
-        if(gameObject != null)
-        {
-            HealthSystem playerHealth = gameObject.GetComponent<HealthSystem>();
-            float healthPercentage = (float)playerHealth.getHealth() / (float)playerHealth.getHealthMax();
-            healthBar.value = healthPercentage;     
-            Vector2 screenPos = Camera.main.WorldToScreenPoint(transform.position);
-            Vector2 aboveSprite = screenPos;
-            aboveSprite.y += 25f;
-            // Update the position of the Slider's RectTransform
-            healthBarTransform.position = aboveSprite;     
-        }
-    }
     private void Shoot(GameObject objToShoot)
     {
         if (objToShoot != null)
