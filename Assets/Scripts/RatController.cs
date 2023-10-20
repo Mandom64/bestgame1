@@ -74,14 +74,12 @@ public class RatController : MonoBehaviour
                         // calculate distance to move
                         if (timer >= attackCooldown && !isAttacking)
                         {
-                            Debug.Log("attack");
                             AnimationState("jump");
                             StartCoroutine(Attack());
                             timer = 0f;
                         }
                         else
                         {
-                            Debug.Log("follow");
                             Vector2 movement = player.transform.position - transform.position;
                             movement.Normalize();
                             if (body.velocity != Vector2.zero)

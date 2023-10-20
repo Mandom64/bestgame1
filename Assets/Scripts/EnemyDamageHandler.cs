@@ -8,12 +8,10 @@ public class DamageHandler : MonoBehaviour
     public float wallDamageMultiplier = 7.5f;
     public float minWallDamage = 35f;
     EnemyHealthbar healthbar;
-    Animator mAnimator;
 
     public void Start()
     {
         healthbar = GetComponentInChildren<EnemyHealthbar>();
-        mAnimator = GetComponent<Animator>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
