@@ -45,13 +45,14 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        Application.targetFrameRate = 1000;
+        Application.targetFrameRate = 144;
         Inventory g_inventory = inventoryObject.GetComponent<Inventory>();
         inventory = g_inventory.inventoryList;
         body = GetComponent<Rigidbody2D>();
         playerHP = gameObject.GetComponent<HealthSystem>();
         grabbableLayer = LayerMask.GetMask("Grabbable Items");
         mAnimator = GetComponent<Animator>();
+        mAnimator.SetBool("idle", true);
     }
 
     void FixedUpdate()
@@ -59,8 +60,6 @@ public class PlayerController : MonoBehaviour
         if(!isDashing)
         {
             MovePlayer();
-            //if (mAnimator != null)
-                //mAnimator.SetTrigger("run");
         }
 
         // Debugging button
@@ -120,9 +119,15 @@ public class PlayerController : MonoBehaviour
         Vector2 movement = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         movement.Normalize();
         if(movement != Vector2.zero)
+        {
             body.velocity = movement * moveSpeed;
+            AnimationState("run");
+        }
         else
+        {
             body.velocity = Vector2.zero;
+            AnimationState("idle");
+        }
     }
 
     public void FlipSprites()
@@ -219,5 +224,15 @@ public class PlayerController : MonoBehaviour
         if(dashSound != null)
             dashSound.Play();
         isDashing = false;
+    }
+
+    private void AnimationState(string state)
+    {
+        if(mAnimator != null)
+        {
+            mAnimator.SetBool("run", false);
+            mAnimator.SetBool("idle", false);
+            mAnimator.SetBool(state, true);
+        }
     }
 }

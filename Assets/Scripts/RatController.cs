@@ -18,11 +18,10 @@ public class RatController : MonoBehaviour
 {
     private Rigidbody2D body;
     private GameObject player;
-    private RectTransform healthBarTransform;
     private ratState currentState = ratState.Idle;
     private LineRenderer lineToPlayer;
+    private Animator mAnimator;
     public AudioSource attackSound;
-    public Slider healthBar;
     [Header("Rat Parameters")]
     public float range = 1f;
     public float timeToMove = 5f;
@@ -39,12 +38,14 @@ public class RatController : MonoBehaviour
     {
         player = GameObject.FindWithTag("Player");
         body = GetComponent<Rigidbody2D>();
+        mAnimator = GetComponent<Animator>();
         lineToPlayer = GetComponent<LineRenderer>();
         body.velocity = new Vector2(1,1);
     }
 
     private void FixedUpdate()
     {
+        timer += Time.deltaTime;
         if(gameObject != null)
         {
             // Check if im grabbed by gravity gun
@@ -56,29 +57,50 @@ public class RatController : MonoBehaviour
 
                         if (timer >= timeToMove && !isAttacking)
                         {
+                            AnimationState("run");
                             Vector2 randomDir = RandomVector2(3.1415f * 2, 0f);
                             randomDir.Normalize();
                             body.velocity = randomDir * idleSpeed * Time.fixedDeltaTime;
                             timer = 0f;
+                        }
+                        else
+                        {
+                            AnimationState("idle");
                         }
                         break;
 
                     case (ratState.Engaged):
 
                         // calculate distance to move
-                        if (!isAttacking)
+                        if (timer >= attackCooldown && !isAttacking)
                         {
+                            Debug.Log("attack");
+                            AnimationState("jump");
+                            StartCoroutine(Attack());
+                            timer = 0f;
+                        }
+                        else
+                        {
+                            Debug.Log("follow");
                             Vector2 movement = player.transform.position - transform.position;
                             movement.Normalize();
                             if (body.velocity != Vector2.zero)
+                            {
                                 body.velocity = movement * engagedSpeed * Time.fixedDeltaTime;
+                                AnimationState("run");
+                            }
                             else
+                            {
                                 body.velocity = Vector2.zero;
+                                AnimationState("idle");
+                            }
                         }
 
                         break;
 
                     case (ratState.Dead):
+                        AnimationState("idle");
+                        body.velocity = Vector2.zero;
                         break;
                 }
             }
@@ -87,41 +109,32 @@ public class RatController : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
-
         if (gameObject != null)
         {
+            FlipSprites();
             if (gameObject.transform.parent == null || !gameObject.transform.parent.CompareTag("Weapon"))
             {
-                //Debug.Log("rat is attacking = " + isAttacking);
-                //Debug.Log("rat stat is = "  + currentState);
                 if (!isPlayerClose())
                     currentState = ratState.Idle;
                 else
                     currentState = ratState.Engaged;
+                float butlerHP = body.GetComponent<HealthSystem>().getHealth();
+                if (butlerHP <= 0)
+                    currentState = ratState.Dead;
+
                 switch (currentState)
                 {
                     case (ratState.Idle):
-
                         lineToPlayer.enabled = false;
                         break;
                     case (ratState.Engaged):
-
                         DrawLineToPlayer();
-                        if (timer >= attackCooldown && !isAttacking)
-                        {
-                            StartCoroutine(Attack());
-                            timer = 0f;
-                        }
-
                         break;
                     case (ratState.Dead):
-                        body.velocity = Vector2.zero;
                         gameObject.layer = LayerMask.NameToLayer("Dead Objects");
                         lineToPlayer.enabled = false;
                         break;
                 }
-                if (healthBar != null)
-                    showHealthBar();
             }
         }
        
@@ -149,22 +162,6 @@ public class RatController : MonoBehaviour
             return true;
     }
 
-    private void showHealthBar()
-    {
-        // Healthbar slider and text update
-        if (gameObject != null)
-        {
-            HealthSystem playerHealth = gameObject.GetComponent<HealthSystem>();
-            float healthPercentage = (float)playerHealth.getHealth() / (float)playerHealth.getHealthMax();
-            healthBar.value = healthPercentage;
-            Vector2 screenPos = Camera.main.WorldToScreenPoint(transform.position);
-            Vector2 aboveSprite = screenPos;
-            aboveSprite.y += 25f;
-            // Update the position of the Slider's RectTransform
-            healthBar.transform.position = aboveSprite;
-        }
-    }
-
     public void DrawLineToPlayer()
     {
         lineToPlayer.enabled = true;
@@ -186,4 +183,18 @@ public class RatController : MonoBehaviour
         return new Vector2(Mathf.Cos(random), Mathf.Sin(random));
     }
 
+    void AnimationState(string currState)
+    {
+        if (mAnimator != null)
+        {
+            mAnimator.SetBool("idle", false);
+            mAnimator.SetBool("run", false);
+            mAnimator.SetBool("jump", false);
+            mAnimator.SetBool(currState, true);
+        }
+    }
+    public void FlipSprites()
+    {
+        body.GetComponent<SpriteRenderer>().flipX = (player.transform.position.x < transform.position.x);
+    }
 }

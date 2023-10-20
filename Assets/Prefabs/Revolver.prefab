@@ -270,6 +270,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bullet: {fileID: 3261428201285270749, guid: 8d19ea939d264e04295222d97796744c, type: 3}
   fireSound: {fileID: 4592253738361210879}
-  bulletSpeed: 20
+  bulletSpeed: 35
   bulletDeathTimer: 1.5
   cooldownTimer: 0.25

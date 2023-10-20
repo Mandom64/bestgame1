@@ -10,6 +10,7 @@ enum eyeState
     {
         Idle,
         Engaged,
+        Struck,
         Dead,
     };
 
@@ -34,6 +35,7 @@ public class EyeController : MonoBehaviour
     public Sprite eye_dead;
     SpriteRenderer eyeRenderer;
     Animator mAnimator;
+    float lastHP;
     
     
 
@@ -53,17 +55,21 @@ public class EyeController : MonoBehaviour
         if(gameObject != null)
         {
             timer += Time.deltaTime;
+
+            FlipSprites();
             // Check if im grabbed by gravity gun
             if(gameObject.transform.parent == null || !gameObject.transform.parent.CompareTag("Weapon"))
             {
-                mAnimator.SetBool("struck", false);
+                
                 if (!isPlayerClose())
                     currentState = eyeState.Idle;
                 else
                     currentState = eyeState.Engaged;
-                //Debug.Log(currentState);
 
                 float eyeHP = body.GetComponent<HealthSystem>().getHealth();
+                if(eyeHP != lastHP)
+                    currentState = eyeState.Struck;
+                lastHP = eyeHP;
                 if (eyeHP <= 0)
                     currentState = eyeState.Dead;
 
@@ -100,7 +106,13 @@ public class EyeController : MonoBehaviour
                             timer = 0f;
                         }
                         break;
-
+                    case (eyeState.Struck):
+                        if (mAnimator != null)
+                        {
+                            mAnimator.SetBool("running", false);
+                            mAnimator.SetBool("struck", true);
+                        }
+                        break;
                     case (eyeState.Dead):
                         if (mAnimator != null)
                             mAnimator.SetBool("dead", true);
@@ -160,5 +172,8 @@ public class EyeController : MonoBehaviour
         float random = UnityEngine.Random.value * angle + angleMin;
         return new Vector2(Mathf.Cos(random), Mathf.Sin(random));
     }
-    
+    public void FlipSprites()
+    {
+        body.GetComponent<SpriteRenderer>().flipX = (player.transform.position.x < transform.position.x);
+    }
 }

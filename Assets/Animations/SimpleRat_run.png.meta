@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: cfeec2724184075408529b9a558ec940
+guid: 5cf7fe9e8e78e03488f7eca8ddf8b156
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 300
+  spritePixelsToUnits: 200
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -123,13 +123,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Rat King_0
+      name: SimpleRat_run_0
       rect:
         serializedVersion: 2
-        x: 55
-        y: 416
-        width: 322
-        height: 348
+        x: 59
+        y: 490
+        width: 280
+        height: 160
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -137,20 +137,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 91495b648c5bb004bb436e3454b221f2
-      internalID: -1397525969
+      spriteID: 2a740034871d8fc4eb85a254dfe607cc
+      internalID: 171772009
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rat King_1
+      name: SimpleRat_run_1
       rect:
         serializedVersion: 2
-        x: 455
-        y: 416
-        width: 314
-        height: 347
+        x: 459
+        y: 496
+        width: 280
+        height: 154
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -158,20 +158,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e5d4d541196df294a9049bd7dd4d5d9f
-      internalID: -1397383712
+      spriteID: 35082761d80758c4f87b5cc288ec65de
+      internalID: -152786607
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rat King_2
+      name: SimpleRat_run_2
       rect:
         serializedVersion: 2
-        x: 856
-        y: 416
-        width: 296
-        height: 356
+        x: 859
+        y: 497
+        width: 280
+        height: 153
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -179,20 +179,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 402c9efc38377224fba57a3d9857bbdd
-      internalID: -445698451
+      spriteID: e1e56d9120a66624e971d6ebc4a09558
+      internalID: 349554798
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rat King_3
+      name: SimpleRat_run_3
       rect:
         serializedVersion: 2
-        x: 1255
-        y: 416
-        width: 314
-        height: 347
+        x: 1259
+        y: 496
+        width: 280
+        height: 154
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -200,20 +200,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4a16c8def9e172b4a8d74240573d7367
-      internalID: 1424333428
+      spriteID: 6cdc6c868c9252b4ab7004c5b084cc62
+      internalID: 1660278319
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rat King_4
+      name: SimpleRat_run_4
       rect:
         serializedVersion: 2
-        x: 55
-        y: 16
-        width: 327
-        height: 348
+        x: 1660
+        y: 490
+        width: 280
+        height: 160
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -221,20 +221,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6defa7f091ce9b64aa36ac8ae2c702fa
-      internalID: -930480685
+      spriteID: 148c810e4ebfa78419c5f9a2b1b596a9
+      internalID: -263782609
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rat King_5
+      name: SimpleRat_run_5
       rect:
         serializedVersion: 2
-        x: 454
-        y: 8
-        width: 310
-        height: 363
+        x: 59
+        y: 90
+        width: 280
+        height: 160
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -242,20 +242,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 972ddd79b488ac94793ab3828e68ecfd
-      internalID: -1366144027
+      spriteID: 77f730bb7d6bb4540948cdfa0da17b12
+      internalID: 6168284
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rat King_6
+      name: SimpleRat_run_6
       rect:
         serializedVersion: 2
-        x: 854
-        y: 11
-        width: 328
-        height: 353
+        x: 459
+        y: 96
+        width: 280
+        height: 154
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -263,20 +263,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b4a07977023544d498238114615c958e
-      internalID: -1781071948
+      spriteID: 3a99c18bdf0caf04bb9bcd2c3cc84e18
+      internalID: 639289590
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rat King_7
+      name: SimpleRat_run_7
       rect:
         serializedVersion: 2
-        x: 1254
-        y: 8
-        width: 310
-        height: 363
+        x: 859
+        y: 97
+        width: 280
+        height: 153
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -284,8 +284,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 52cc83a04f3bb9048a5f2641ac5f8f95
-      internalID: -1461302481
+      spriteID: 447d93e7a7254194fafb0eee59844270
+      internalID: -362571184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimpleRat_run_8
+      rect:
+        serializedVersion: 2
+        x: 1259
+        y: 96
+        width: 280
+        height: 154
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74f84aacc53f82046b691a346e553ee9
+      internalID: -730069073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimpleRat_run_9
+      rect:
+        serializedVersion: 2
+        x: 1660
+        y: 90
+        width: 280
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6fcac9fda2e6514498ed79e3eb1751e
+      internalID: 1855952840
       vertices: []
       indices: 
       edges: []
@@ -301,14 +343,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Rat King_0: -1397525969
-      Rat King_1: -1397383712
-      Rat King_2: -445698451
-      Rat King_3: 1424333428
-      Rat King_4: -930480685
-      Rat King_5: -1366144027
-      Rat King_6: -1781071948
-      Rat King_7: -1461302481
+      SimpleRat_run_0: 171772009
+      SimpleRat_run_1: -152786607
+      SimpleRat_run_2: 349554798
+      SimpleRat_run_3: 1660278319
+      SimpleRat_run_4: -263782609
+      SimpleRat_run_5: 6168284
+      SimpleRat_run_6: 639289590
+      SimpleRat_run_7: -362571184
+      SimpleRat_run_8: -730069073
+      SimpleRat_run_9: 1855952840
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

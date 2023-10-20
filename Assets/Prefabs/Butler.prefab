@@ -407,6 +407,7 @@ GameObject:
   - component: {fileID: 6886096901902172034}
   - component: {fileID: 435459477952204786}
   - component: {fileID: 8002670466616402955}
+  - component: {fileID: 3621731440101497727}
   m_Layer: 9
   m_Name: Butler
   m_TagString: Untagged
@@ -713,3 +714,24 @@ MonoBehaviour:
   baseWallDamage: 10
   wallDamageMultiplier: 7.5
   minWallDamage: 35
+--- !u!95 &3621731440101497727
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7329148490360803037}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9d4f66df2b3ad654692693e62017d7d9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
