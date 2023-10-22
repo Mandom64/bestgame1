@@ -61,9 +61,9 @@ public class GravityGun : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position,
             rayDir, grabDistance, grabbableLayer);
 
-        Debug.Log(hit.collider.gameObject.layer);
         if(hit.collider != null) 
         {
+            Debug.Log(hit.collider.gameObject.layer);
             objectGrabbed = hit.collider.gameObject;
             objectGrabbed.transform.parent = transform;
             hasGrabbed = true;

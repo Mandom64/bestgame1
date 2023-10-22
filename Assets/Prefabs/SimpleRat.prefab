@@ -200,13 +200,14 @@ GameObject:
   - component: {fileID: 6115885655757647343}
   - component: {fileID: 5346954223090248425}
   - component: {fileID: -6906477483865122538}
+  - component: {fileID: -4846744793455608580}
   - component: {fileID: -5164756131211562072}
   - component: {fileID: 5617958194523424221}
   - component: {fileID: 2645099081054454636}
-  - component: {fileID: -4846744793455608580}
+  - component: {fileID: -2508958477146965306}
   m_Layer: 9
   m_Name: SimpleRat
-  m_TagString: Untagged
+  m_TagString: SimpleRat
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -342,7 +343,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.8, y: 1.6}
+    oldSize: {x: 1.4, y: 0.8}
     newSize: {x: 2.8, y: 1.6}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -551,6 +552,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!95 &-4846744793455608580
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1842902642620573894}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0611ecc68829fa04995c137a8d2e37e6, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &-5164756131211562072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -568,9 +590,9 @@ MonoBehaviour:
   timeToMove: 5
   idleSpeed: 15
   engagedSpeed: 40
-  attackSpeed: 2500
-  attackTime: 1
-  attackCooldown: 2
+  attackSpeed: 50
+  attackTime: 0.15
+  attackCooldown: 3
 --- !u!114 &5617958194523424221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -600,27 +622,19 @@ MonoBehaviour:
   baseWallDamage: 10
   wallDamageMultiplier: 7.5
   minWallDamage: 35
---- !u!95 &-4846744793455608580
-Animator:
-  serializedVersion: 5
+--- !u!114 &-2508958477146965306
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1842902642620573894}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 0611ecc68829fa04995c137a8d2e37e6, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 510b06d4b9487884b9dd50958eedb1df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 50
 --- !u!1 &4357570763852012392
 GameObject:
   m_ObjectHideFlags: 0

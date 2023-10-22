@@ -131,7 +131,6 @@ public class Shotgun : MonoBehaviour
         muzzleFlash.SetActive(true);
         yield return new WaitForSeconds(muzzleDrawTime);
         muzzleFlash.SetActive(false);
-        Debug.Log("hello!"); 
     }
 
 }

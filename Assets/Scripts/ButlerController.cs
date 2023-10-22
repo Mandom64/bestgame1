@@ -109,7 +109,8 @@ public class ButlerController : MonoBehaviour
 
                     case (ButlerState.Engaged):
                         DrawLineToPlayer();
-                        if (timer >= spawnCooldown && rats.Count < ratLimit - 1)
+                        checkAliveRats();
+                        if (timer >= spawnCooldown && rats.Count < ratLimit)
                         {
                             SpawnRats();
                             AnimationState("spawn");
@@ -135,7 +136,6 @@ public class ButlerController : MonoBehaviour
 
     public void SpawnRats()
     {
-        GetAliveRats();
         if(rat != null)
         {
             for(int i = 0; i < RatsToSpawn; i++)
@@ -143,17 +143,21 @@ public class ButlerController : MonoBehaviour
                 GameObject ratClone = Instantiate(rat, transform.position, Quaternion.identity);
                 if(ratClone != null)
                     rats.Add(ratClone);
-                Debug.Log(rats.Count);
             }
         }
     }
 
-    public void GetAliveRats()
+    public void checkAliveRats()
     {
-        foreach(GameObject rat in rats)
+        if (rats != null)
         {
-            if (rat == null)
-                rats.Remove(rat);
+            for (int i = 0; i < rats.Count; i++)
+            {
+                if (rats[i] == null)
+                { 
+                    rats.RemoveAt(i);
+                }
+            }
         }
     }
 

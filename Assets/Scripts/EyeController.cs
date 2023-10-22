@@ -33,7 +33,6 @@ public class EyeController : MonoBehaviour
     public float bulletDeathTimer = 3.0f;
     public float cooldownTimer = 0.5f;
     public Sprite eye_dead;
-    SpriteRenderer eyeRenderer;
     Animator mAnimator;
     float lastHP;
     
@@ -44,10 +43,46 @@ public class EyeController : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         body = GetComponent<Rigidbody2D>();
         lineToPlayer = GetComponent<LineRenderer>();
-        eyeRenderer = GetComponent<SpriteRenderer>();
         mAnimator = GetComponent<Animator>();
         if(mAnimator != null)
             mAnimator.SetBool("running", true);
+    }
+
+    private void FixedUpdate()
+    {
+        if (gameObject != null)
+        {
+            timer += Time.deltaTime;
+            // Check if im grabbed by gravity gun
+            if (gameObject.transform.parent == null || !gameObject.transform.parent.CompareTag("Weapon"))
+            {
+                switch (currentState)
+                {
+                    case (eyeState.Idle):
+                        if (timer >= timeToMove)
+                        {
+                            Vector2 randomDir = RandomVector2(3.1415f * 2, 0f);
+                            randomDir.Normalize();
+                            body.velocity = randomDir * idleSpeed * Time.deltaTime;
+                            timer = 0f;
+                        }
+                        break;
+
+                    case (eyeState.Engaged):
+                        // calculate distance to move
+                        var step = engagedSpeed * Time.deltaTime;
+                        transform.position = Vector3.MoveTowards(transform.position,
+                            player.transform.position, step);
+                        break;
+                    case (eyeState.Struck):
+                        break;
+                    case (eyeState.Dead):
+                        body.velocity = Vector2.zero;
+                        break;
+                }
+
+            }
+        }
     }
 
     void Update()
@@ -60,7 +95,6 @@ public class EyeController : MonoBehaviour
             // Check if im grabbed by gravity gun
             if(gameObject.transform.parent == null || !gameObject.transform.parent.CompareTag("Weapon"))
             {
-                
                 if (!isPlayerClose())
                     currentState = eyeState.Idle;
                 else
@@ -81,13 +115,6 @@ public class EyeController : MonoBehaviour
                             mAnimator.SetBool("running", true);
                         }
                         lineToPlayer.enabled = false;
-                        if (timer >= timeToMove)
-                        {
-                            Vector2 randomDir = RandomVector2(3.1415f * 2, 0f);
-                            randomDir.Normalize();
-                            body.velocity = randomDir * idleSpeed * Time.deltaTime;
-                            timer = 0f;
-                        }
                         break;
 
                     case (eyeState.Engaged):
@@ -96,10 +123,6 @@ public class EyeController : MonoBehaviour
                             mAnimator.SetBool("running", true);
                         }
                         DrawLineToPlayer();
-                        // calculate distance to move
-                        var step = engagedSpeed * Time.deltaTime; 
-                        transform.position = Vector3.MoveTowards(transform.position,
-                            player.transform.position, step);
                         if (timer >= cooldownTimer)
                         {
                             Shoot(player);
@@ -116,10 +139,8 @@ public class EyeController : MonoBehaviour
                     case (eyeState.Dead):
                         if (mAnimator != null)
                             mAnimator.SetBool("dead", true);
-                        body.velocity = Vector2.zero;
                         gameObject.layer = LayerMask.NameToLayer("Dead Objects");
                         lineToPlayer.enabled = false;
-                        eyeRenderer.sprite = eye_dead;
                         break;
                 }
             }

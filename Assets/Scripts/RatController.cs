@@ -70,15 +70,7 @@ public class RatController : MonoBehaviour
                         break;
 
                     case (ratState.Engaged):
-
-                        // calculate distance to move
-                        if (timer >= attackCooldown && !isAttacking)
-                        {
-                            AnimationState("jump");
-                            StartCoroutine(Attack());
-                            timer = 0f;
-                        }
-                        else
+                        if(!isAttacking)
                         {
                             Vector2 movement = player.transform.position - transform.position;
                             movement.Normalize();
@@ -93,12 +85,12 @@ public class RatController : MonoBehaviour
                                 AnimationState("idle");
                             }
                         }
-
                         break;
 
                     case (ratState.Dead):
                         AnimationState("idle");
                         body.velocity = Vector2.zero;
+                        gameObject.layer = LayerMask.NameToLayer("Dead Objects");
                         break;
                 }
             }
@@ -127,6 +119,13 @@ public class RatController : MonoBehaviour
                         break;
                     case (ratState.Engaged):
                         DrawLineToPlayer();
+                        // calculate distance to move
+                        if (timer >= attackCooldown && !isAttacking)
+                        {
+                            
+                            StartCoroutine(Attack());
+                            timer = 0f;
+                        }
                         break;
                     case (ratState.Dead):
                         gameObject.layer = LayerMask.NameToLayer("Dead Objects");
@@ -141,7 +140,9 @@ public class RatController : MonoBehaviour
     private IEnumerator Attack()
     {
         isAttacking = true;
-        body.AddForce(body.velocity * attackSpeed * Time.fixedDeltaTime);
+        AnimationState("jump");
+        Vector2 attackDir = (player.transform.position - transform.position).normalized;
+        body.AddForce(attackDir * attackSpeed);
         yield return new WaitForSeconds(attackTime);
         if (attackSound != null)
             attackSound.Play();

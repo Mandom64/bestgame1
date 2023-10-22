@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class Revolver : MonoBehaviour
 {
+    private Ammo mAmmo;
     public GameObject bullet;
     public AudioSource fireSound;
     public float bulletSpeed = 1.0f;
     public float bulletDeathTimer = 3.0f;
     public float cooldownTimer = 0.25f;
+    private bool canShoot = true;
     private float timer = 0.0f;
 
+    private void Start()
+    {
+        mAmmo = GetComponent<Ammo>();
+    }
     void Update()
     {
         timer += Time.deltaTime;
@@ -31,16 +37,19 @@ public class Revolver : MonoBehaviour
 
     private void Shoot()
     {
-        Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
-        Vector2 shootDir = (mousePos - transform.position).normalized;
-        GameObject pelletInstance = Instantiate(bullet, transform.position, Quaternion.identity);
-        Rigidbody2D rb_pellet = pelletInstance.GetComponent<Rigidbody2D>();
-        rb_pellet.velocity = shootDir * bulletSpeed;
-        Destroy(pelletInstance, bulletDeathTimer);
-
-        if(fireSound != null)
-            fireSound.Play();   
-        
+        canShoot = mAmmo.CanShoot();
+        if (canShoot)
+        {
+            Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
+            Vector2 shootDir = (mousePos - transform.position).normalized;
+            GameObject pelletInstance = Instantiate(bullet, transform.position, transform.rotation);
+            Rigidbody2D rb_pellet = pelletInstance.GetComponent<Rigidbody2D>();
+            rb_pellet.velocity = shootDir * bulletSpeed;
+            Destroy(pelletInstance, bulletDeathTimer);
+            mAmmo.UseAmmo(1);
+            if(fireSound != null)
+                fireSound.Play();   
+        }
     }
     private void EnableAiming()
     {

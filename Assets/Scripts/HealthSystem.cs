@@ -18,17 +18,17 @@ public class HealthSystem : MonoBehaviour
     public void Damage(float damageAmount)
     {
         health -= damageAmount;
-        if(health < 0)
+        if(health <= 0)
         {
             health = 0;
             Destroy(gameObject, deleteTimer);
             Debug.Log(gameObject + " is deleted!");
         }
     }
-    public void Heal(int healAmount)
+    public void Heal(float healAmount)
     {
         health += healAmount;
         if(health > healthMax)
-            healthMax = health;
+            health = healthMax;
     }
 }

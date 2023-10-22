@@ -8,6 +8,8 @@ TagManager:
   - Bullet
   - Pellet
   - Weapon
+  - SimpleRat
+  - Healthpack
   layers:
   - Default
   - TransparentFX

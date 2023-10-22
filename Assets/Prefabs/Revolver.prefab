@@ -268,7 +268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51deb5bc31d2dec20bbd3b3f54250eb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bullet: {fileID: 3261428201285270749, guid: 8d19ea939d264e04295222d97796744c, type: 3}
+  bullet: {fileID: 3261428201285270749, guid: 0eb7953f406be4d42b6c5dc022c4fe4f, type: 3}
   fireSound: {fileID: 4592253738361210879}
   bulletSpeed: 35
   bulletDeathTimer: 1.5

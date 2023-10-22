@@ -214,6 +214,18 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+        if(objectHit.layer == LayerMask.NameToLayer("Enemies"))
+        {
+            if(objectHit.CompareTag("SimpleRat"))
+            {
+                float damageAmount = objectHit.gameObject.GetComponent<Damage>().damage;
+                if (playerHP != null)
+                {
+                    playerHP.Damage(damageAmount);
+                    Debug.Log(playerHP + " took " + damageAmount + " from a SIMPLE_RAT");
+                }
+            }
+        }
     }
     
     private IEnumerator Dash()
