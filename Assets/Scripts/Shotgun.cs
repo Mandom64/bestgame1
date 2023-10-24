@@ -10,6 +10,7 @@ public class Shotgun : MonoBehaviour
     Rigidbody2D body;
     public GameObject muzzleFlash;
     private AudioSource fireAudio;
+    private Ammo mAmmo;
     [Header("Shotgun parameters")]
     public GameObject pellet;
     public int pelletCount = 5;
@@ -20,6 +21,7 @@ public class Shotgun : MonoBehaviour
     public float cooldownTimer = 0.25f;
     public float muzzleDrawTime = 0.5f;
     private float timer = 0.0f;
+    private bool canShoot = true;
 
 
     void Start()
@@ -27,6 +29,7 @@ public class Shotgun : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         fireAudio = gameObject.GetComponent<AudioSource>();
         muzzleFlash.SetActive(false);
+        mAmmo = GetComponent<Ammo>();
     }
 
     void Update()
@@ -49,27 +52,39 @@ public class Shotgun : MonoBehaviour
 
     private void Shoot(int pelletCount)
     {
-        StartCoroutine(DrawMuzzleFlash());
-        Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
-        Vector2 shootDir = (mousePos - transform.position).normalized;
+        canShoot = mAmmo.CanShoot();
+        if(canShoot)
+        {
+            StartCoroutine(DrawMuzzleFlash());
+            Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
+            Vector2 shootDir = (mousePos - transform.position).normalized;
 
-        for (int i = 0; i < pelletCount; i++)
-        {
-            // Create random spread by alternating positive and negative angles
-            int randValue = Random.Range(0, 2);
-            if (randValue == 1)
-                shootDir = RotateVector2(shootDir, spread);
-            else
-                shootDir = RotateVector2(shootDir, -spread);
-            GameObject pelletInstance = Instantiate(pellet, transform.position, transform.rotation);
-            Rigidbody2D rb_pellet = pelletInstance.GetComponent<Rigidbody2D>();
-            rb_pellet.AddForce(shootDir * RandomPelletSpeed());
-            Destroy(pelletInstance, pelletDeathTimer);
-        }
-        
-        if(fireAudio != null)
-        {
-            fireAudio.Play();
+            for (int i = 0; i < pelletCount; i++)
+            {
+                if(mAmmo.getAmmo() > 0)
+                {
+                    // Create random spread by alternating positive and negative angles
+                    int randValue = Random.Range(0, 2);
+                    if (randValue == 1)
+                        shootDir = RotateVector2(shootDir, spread);
+                    else
+                        shootDir = RotateVector2(shootDir, -spread);
+                    GameObject pelletInstance = Instantiate(pellet, transform.position, transform.rotation);
+                    Rigidbody2D rb_pellet = pelletInstance.GetComponent<Rigidbody2D>();
+                    rb_pellet.AddForce(shootDir * RandomPelletSpeed());
+                    Destroy(pelletInstance, pelletDeathTimer);
+                    mAmmo.UseAmmo(1);
+                }
+                else
+                {
+                    canShoot = false;
+                }
+            }
+
+            if (fireAudio != null)
+            {
+                fireAudio.Play();
+            }
         }
     }
 

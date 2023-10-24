@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -8916581557083451120}
   - component: {fileID: 4592253738361210879}
   - component: {fileID: 3331166356130856925}
+  - component: {fileID: 5222117258506821124}
   m_Layer: 10
   m_Name: Revolver
   m_TagString: Weapon
@@ -273,3 +274,17 @@ MonoBehaviour:
   bulletSpeed: 35
   bulletDeathTimer: 1.5
   cooldownTimer: 0.25
+--- !u!114 &5222117258506821124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2154102438909483411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16418bb1e0c829a40a4673414130e324, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxAmmo: 10
+  canShoot: 1

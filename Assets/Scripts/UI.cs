@@ -16,6 +16,7 @@ public class UI : MonoBehaviour
     public Canvas options;
     public Slider audioSlider;
     public Image healthbar;
+    public TextMeshProUGUI ammo;
     bool pauseGame = false;
 
     void Start()
@@ -90,10 +91,14 @@ public class UI : MonoBehaviour
             SpriteRenderer currItemImage = 
                 inventory.inventoryList[itemToShow].GetComponent<SpriteRenderer>();
             InventoryImage.sprite = currItemImage.sprite;
+
+            ammo.enabled = true;
+            ammo.text = inventory.inventoryList[itemToShow].GetComponent<Ammo>().getAmmo().ToString();
         }
         else if (inventory.inventoryList.Count == 0)
         {
             InventoryImage.enabled = false;
+            ammo.enabled = false;
         }
     }
 

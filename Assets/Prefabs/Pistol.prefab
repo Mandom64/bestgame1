@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4464967842449991778}
   - component: {fileID: 3273853613732562228}
   - component: {fileID: 1205933500710130588}
+  - component: {fileID: 3605382905353829020}
   m_Layer: 10
   m_Name: Pistol
   m_TagString: Weapon
@@ -380,4 +381,18 @@ MonoBehaviour:
   hitRay: {fileID: 4464967842449991778}
   cooldownTimer: 0.25
   shootDistance: 20
-  damage: 15
+  damage: 22.5
+--- !u!114 &3605382905353829020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 773645686571240382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16418bb1e0c829a40a4673414130e324, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxAmmo: 1000
+  canShoot: 1

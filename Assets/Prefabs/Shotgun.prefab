@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 7411031963560246666}
   - component: {fileID: -257955196582254308}
   - component: {fileID: 5670927908337547577}
+  - component: {fileID: -9214861762547251804}
   m_Layer: 10
   m_Name: Shotgun
   m_TagString: Weapon
@@ -362,3 +363,17 @@ MonoBehaviour:
   spread: 3.5
   cooldownTimer: 0.75
   muzzleDrawTime: 0.5
+--- !u!114 &-9214861762547251804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8217800999922394442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16418bb1e0c829a40a4673414130e324, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxAmmo: 50
+  canShoot: 1

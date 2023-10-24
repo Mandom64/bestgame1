@@ -2,19 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pistol : MonoBehaviour
+public class Hitscan : MonoBehaviour
 {
     public AudioSource fireSound;
     public LayerMask EnemiesLayer;
     public LineRenderer hitRay;
+    private Ammo mAmmo;
     public float cooldownTimer = 0.25f;
     public float shootDistance = 10f;
     public float damage = 15f;
     private float timer = 0.0f;
+    private bool canShoot = true;
 
     private void Start()
     {
         hitRay = GetComponent<LineRenderer>();
+        mAmmo = GetComponent<Ammo>();
     }
     void Update()
     {
@@ -38,28 +41,33 @@ public class Pistol : MonoBehaviour
 
     private void Shoot()
     {
-        Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
-        Vector2 shootDir = (mousePos - transform.position).normalized;
-        RaycastHit2D hit = Physics2D.Raycast(transform.position,
-            shootDir, shootDistance, EnemiesLayer);
-        if(hit.collider != null)
+        canShoot = mAmmo.CanShoot();
+        if (canShoot)
         {
-            GameObject enemyHit = hit.collider.gameObject;
-            if (enemyHit != null)
+            Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
+            Vector2 shootDir = (mousePos - transform.position).normalized;
+            RaycastHit2D hit = Physics2D.Raycast(transform.position,
+                shootDir, shootDistance, EnemiesLayer);
+            if (hit.collider != null)
             {
-                DrawRay(enemyHit.transform);
-                HealthSystem enemyHP = enemyHit.GetComponent<HealthSystem>();
-                enemyHP.Damage(damage);
-                enemyHit.GetComponentInChildren<EnemyHealthbar>().UpdateHealthbarUI(enemyHP.getHealth(), enemyHP.healthMax);
+                GameObject enemyHit = hit.collider.gameObject;
+                if (enemyHit != null)
+                {
+                    DrawRay(enemyHit.transform);
+                    HealthSystem enemyHP = enemyHit.GetComponent<HealthSystem>();
+                    enemyHP.Damage(damage);
+                    enemyHit.GetComponentInChildren<EnemyHealthbar>().UpdateHealthbarUI(enemyHP.getHealth(), enemyHP.healthMax);
+                    mAmmo.UseAmmo(1);
+                }
+                if (fireSound != null)
+                    fireSound.Play();
             }
-        }
-        else
-        {
-        }
+            else
+            {
 
-        if (fireSound != null)
-            fireSound.Play();
+            }
 
+        }
     }
     private void EnableAiming()
     {
