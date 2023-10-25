@@ -458,15 +458,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f480e4f24109e4798e1b144e5179eb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 5
+  range: 8
   idleSpeed: 25
   engagedSpeed: 1
   timeToMove: 5
   healthBar: {fileID: 0}
   bullet: {fileID: 3261428201285270749, guid: 8d19ea939d264e04295222d97796744c, type: 3}
-  bulletSpeed: 2.5
+  bulletSpeed: 6
   bulletDeathTimer: 3
-  cooldownTimer: 2
+  cooldownTimer: 2.5
   eye_dead: {fileID: -393214449, guid: 58982927945de414b83b75b60bbdd691, type: 3}
 --- !u!114 &7562215725066220184
 MonoBehaviour:
