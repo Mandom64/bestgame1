@@ -21,7 +21,7 @@ public class FollowPlayer : MonoBehaviour
             Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
             Vector2 distance = mousePos - mainCamera.transform.position;
             distance = Vector3.ClampMagnitude(distance, cameraMaxDistance);
-            mainCamera.transform.position = player.transform.position + (Vector3)distance / 7 + new Vector3(0, 0, -5);
+            mainCamera.transform.position = player.transform.position + (Vector3)distance / 3 + new Vector3(0, 0, -5);
         }
     }
 

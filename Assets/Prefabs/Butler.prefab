@@ -679,12 +679,6 @@ MonoBehaviour:
   ratLimit: 4
   RatsToSpawn: 2
   rat: {fileID: 1842902642620573894, guid: 672418a26e2630742bb132b699b2d161, type: 3}
-  butler_idle: {fileID: 1995082928, guid: 58982927945de414b83b75b60bbdd691, type: 3}
-  butler_struck: {fileID: -185360492, guid: 58982927945de414b83b75b60bbdd691, type: 3}
-  butler_spawn: {fileID: -733445921, guid: 58982927945de414b83b75b60bbdd691, type: 3}
-  butler_dead: {fileID: 1842210414, guid: 58982927945de414b83b75b60bbdd691, type: 3}
-  drawTime: 0.5
-  healthBar: {fileID: 0}
 --- !u!114 &435459477952204786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -711,9 +705,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef04cca93bc19d744b739df1e360b48d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseWallDamage: 10
-  wallDamageMultiplier: 7.5
-  minWallDamage: 35
+  baseWallDamage: 0
+  wallDamageMultiplier: 0
+  minWallDamage: 0
 --- !u!95 &3621731440101497727
 Animator:
   serializedVersion: 5
