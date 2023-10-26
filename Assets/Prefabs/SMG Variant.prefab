@@ -14,11 +14,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1205933500710130588, guid: 805745eb14ce6144aa8b52688c1d4d84, type: 3}
       propertyPath: damage
-      value: 5
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 1205933500710130588, guid: 805745eb14ce6144aa8b52688c1d4d84, type: 3}
       propertyPath: cooldownTimer
-      value: 0.05
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 2972431101381675787, guid: 805745eb14ce6144aa8b52688c1d4d84, type: 3}
       propertyPath: m_Sprite

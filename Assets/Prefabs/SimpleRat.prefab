@@ -586,7 +586,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackSound: {fileID: 0}
-  range: 5
+  range: 9
   timeToMove: 5
   idleSpeed: 15
   engagedSpeed: 40
@@ -605,7 +605,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d267893d7ee15d4a8afaa85edf634b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthMax: 150
+  healthMax: 60
   deleteTimer: 3
 --- !u!114 &2645099081054454636
 MonoBehaviour:
