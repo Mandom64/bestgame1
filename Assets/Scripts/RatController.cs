@@ -30,7 +30,10 @@ public class RatController : MonoBehaviour
     public float attackSpeed = 10f;
     public float attackTime = 1f;
     public float attackCooldown = 5f;
+    public float pounceTime = 0.25f;
     private bool isAttacking = false;
+    private bool isPouncing = false;
+    public bool EnableLine = false;
     float timer = 0.0f;
    
 
@@ -55,7 +58,7 @@ public class RatController : MonoBehaviour
                 {
                     case (ratState.Idle):
 
-                        if (timer >= timeToMove && !isAttacking)
+                        if (timer >= timeToMove && !isAttacking && !isPouncing)
                         {
                             AnimationState("run");
                             Vector2 randomDir = RandomVector2(3.1415f * 2, 0f);
@@ -63,14 +66,10 @@ public class RatController : MonoBehaviour
                             body.velocity = randomDir * idleSpeed * Time.fixedDeltaTime;
                             timer = 0f;
                         }
-                        else
-                        {
-                            AnimationState("idle");
-                        }
+                        
                         break;
-
                     case (ratState.Engaged):
-                        if(!isAttacking)
+                        if(!isAttacking && !isPouncing)
                         {
                             Vector2 movement = player.transform.position - transform.position;
                             movement.Normalize();
@@ -98,6 +97,7 @@ public class RatController : MonoBehaviour
     }
     void Update()
     {
+        //Debug.Log(currentState);
         timer += Time.deltaTime;
         if (gameObject != null)
         {
@@ -118,13 +118,20 @@ public class RatController : MonoBehaviour
                         lineToPlayer.enabled = false;
                         break;
                     case (ratState.Engaged):
-                        DrawLineToPlayer();
-                        // calculate distance to move
-                        if (timer >= attackCooldown && !isAttacking)
+                        if(EnableLine)
+                            DrawLineToPlayer();
+                        if(timer >= attackCooldown)
                         {
-                            
-                            StartCoroutine(Attack());
-                            timer = 0f;
+                            if (!isAttacking)
+                            {
+                                StartCoroutine(Pounce());
+                            }
+                            else if (!isPouncing)
+                            {
+                                AnimationState("jump");
+                                StartCoroutine(Attack());
+                                timer = 0f;
+                            }
                         }
                         break;
                     case (ratState.Dead):
@@ -140,13 +147,23 @@ public class RatController : MonoBehaviour
     private IEnumerator Attack()
     {
         isAttacking = true;
-        AnimationState("jump");
         Vector2 attackDir = (player.transform.position - transform.position).normalized;
+        
         body.AddForce(attackDir * attackSpeed);
         yield return new WaitForSeconds(attackTime);
         if (attackSound != null)
             attackSound.Play();
         isAttacking = false;
+    }
+
+    private IEnumerator Pounce()
+    {
+        isPouncing = true;
+        isAttacking = true;
+        AnimationState("pounce");
+        body.velocity = Vector2.zero;
+        yield return new WaitForSeconds(pounceTime);
+        isPouncing = false;
     }
 
     private bool isPlayerClose()
@@ -189,6 +206,7 @@ public class RatController : MonoBehaviour
             mAnimator.SetBool("idle", false);
             mAnimator.SetBool("run", false);
             mAnimator.SetBool("jump", false);
+            mAnimator.SetBool("pounce", false);
             mAnimator.SetBool(currState, true);
         }
     }

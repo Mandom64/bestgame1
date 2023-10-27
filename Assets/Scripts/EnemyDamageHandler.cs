@@ -24,7 +24,7 @@ public class DamageHandler : MonoBehaviour
             if(myHP != null)
             {
                 myHP.Damage(damageAmount);
-                healthbar.UpdateHealthbarUI(myHP.getHealth(), myHP.healthMax);
+                healthbar.UpdateHealthbarUI(myHP.getHealth(), myHP.getHealthMax());
                 Destroy(objectHit);
                 Debug.Log(gameObject.name + " took " + damageAmount + " from a Bullet");
             }
@@ -37,7 +37,7 @@ public class DamageHandler : MonoBehaviour
             if(myHP != null)
             {
                 myHP.Damage(damageAmount);
-                healthbar.UpdateHealthbarUI(myHP.getHealth(), myHP.healthMax);
+                healthbar.UpdateHealthbarUI(myHP.getHealth(), myHP.getHealthMax());
                 Destroy(objectHit);
                 Debug.Log(gameObject.name + " took " + damageAmount + " from a Pellet");
             }
@@ -56,7 +56,7 @@ public class DamageHandler : MonoBehaviour
                 {
                     // Apply damage to the player
                     myHP.Damage(damageAmount);
-                    healthbar.UpdateHealthbarUI(myHP.getHealth(), myHP.healthMax);
+                    healthbar.UpdateHealthbarUI(myHP.getHealth(), myHP.getHealthMax());
                     Debug.Log(gameObject.name + " took " + damageAmount + " from a WALL");
                 }
             }

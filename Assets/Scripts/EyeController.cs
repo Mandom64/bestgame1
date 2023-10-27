@@ -27,6 +27,7 @@ public class EyeController : MonoBehaviour
     public float engagedSpeed = 15f;
     public float timeToMove = 5f;
     public Slider healthBar;
+    public bool EnableLine = false;
     [Header("Bullet Parameters")]
     public GameObject bullet;
     public float bulletSpeed = 15.0f;
@@ -35,6 +36,7 @@ public class EyeController : MonoBehaviour
     public Sprite eye_dead;
     Animator mAnimator;
     float lastHP;
+    float eyeHPmax;
     
     
 
@@ -46,6 +48,7 @@ public class EyeController : MonoBehaviour
         mAnimator = GetComponent<Animator>();
         if(mAnimator != null)
             mAnimator.SetBool("running", true);
+        eyeHPmax = body.GetComponent<HealthSystem>().getHealthMax();
     }
 
     private void FixedUpdate()
@@ -106,7 +109,6 @@ public class EyeController : MonoBehaviour
                 lastHP = eyeHP;
                 if (eyeHP <= 0)
                     currentState = eyeState.Dead;
-
                 switch (currentState)
                 {
                     case (eyeState.Idle):
@@ -118,11 +120,12 @@ public class EyeController : MonoBehaviour
                         break;
 
                     case (eyeState.Engaged):
+                        if(EnableLine)
+                            DrawLineToPlayer();
                         if (mAnimator != null)
                         {
                             mAnimator.SetBool("running", true);
                         }
-                        DrawLineToPlayer();
                         if (timer >= cooldownTimer)
                         {
                             Shoot(player);

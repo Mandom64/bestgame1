@@ -91,9 +91,11 @@ public class UI : MonoBehaviour
             SpriteRenderer currItemImage = 
                 inventory.inventoryList[itemToShow].GetComponent<SpriteRenderer>();
             InventoryImage.sprite = currItemImage.sprite;
-
-            ammo.enabled = true;
-            ammo.text = inventory.inventoryList[itemToShow].GetComponent<Ammo>().getAmmo().ToString();
+            if(inventory.inventoryList[itemToShow].name != "GravityGun")
+            {
+                ammo.enabled = true;
+                ammo.text = inventory.inventoryList[itemToShow].GetComponent<Ammo>().getAmmo().ToString();
+            }
         }
         else if (inventory.inventoryList.Count == 0)
         {

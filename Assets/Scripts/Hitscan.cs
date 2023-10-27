@@ -51,12 +51,12 @@ public class Hitscan : MonoBehaviour
             if (hit.collider != null)
             {
                 GameObject enemyHit = hit.collider.gameObject;
-                if (enemyHit != null)
+                if (enemyHit != null && !enemyHit.CompareTag("Walls"))
                 {
                     DrawRay(enemyHit.transform);
                     HealthSystem enemyHP = enemyHit.GetComponent<HealthSystem>();
                     enemyHP.Damage(damage);
-                    enemyHit.GetComponentInChildren<EnemyHealthbar>().UpdateHealthbarUI(enemyHP.getHealth(), enemyHP.healthMax);
+                    enemyHit.GetComponentInChildren<EnemyHealthbar>().UpdateHealthbarUI(enemyHP.getHealth(), enemyHP.getHealthMax());
                     mAmmo.UseAmmo(1);
                 }
                 if (fireSound != null)
@@ -64,9 +64,11 @@ public class Hitscan : MonoBehaviour
             }
             else
             {
-
+                DrawRay(mousePos);
+                mAmmo.UseAmmo(1);
+                if (fireSound != null)
+                    fireSound.Play();
             }
-
         }
     }
     private void EnableAiming()
@@ -94,5 +96,14 @@ public class Hitscan : MonoBehaviour
         hitRay.SetPosition(0, transform.position);
         hitRay.SetPosition(1, at.position);
     }
+    public void DrawRay(Vector3 at)
+    {
+        hitRay.enabled = true;
+        hitRay.material = new Material(Shader.Find("Sprites/Default"));
+        hitRay.material.color = Color.yellow;
+        hitRay.SetPosition(0, transform.position);
+        hitRay.SetPosition(1, at);
+    }
 }
+
 

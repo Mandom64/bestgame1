@@ -32,6 +32,7 @@ public class ButlerController : MonoBehaviour
     public float spawnCooldown = 3f;
     public int ratLimit = 6;
     public int RatsToSpawn = 2;
+    public bool EnableLine = false;
     public GameObject rat;
     private List<GameObject> rats = new List<GameObject>();
    
@@ -108,7 +109,8 @@ public class ButlerController : MonoBehaviour
                         break;
 
                     case (ButlerState.Engaged):
-                        DrawLineToPlayer();
+                        if(EnableLine)
+                            DrawLineToPlayer();
                         checkAliveRats();
                         if (timer >= spawnCooldown && rats.Count < ratLimit)
                         {

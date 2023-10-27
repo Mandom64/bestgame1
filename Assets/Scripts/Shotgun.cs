@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class Shotgun : MonoBehaviour
 {
     Rigidbody2D body;
-    public GameObject muzzleFlash;
     private AudioSource fireAudio;
     private Ammo mAmmo;
     [Header("Shotgun parameters")]
@@ -19,7 +18,6 @@ public class Shotgun : MonoBehaviour
     public float pelletDeathTimer = 3.0f;
     public float spread = 5.0f;
     public float cooldownTimer = 0.25f;
-    public float muzzleDrawTime = 0.5f;
     private float timer = 0.0f;
     private bool canShoot = true;
 
@@ -28,7 +26,6 @@ public class Shotgun : MonoBehaviour
     {
         body = GetComponent<Rigidbody2D>();
         fireAudio = gameObject.GetComponent<AudioSource>();
-        muzzleFlash.SetActive(false);
         mAmmo = GetComponent<Ammo>();
     }
 
@@ -55,7 +52,6 @@ public class Shotgun : MonoBehaviour
         canShoot = mAmmo.CanShoot();
         if(canShoot)
         {
-            StartCoroutine(DrawMuzzleFlash());
             Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
             Vector2 shootDir = (mousePos - transform.position).normalized;
 
@@ -140,12 +136,5 @@ public class Shotgun : MonoBehaviour
             obj.GetComponent<SpriteRenderer>().flipY = true;
     }
 
-    private IEnumerator DrawMuzzleFlash()
-    { 
-        FlipSpriteY(muzzleFlash);
-        muzzleFlash.SetActive(true);
-        yield return new WaitForSeconds(muzzleDrawTime);
-        muzzleFlash.SetActive(false);
-    }
 
 }

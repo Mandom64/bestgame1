@@ -5,8 +5,9 @@ using UnityEngine.UI;
 
 public class HealthSystem : MonoBehaviour
 {
-    public float healthMax = 100;
     public float deleteTimer = 3f;
+    public bool deleteOnDeath = true;
+    [SerializeField] private float healthMax = 100;
     private float health;
 
     public void Start()
@@ -21,8 +22,11 @@ public class HealthSystem : MonoBehaviour
         if(health <= 0)
         {
             health = 0;
-            Destroy(gameObject, deleteTimer);
-            Debug.Log(gameObject + " is deleted!");
+            if(deleteOnDeath) 
+            {
+                Destroy(gameObject, deleteTimer);
+                Debug.Log(gameObject + " is deleted!");
+            }   
         }
     }
     public void Heal(float healAmount)

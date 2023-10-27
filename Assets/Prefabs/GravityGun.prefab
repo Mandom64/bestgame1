@@ -506,8 +506,11 @@ MonoBehaviour:
   fireAudio: {fileID: 4625522516850376275}
   holdPosition: {fileID: 5228206715903018691}
   grabbableLayer:
-    serializedVersion: 2
+  - serializedVersion: 2
     m_Bits: 512
+  - serializedVersion: 2
+    m_Bits: 65536
+  grabbableLayers: []
   grabDistance: 10
   cooldownTimer: 2
   shootForce: 15

@@ -9,7 +9,7 @@ public class GravityGun : MonoBehaviour
     public AudioSource grabAudio;
     public AudioSource fireAudio;
     public Transform holdPosition;
-    public LayerMask grabbableLayer;
+    public List<LayerMask> grabbableLayers = new List<LayerMask>();
     public float grabDistance = 2f;
 
     [Header("Gravity Gun Parameters")]
@@ -21,7 +21,8 @@ public class GravityGun : MonoBehaviour
 
     void Start()
     {
-        grabbableLayer = LayerMask.GetMask("Enemies");
+        grabbableLayers.Add(LayerMask.GetMask("Enemies"));
+        grabbableLayers.Add(LayerMask.GetMask("Explosives"));
         lineToMouse = GetComponent<LineRenderer>();   
     }
 
@@ -56,27 +57,30 @@ public class GravityGun : MonoBehaviour
 
     private void Grab()
     {
-        Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
-        Vector2 rayDir = (mousePos - transform.position).normalized;
-        RaycastHit2D hit = Physics2D.Raycast(transform.position,
-            rayDir, grabDistance, grabbableLayer);
+        foreach(LayerMask layer in grabbableLayers)
+        {
+            Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
+            Vector2 rayDir = (mousePos - transform.position).normalized;
+            RaycastHit2D hit = Physics2D.Raycast(transform.position,
+                rayDir, grabDistance, layer);
 
-        if(hit.collider != null) 
-        {
-            Debug.Log(hit.collider.gameObject.layer);
-            objectGrabbed = hit.collider.gameObject;
-            objectGrabbed.transform.parent = transform;
-            hasGrabbed = true;
-            Debug.Log("gravity gun got " +  objectGrabbed.name);
-        }
-        else
-        {
-            DrawLineToMouse();
-        }
+            if(hit.collider != null) 
+            {
+                Debug.Log(hit.collider.gameObject.layer);
+                objectGrabbed = hit.collider.gameObject;
+                objectGrabbed.transform.parent = transform;
+                hasGrabbed = true;
+                Debug.Log("gravity gun got " +  objectGrabbed.name);
+            }
+            else
+            {
+                DrawLineToMouse();
+            }
 
-        if (fireAudio != null)
-        {
-            grabAudio.Play();
+            if (fireAudio != null)
+            {
+                grabAudio.Play();
+            }
         }
     }
 
