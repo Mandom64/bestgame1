@@ -10,6 +10,7 @@ public class Explosives : MonoBehaviour
     private HealthSystem mHealthSystem;
     private Rigidbody2D body;
     public Animator mAnimator;
+    public AudioSource explosionSound;
     public List<LayerMask> damageLayers = new List<LayerMask>();
     private bool hasExploded = false;
 
@@ -55,6 +56,8 @@ public class Explosives : MonoBehaviour
         hasExploded = true;
         mAnimator.SetBool("explode", true);
         body.velocity = Vector2.zero;
+        if (explosionSound != null)
+            explosionSound.Play();
         Destroy(this.gameObject, 1f);
     }
 }
