@@ -354,7 +354,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8303b73165e74f3bd93744c62e783a52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  muzzleFlash: {fileID: 7478842044177941454}
   pellet: {fileID: 6908258064874457336, guid: 455c52b9bb4b50ca195265df5c08fdf2, type: 3}
   pelletCount: 12
   pelletSpeed: 55
@@ -362,7 +361,6 @@ MonoBehaviour:
   pelletDeathTimer: 0.66
   spread: 3.5
   cooldownTimer: 0.75
-  muzzleDrawTime: 0.5
 --- !u!114 &-9214861762547251804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -375,5 +373,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16418bb1e0c829a40a4673414130e324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAmmo: 240
+  maxAmmo: 300
   canShoot: 1

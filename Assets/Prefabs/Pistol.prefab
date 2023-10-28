@@ -379,8 +379,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   hitRay: {fileID: 4464967842449991778}
-  cooldownTimer: 0.25
-  shootDistance: 20
+  cooldownTimer: 0.3
+  shootDistance: 12
   damage: 22.5
 --- !u!114 &3605382905353829020
 MonoBehaviour:
@@ -394,5 +394,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16418bb1e0c829a40a4673414130e324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAmmo: 1000
+  maxAmmo: 999999
   canShoot: 1

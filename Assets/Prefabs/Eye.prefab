@@ -340,7 +340,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.46652803, y: 0.46047467}
+  m_Size: {x: 1.3, y: 1}
   m_EdgeRadius: 0
 --- !u!120 &-4980360211683817913
 LineRenderer:
@@ -459,10 +459,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 8
-  idleSpeed: 25
+  idleSpeed: 5
   engagedSpeed: 1
   timeToMove: 5
   healthBar: {fileID: 0}
+  EnableLine: 0
   bullet: {fileID: 3261428201285270749, guid: 8d19ea939d264e04295222d97796744c, type: 3}
   bulletSpeed: 6
   bulletDeathTimer: 3
@@ -480,8 +481,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d267893d7ee15d4a8afaa85edf634b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthMax: 120
   deleteTimer: 3
+  deleteOnDeath: 1
+  healthMax: 120
 --- !u!114 &8267630558220306769
 MonoBehaviour:
   m_ObjectHideFlags: 0

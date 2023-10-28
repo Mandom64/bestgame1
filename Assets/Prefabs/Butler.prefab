@@ -553,7 +553,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.2978108, y: 1.023771}
+  m_Size: {x: 0.6, y: 1.2}
   m_EdgeRadius: 0
 --- !u!120 &2962031409477453928
 LineRenderer:
@@ -678,6 +678,7 @@ MonoBehaviour:
   spawnCooldown: 3
   ratLimit: 4
   RatsToSpawn: 2
+  EnableLine: 0
   rat: {fileID: 1842902642620573894, guid: 672418a26e2630742bb132b699b2d161, type: 3}
 --- !u!114 &435459477952204786
 MonoBehaviour:
@@ -691,8 +692,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d267893d7ee15d4a8afaa85edf634b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthMax: 350
   deleteTimer: 3
+  deleteOnDeath: 1
+  healthMax: 350
 --- !u!114 &8002670466616402955
 MonoBehaviour:
   m_ObjectHideFlags: 0

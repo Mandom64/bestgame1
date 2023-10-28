@@ -408,7 +408,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deleteTimer: 2
   deleteOnDeath: 0
-  healthMax: 200
+  healthMax: 50
 --- !u!114 &1524606076179293161
 MonoBehaviour:
   m_ObjectHideFlags: 0
