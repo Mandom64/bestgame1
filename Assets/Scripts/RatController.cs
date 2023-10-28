@@ -80,7 +80,7 @@ public class RatController : MonoBehaviour
                             }
                             else
                             {
-                                body.velocity = Vector2.zero;
+                                //body.velocity = Vector2.zero;
                                 AnimationState("idle");
                             }
                         }
