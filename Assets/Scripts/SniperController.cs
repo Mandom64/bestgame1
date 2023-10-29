@@ -112,7 +112,7 @@ public class SniperController : MonoBehaviour
                         break;
 
                     case (SniperState.Aim):
-                            Debug.Log("hello aim here");
+                            //Debug.Log("hello aim here");
                         DrawLineToPlayer();
                         EnableAiming();
                         if (timer >= aimTimer)
