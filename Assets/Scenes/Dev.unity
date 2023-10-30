@@ -292,7 +292,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 3.5
+  orthographic size: 7
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -46973,6 +46973,74 @@ PrefabInstance:
     - target: {fileID: 735763707186861662, guid: 8f7f5c76fe32f6c4eb0c535cb40cbb69, type: 3}
       propertyPath: m_Name
       value: Boss
+      objectReference: {fileID: 0}
+    - target: {fileID: 7520817491104382441, guid: 8f7f5c76fe32f6c4eb0c535cb40cbb69, type: 3}
+      propertyPath: dashTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7520817491104382441, guid: 8f7f5c76fe32f6c4eb0c535cb40cbb69, type: 3}
+      propertyPath: dashSpeed
+      value: 20000
+      objectReference: {fileID: 0}
+    - target: {fileID: 7520817491104382441, guid: 8f7f5c76fe32f6c4eb0c535cb40cbb69, type: 3}
+      propertyPath: longRange
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7520817491104382441, guid: 8f7f5c76fe32f6c4eb0c535cb40cbb69, type: 3}
+      propertyPath: attackTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7520817491104382441, guid: 8f7f5c76fe32f6c4eb0c535cb40cbb69, type: 3}
+      propertyPath: bulletRows
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7520817491104382441, guid: 8f7f5c76fe32f6c4eb0c535cb40cbb69, type: 3}
+      propertyPath: closeRange
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7520817491104382441, guid: 8f7f5c76fe32f6c4eb0c535cb40cbb69, type: 3}
+      propertyPath: lanceSpeed
+      value: 25000
+      objectReference: {fileID: 0}
+    - target: {fileID: 7520817491104382441, guid: 8f7f5c76fe32f6c4eb0c535cb40cbb69, type: 3}
+      propertyPath: attackSpeed
+      value: 2000
+      objectReference: {fileID: 0}
+    - target: {fileID: 7520817491104382441, guid: 8f7f5c76fe32f6c4eb0c535cb40cbb69, type: 3}
+      propertyPath: bulletSpeed
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7520817491104382441, guid: 8f7f5c76fe32f6c4eb0c535cb40cbb69, type: 3}
+      propertyPath: mediumRange
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7520817491104382441, guid: 8f7f5c76fe32f6c4eb0c535cb40cbb69, type: 3}
+      propertyPath: bulletSpread
+      value: 3.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7520817491104382441, guid: 8f7f5c76fe32f6c4eb0c535cb40cbb69, type: 3}
+      propertyPath: dashCooldown
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7520817491104382441, guid: 8f7f5c76fe32f6c4eb0c535cb40cbb69, type: 3}
+      propertyPath: overallRange
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7520817491104382441, guid: 8f7f5c76fe32f6c4eb0c535cb40cbb69, type: 3}
+      propertyPath: bulletColumns
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7520817491104382441, guid: 8f7f5c76fe32f6c4eb0c535cb40cbb69, type: 3}
+      propertyPath: lanceCooldown
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7520817491104382441, guid: 8f7f5c76fe32f6c4eb0c535cb40cbb69, type: 3}
+      propertyPath: bulletCooldown
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7520817491104382441, guid: 8f7f5c76fe32f6c4eb0c535cb40cbb69, type: 3}
+      propertyPath: columnDistance
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 7944380847793894154, guid: 8f7f5c76fe32f6c4eb0c535cb40cbb69, type: 3}
       propertyPath: m_AnchorMax.x

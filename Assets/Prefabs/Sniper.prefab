@@ -111,7 +111,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5766451106809056369}
+  - {fileID: 6368653754975697393}
   - {fileID: 7489448005292460020}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -156,7 +156,7 @@ SpriteRenderer:
   m_SortingLayerID: 756463447
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 159a423c56cb8f84fbff902e255bda3d, type: 3}
+  m_Sprite: {fileID: -380424405, guid: 3f9ed836c1e011242ab93e00a52a5482, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -230,7 +230,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.5625, y: 1.5625}
+    oldSize: {x: 1.14, y: 1.815}
     newSize: {x: 1.28, y: 1.28}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -394,7 +394,7 @@ MonoBehaviour:
   bulletSpeed: 50
   bulletDeathTimer: 3
   cooldownTimer: 3
-  sniperWeapon: {fileID: 661343852680926995}
+  sniperWeapon: {fileID: 92636984927117971}
 --- !u!1 &4414135304547098512
 GameObject:
   m_ObjectHideFlags: 0
@@ -768,12 +768,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9930f81e5d03d3667a2ab48a4440bdab, type: 3}
---- !u!1 &661343852680926995 stripped
+--- !u!1 &92636984927117971 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2154102438909483411, guid: 9930f81e5d03d3667a2ab48a4440bdab, type: 3}
   m_PrefabInstance: {fileID: 2066576194570320640}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &5766451106809056369 stripped
+--- !u!4 &6368653754975697393 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4958450826410246897, guid: 9930f81e5d03d3667a2ab48a4440bdab, type: 3}
   m_PrefabInstance: {fileID: 2066576194570320640}
