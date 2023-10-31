@@ -361,6 +361,7 @@ MonoBehaviour:
   pelletDeathTimer: 0.66
   spread: 3.5
   cooldownTimer: 0.75
+  fireAudio: {fileID: -257955196582254308}
 --- !u!114 &-9214861762547251804
 MonoBehaviour:
   m_ObjectHideFlags: 0

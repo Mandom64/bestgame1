@@ -4,26 +4,25 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.XR;
 
-enum BossState
-{
-    Idle,
-    Engaged,
-    Struck,
-    Dead,
-};
-
-enum AttackType
-{
-    None,
-    CloseRange,
-    MediumRange,
-    LongRange,
-};
-
 public class BossController : MonoBehaviour
 {
-    private BossState currentState = BossState.Idle;
-    private AttackType attackState = AttackType.None;
+    private enum State
+    {
+        Idle,
+        Engaged,
+        Struck,
+        Dead,
+    };
+    private enum Range
+    {
+        None,
+        CloseRange,
+        MediumRange,
+        LongRange,
+    };
+
+    private State currentState = State.Idle;
+    private Range attackState = Range.None;
     private Rigidbody2D mBody;
     private Animator mAnimator;
     private GameObject player;
@@ -77,38 +76,37 @@ public class BossController : MonoBehaviour
         if(!isDashing)
             Move();
         HandleBehavior();
-        FlipSprites();
+        Utils.FlipSprites(this.gameObject, player);
     }
 
     void Update()
     {
         if (this.gameObject == null)
             return;
-        Debug.Log(attackState);
     }
 
     private void Move()
     {
         switch (currentState)
         {
-            case BossState.Idle:
+            case State.Idle:
                 mBody.velocity = Vector2.zero;
                 break;
-            case BossState.Engaged:
+            case State.Engaged:
                 if (timer >= timeToMove && !isDashing)
                 {
                     Vector3 playerDir = (player.transform.position - transform.position).normalized;
-                    Vector3 randomDir = RandomVector2(3.1415f * 2, 0f).normalized;
+                    Vector3 randomDir = Utils.RandomVector2(3.1415f * 2, 0f).normalized;
                     Vector3 moveDir = playerDir + randomDir;
                     moveDir.Normalize();
                     mBody.velocity = moveDir * engagedSpeed * Time.fixedDeltaTime;
                     timer = 0f;
                 }
                 break;
-            case BossState.Struck:
+            case State.Struck:
                 mBody.velocity = Vector2.zero;
                 break;
-            case BossState.Dead:
+            case State.Dead:
                 mBody.velocity = Vector2.zero;
                 this.gameObject.layer = LayerMask.NameToLayer("Dead Objects");
                 break;
@@ -117,45 +115,45 @@ public class BossController : MonoBehaviour
 
     private void HandleBehavior()
     {
-        float playerDist = PlayerDistance();
+        float playerDist = Utils.PlayerDistance(this.gameObject, player);
         if (playerDist <= overallRange)
         {
-            currentState = BossState.Engaged;
+            currentState = State.Engaged;
             if (playerDist > 0 && playerDist <= closeRange)
-                attackState = AttackType.CloseRange;
+                attackState = Range.CloseRange;
             else if (playerDist > closeRange && playerDist <= mediumRange)
-                attackState = AttackType.MediumRange;
+                attackState = Range.MediumRange;
             else if (playerDist > mediumRange && playerDist <= longRange)
-                attackState = AttackType.LongRange;
+                attackState = Range.LongRange;
         }
         else
         {
-            currentState = BossState.Idle;
-            attackState = AttackType.None;
+            currentState = State.Idle;
+            attackState = Range.None;
         }
 
         float mHP = mBody.GetComponent<HealthSystem>().getHealth();
         if (mHP != lastHP)
-            currentState = BossState.Struck;
+            currentState = State.Struck;
         lastHP = mHP;
         if (mHP <= 0)
-            currentState = BossState.Dead;
+            currentState = State.Dead;
 
-        if (currentState == BossState.Engaged)
+        if (currentState == State.Engaged)
         {
             switch (attackState)
             {
-                case AttackType.CloseRange:
+                case Range.CloseRange:
                     CloseCharge();
 
                     break;
-                case AttackType.MediumRange:
+                case Range.MediumRange:
                     if (canShoot)
                     {
                         MediumShoot(player);
                     }
                     break;
-                case AttackType.LongRange:
+                case Range.LongRange:
                     if (canShoot)
                     {
                         LongShoot(player);
@@ -188,9 +186,9 @@ public class BossController : MonoBehaviour
                 StartCoroutine(ShootCooldown(columnDistance));
                 for(int j = 0; j < bulletRows; j++)
                 {
-                    Debug.Log(startAngle);
+                    //Debug.Log(startAngle);
                     Vector2 shootDir = (objToShoot.transform.position - transform.position).normalized;
-                    shootDir = RotateVector2(shootDir, angle);
+                    shootDir = Utils.RotateVector2(shootDir, angle);
                     angle += bulletSpread;
                     GameObject bulletInstance = Instantiate(bullet, transform.position, transform.rotation);
                     Rigidbody2D bulletBody = bulletInstance.GetComponent<Rigidbody2D>();
@@ -234,27 +232,6 @@ public class BossController : MonoBehaviour
         yield return new WaitForSeconds(cooldownTime);
         canShoot = true;
     }
-
-    public Vector2 RandomVector2(float angle, float angleMin)
-    {
-        float random = Random.value * angle + angleMin;
-        return new Vector2(Mathf.Cos(random), Mathf.Sin(random));
-    }
-    public Vector2 RotateVector2(Vector2 vector, float angleDegrees)
-    {
-        // Convert the angle to radians because Mathf.Cos and Mathf.Sin use radians
-        float angleRadians = angleDegrees * Mathf.Deg2Rad;
-
-        // Calculate the new rotated vector
-        float x = vector.x * Mathf.Cos(angleRadians) - vector.y * Mathf.Sin(angleRadians);
-        float y = vector.x * Mathf.Sin(angleRadians) + vector.y * Mathf.Cos(angleRadians);
-
-        return new Vector2(x, y);
-    }
-
-    public void FlipSprites() { this.gameObject.GetComponent<SpriteRenderer>().flipX = (player.transform.position.x > this.transform.position.x);}
-    
-    public float PlayerDistance() { return Vector3.Distance(this.transform.position, player.transform.position);}
 
     private void OnDrawGizmos()
     {

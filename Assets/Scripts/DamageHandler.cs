@@ -7,7 +7,7 @@ public class DamageHandler : MonoBehaviour
     public float baseWallDamage = 10.0f;
     public float wallDamageMultiplier = 7.5f;
     public float minWallDamage = 35f;
-    EnemyHealthbar healthbar;
+    private EnemyHealthbar healthbar;
 
     public void Start()
     {
@@ -57,7 +57,7 @@ public class DamageHandler : MonoBehaviour
                     // Apply damage to the player
                     myHP.Damage(damageAmount);
                     healthbar.UpdateHealthbarUI(myHP.getHealth(), myHP.getHealthMax());
-                    Debug.Log(gameObject.name + " took " + damageAmount + " from a WALL");
+                    Debug.Log(gameObject.name + " took " + damageAmount + " from a Wall");
                 }
             }
         }

@@ -6,7 +6,10 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
-enum eyeState
+
+public class EyeController : MonoBehaviour
+{
+    private enum State
     {
         Idle,
         Engaged,
@@ -14,152 +17,137 @@ enum eyeState
         Dead,
     };
 
-public class EyeController : MonoBehaviour
-{
-    private Rigidbody2D body;
+    private State currentState = State.Idle;
+    private Rigidbody2D mBody;
+    private Animator mAnimator;
     private GameObject player;
-    private float timer = 0.0f;
-    private eyeState currentState = eyeState.Idle;
     private LineRenderer lineToPlayer;
+    private float timer = 0.0f;
+    private float lastHP;
+
     [Header("Eye Parameters")]
-    public float range = 1f;
-    public float idleSpeed = 1f;
-    public float engagedSpeed = 15f;
-    public float timeToMove = 5f;
-    public Slider healthBar;
-    public bool EnableLine = false;
+    [SerializeField] public float range = 1f;
+    [SerializeField] public float idleSpeed = 1f;
+    [SerializeField] public float engagedSpeed = 15f;
+    [SerializeField] public float timeToMove = 5f;
+    [SerializeField] public Slider healthBar;
+    [SerializeField] public bool EnableLine = false;
+
     [Header("Bullet Parameters")]
-    public GameObject bullet;
-    public float bulletSpeed = 15.0f;
-    public float bulletDeathTimer = 3.0f;
-    public float cooldownTimer = 0.5f;
-    public Sprite eye_dead;
-    Animator mAnimator;
-    float lastHP;
-    float eyeHPmax;
+    [SerializeField] public GameObject bullet;
+    [SerializeField] public float bulletSpeed = 15.0f;
+    [SerializeField] public float bulletDeathTimer = 3.0f;
+    [SerializeField] public float cooldownTimer = 0.5f;
+    [SerializeField] public Sprite eye_dead;
     
     
 
     void Start()
     {
-        player = GameObject.FindWithTag("Player");
-        body = GetComponent<Rigidbody2D>();
-        lineToPlayer = GetComponent<LineRenderer>();
+        mBody = GetComponent<Rigidbody2D>();
         mAnimator = GetComponent<Animator>();
-        if(mAnimator != null)
-            mAnimator.SetBool("running", true);
-        eyeHPmax = body.GetComponent<HealthSystem>().getHealthMax();
+        player = GameObject.FindWithTag("Player");
+        lineToPlayer = GetComponent<LineRenderer>();
+        Utils.AnimationState(mAnimator, "running");
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
-        if (gameObject != null)
-        {
-            timer += Time.deltaTime;
-            // Check if im grabbed by gravity gun
-            if (gameObject.transform.parent == null || !gameObject.transform.parent.CompareTag("Weapon"))
-            {
-                switch (currentState)
-                {
-                    case (eyeState.Idle):
-                        if (timer >= timeToMove)
-                        {
-                            Vector2 randomDir = RandomVector2(3.1415f * 2, 0f);
-                            randomDir.Normalize();
-                            body.velocity = randomDir * idleSpeed * Time.deltaTime;
-                            timer = 0f;
-                        }
-                        break;
-
-                    case (eyeState.Engaged):
-                        // calculate distance to move
-                        var step = engagedSpeed * Time.deltaTime;
-                        transform.position = Vector3.MoveTowards(transform.position,
-                            player.transform.position, step);
-                        break;
-                    case (eyeState.Struck):
-                        break;
-                    case (eyeState.Dead):
-                        body.velocity = Vector2.zero;
-                        break;
-                }
-
-            }
-        }
+        FixedBehavior();
     }
 
     void Update()
     {
-        if(gameObject != null)
+        ContBehavior();
+    }
+
+    private void FixedBehavior()
+    {
+        GameObject mObj = this.gameObject;
+        if (mObj != null)
         {
             timer += Time.deltaTime;
-
-            FlipSprites();
             // Check if im grabbed by gravity gun
-            if(gameObject.transform.parent == null || !gameObject.transform.parent.CompareTag("Weapon"))
+            if (mObj.transform.parent == null || !mObj.transform.parent.CompareTag("Weapon"))
             {
-                if (!isPlayerClose())
-                    currentState = eyeState.Idle;
-                else
-                    currentState = eyeState.Engaged;
-
-                float eyeHP = body.GetComponent<HealthSystem>().getHealth();
-                if(eyeHP != lastHP)
-                    currentState = eyeState.Struck;
-                lastHP = eyeHP;
-                if (eyeHP <= 0)
-                    currentState = eyeState.Dead;
                 switch (currentState)
                 {
-                    case (eyeState.Idle):
-                        if (mAnimator != null)
+                    case (State.Idle):
+                        if (timer >= timeToMove)
                         {
-                            mAnimator.SetBool("running", true);
+                            Vector2 randomDir = Utils.RandomVector2(3.1415f * 2, 0f);
+                            randomDir.Normalize();
+                            mBody.velocity = randomDir * idleSpeed * Time.deltaTime;
+                            timer = 0f;
                         }
+                        break;
+
+                    case (State.Engaged):
+                        // calculate distance to move
+                        var step = engagedSpeed * Time.deltaTime;
+                        transform.position = Vector3.MoveTowards(mObj.transform.position,
+                            player.transform.position, step);
+                        break;
+                    case (State.Struck):
+                        break;
+                    case (State.Dead):
+                        mBody.velocity = Vector2.zero;
+                        break;
+                }
+            }
+        }
+    }
+    private void ContBehavior()
+    {
+        GameObject mObj = this.gameObject;
+
+        if (mObj != null)
+        {
+            timer += Time.deltaTime;
+            Utils.FlipSprites(mObj, player);
+
+            // Check if im grabbed by gravity gun
+            if (mObj.transform.parent == null || !mObj.transform.parent.CompareTag("Weapon"))
+            {
+                if (!Utils.isPlayerClose(mObj, player, range))
+                    currentState = State.Idle;
+                else
+                    currentState = State.Engaged;
+                float eyeHP = mBody.GetComponent<HealthSystem>().getHealth();
+                if (eyeHP != lastHP)
+                    currentState = State.Struck;
+                lastHP = eyeHP;
+                if (eyeHP <= 0)
+                    currentState = State.Dead;
+
+                switch (currentState)
+                {
+                    case (State.Idle):
+                        Utils.AnimationState(mAnimator, "running");
                         lineToPlayer.enabled = false;
                         break;
 
-                    case (eyeState.Engaged):
-                        if(EnableLine)
-                            DrawLineToPlayer();
-                        if (mAnimator != null)
-                        {
-                            mAnimator.SetBool("running", true);
-                        }
+                    case (State.Engaged):
+                        if (EnableLine)
+                            Utils.DrawLine(lineToPlayer, mObj, player);
+                        Utils.AnimationState(mAnimator, "running");
                         if (timer >= cooldownTimer)
                         {
                             Shoot(player);
                             timer = 0f;
                         }
                         break;
-                    case (eyeState.Struck):
-                        if (mAnimator != null)
-                        {
-                            mAnimator.SetBool("running", false);
-                            mAnimator.SetBool("struck", true);
-                        }
+                    case (State.Struck):
+                        Utils.AnimationState(mAnimator, "struck");
                         break;
-                    case (eyeState.Dead):
-                        if (mAnimator != null)
-                            mAnimator.SetBool("dead", true);
-                        gameObject.layer = LayerMask.NameToLayer("Dead Objects");
+                    case (State.Dead):
+                        Utils.AnimationState(mAnimator, "dead");
+                        mObj.layer = LayerMask.NameToLayer("Dead Objects");
                         lineToPlayer.enabled = false;
                         break;
                 }
             }
-        }       
-    }
-
-    private bool isPlayerClose()
-    {
-        if(player == null)
-            return false;
-
-        float distance = Vector3.Distance(transform.position, player.transform.position);
-        if(distance >= range)
-            return false;
-        else 
-            return true;
+        }
     }
 
     private void Shoot(GameObject objToShoot)
@@ -174,30 +162,5 @@ public class EyeController : MonoBehaviour
             bulletBody.velocity = shootDir * bulletSpeed;
             Destroy(bulletInstance, bulletDeathTimer);
         }
-    }
-    
-    public void DrawLineToPlayer()
-    {
-        lineToPlayer.enabled = true;
-        lineToPlayer.material = new Material(Shader.Find("Sprites/Default"));
-        lineToPlayer.material.color = Color.red;
-        lineToPlayer.SetPosition(0, transform.position);
-        lineToPlayer.SetPosition(1, player.transform.position);
-    }
-
-    public Vector3 GetMouseWorldPosition(Vector3 screenPos)
-    {
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
-        return worldPos;
-    }
-
-    public Vector2 RandomVector2(float angle, float angleMin)
-    {
-        float random = UnityEngine.Random.value * angle + angleMin;
-        return new Vector2(Mathf.Cos(random), Mathf.Sin(random));
-    }
-    public void FlipSprites()
-    {
-        body.GetComponent<SpriteRenderer>().flipX = (player.transform.position.x < transform.position.x);
     }
 }

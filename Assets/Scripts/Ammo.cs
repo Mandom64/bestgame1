@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Ammo : MonoBehaviour
 {
-    public int maxAmmo = 50;
-    public bool canShoot = true;
+    [SerializeField] public int maxAmmo = 50;
     private int currAmmo;
+    public bool canShoot = true;
 
     public void Start()
     {
@@ -22,7 +22,7 @@ public class Ammo : MonoBehaviour
         else
             canShoot = true;
     }
-    public void NewAmmo(int newAmmo)
+    public void IncreaseAmmo(int newAmmo)
     {
         currAmmo += newAmmo;
     }

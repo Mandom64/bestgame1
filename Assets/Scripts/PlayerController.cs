@@ -19,40 +19,45 @@ public class PlayerController : MonoBehaviour
         KeyCode.Alpha0,
     };
 
-    [Header("Player parameters")]
-    public Rigidbody2D body;
-    public GameObject inventoryObject;
-    public float moveSpeed = 5.0f;
-    public float baseWallDamage = 1f;
-    public float wallDamageMultiplier = 10f;
-    [Header("Audio sounds")]
-    public AudioSource dashSound;
-    public AudioSource itemTakenSound;
-    private List<GameObject> inventory;
-    public int currItem = 0;
-    [Header("Grabbing parameters")]
-    public LayerMask grabbableLayer;
-    public float grabDistance = 2.5f;
-    public float grabCooldown = 1f;
-    [Header("Dashing parameters")]
-    public float dashForce = 50.0f;
-    public float dashTime = 0.25f;
-    public float dashCooldown = 3f;
-    private bool isDashing = false;
     private float timer = 0f;
+    private Rigidbody2D mBody;
     private Animator mAnimator;
-    HealthSystem playerHP;
+    private HealthSystem mHealth;
+
+    [Header("Player parameters")]
+    [SerializeField] private GameObject inventoryObj;
+    [SerializeField] private float moveSpeed = 5.0f;
+    [SerializeField] private float baseWallDamage = 1f;
+    [SerializeField] private float wallDamageMultiplier = 10f;
+
+    [Header("Audio sounds")]
+    [SerializeField] public AudioSource dashSound;
+    [SerializeField] public AudioSource itemTakenSound;
+    [SerializeField] private List<GameObject> inventory;
+    [SerializeField] public int currItem = 0;
+
+    [Header("Grabbing parameters")]
+    [SerializeField] private LayerMask grabbableLayer;
+    [SerializeField] private float grabDistance = 2.5f;
+    [SerializeField] private float grabCooldown = 1f;
+    [SerializeField] private Vector2 grabRayThickness = new Vector2(0.5f, 0.5f);
+
+    [Header("Dashing parameters")]
+    [SerializeField] private float dashForce = 50.0f;
+    [SerializeField] private float dashTime = 0.25f;
+    [SerializeField] private float dashCooldown = 3f;
+    private bool isDashing = false;
 
     void Start()
     {
         Application.targetFrameRate = 144;
-        Inventory g_inventory = inventoryObject.GetComponent<Inventory>();
-        inventory = g_inventory.inventoryList;
-        body = GetComponent<Rigidbody2D>();
-        playerHP = gameObject.GetComponent<HealthSystem>();
-        grabbableLayer = LayerMask.GetMask("Grabbable Items");
+        mBody = GetComponent<Rigidbody2D>();
         mAnimator = GetComponent<Animator>();
-        mAnimator.SetBool("idle", true);
+        mHealth = gameObject.GetComponent<HealthSystem>();
+        Inventory g_inventory = inventoryObj.GetComponent<Inventory>();
+        inventory = g_inventory.inventoryList;
+        grabbableLayer = LayerMask.GetMask("Grabbable Items");
+        Utils.AnimationState(mAnimator, "idle");
     }
 
     void FixedUpdate()
@@ -72,13 +77,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Update()
+    void Update()
     {
         timer += Time.deltaTime;
 
-        if(playerHP.getHealth() <= 0f)
+        // When player dies load the game over scene
+        if(mHealth.getHealth() <= 0f)
         {
-            // When player dies load the game over scene
            SceneManager.LoadScene(1);
         }
 
@@ -120,13 +125,13 @@ public class PlayerController : MonoBehaviour
         movement.Normalize();
         if(movement != Vector2.zero)
         {
-            body.velocity = movement * moveSpeed;
-            AnimationState("run");
+            mBody.velocity = movement * moveSpeed;
+            Utils.AnimationState(mAnimator, "run");
         }
         else
         {
-            body.velocity = Vector2.zero;
-            AnimationState("idle");
+            mBody.velocity = Vector2.zero;
+            Utils.AnimationState(mAnimator, "idle");
         }
     }
 
@@ -134,25 +139,25 @@ public class PlayerController : MonoBehaviour
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         if(horizontalInput > 0f)
-            body.GetComponent<SpriteRenderer>().flipX = true;
+            mBody.GetComponent<SpriteRenderer>().flipX = true;
         else if(horizontalInput < 0f)
-            body.GetComponent<SpriteRenderer>().flipX = false;
+            mBody.GetComponent<SpriteRenderer>().flipX = false;
     }
 
     public void GrabObject()
     {
         // Check if grabbable item is around and grab it
-        RaycastHit2D hit = Physics2D.Raycast(transform.position,
-            transform.up, grabDistance, grabbableLayer);
+        RaycastHit2D hit = Physics2D.BoxCast(transform.position,
+            grabRayThickness, 0.0f, transform.up, grabDistance, grabbableLayer);
         if(hit.collider == null)
-            hit = Physics2D.Raycast(transform.position,
-            transform.right, grabDistance, grabbableLayer);
+            hit = Physics2D.BoxCast(transform.position,
+            grabRayThickness, 0.0f, transform.right, grabDistance, grabbableLayer);
         if(hit.collider == null)
-            hit = Physics2D.Raycast(transform.position,
-            -transform.up, grabDistance, grabbableLayer);
+            hit = Physics2D.BoxCast(transform.position,
+            grabRayThickness, 0.0f, -transform.up, grabDistance, grabbableLayer);
         if (hit.collider == null)
-            hit = Physics2D.Raycast(transform.position,
-            -transform.right, grabDistance, grabbableLayer);
+            hit = Physics2D.BoxCast(transform.position,
+            grabRayThickness, 0.0f, -transform.right, grabDistance, grabbableLayer);
 
         if (hit.collider != null)
         {
@@ -196,7 +201,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Handle damage
+    // Handle damage from bullets and collisions
     public void OnCollisionEnter2D(Collision2D collision)
     {
         GameObject objectHit = collision.gameObject;
@@ -206,11 +211,11 @@ public class PlayerController : MonoBehaviour
             {
                 
                 float damageAmount = objectHit.gameObject.GetComponent<Damage>().damage;
-                if (playerHP != null)
+                if (mHealth != null)
                 {
-                    playerHP.Damage(damageAmount);
+                    mHealth.Damage(damageAmount);
                     Destroy(objectHit);
-                    Debug.Log(playerHP + " took " + damageAmount + " from a Bullet()");
+                    Debug.Log(mHealth + " took " + damageAmount + " from a Bullet()");
                 }
             }
         }
@@ -219,10 +224,10 @@ public class PlayerController : MonoBehaviour
             if(objectHit.CompareTag("SimpleRat"))
             {
                 float damageAmount = objectHit.gameObject.GetComponent<Damage>().damage;
-                if (playerHP != null)
+                if (mHealth != null)
                 {
-                    playerHP.Damage(damageAmount);
-                    Debug.Log(playerHP + " took " + damageAmount + " from a SIMPLE_RAT");
+                    mHealth.Damage(damageAmount);
+                    Debug.Log(mHealth + " took " + damageAmount + " from a SIMPLE_RAT");
                 }
             }
         }
@@ -231,20 +236,10 @@ public class PlayerController : MonoBehaviour
     private IEnumerator Dash()
     {
         isDashing = true;
-        body.AddForce(body.velocity * dashForce);
+        mBody.AddForce(mBody.velocity * dashForce);
         yield return new WaitForSeconds(dashTime);
         if(dashSound != null)
             dashSound.Play();
         isDashing = false;
-    }
-
-    private void AnimationState(string state)
-    {
-        if(mAnimator != null)
-        {
-            mAnimator.SetBool("run", false);
-            mAnimator.SetBool("idle", false);
-            mAnimator.SetBool(state, true);
-        }
     }
 }

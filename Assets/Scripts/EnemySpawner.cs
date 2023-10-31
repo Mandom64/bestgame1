@@ -4,20 +4,22 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    [Header("Spawner Parameters")]
+    [SerializeField] private GameObject enemy;
+    [SerializeField] private int spawnLimit = 5;
+    [SerializeField] private float timeToSpawn = 5f;
+    private List<GameObject> enemies;
     private float timer = 0f;
-    private List<GameObject> enemies = new List<GameObject>();
-    [SerializeField]public int spawnLimit = 5;
-    [SerializeField]public float timeToSpawn = 5f;
-    [SerializeField]public GameObject enemy;
-    // Start is called before the first frame update
+
     void Start()
     {
+        enemies = new List<GameObject>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         timer += Time.deltaTime;
+
         if((timer >= timeToSpawn) && (enemies.Count < spawnLimit))
         {
             enemies.Add(Instantiate(enemy, transform.position, Quaternion.identity));

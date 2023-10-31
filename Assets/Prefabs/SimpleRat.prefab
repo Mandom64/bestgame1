@@ -589,7 +589,7 @@ MonoBehaviour:
   range: 9
   timeToMove: 5
   idleSpeed: 15
-  engagedSpeed: 40
+  engagedSpeed: 5
   attackSpeed: 50
   attackTime: 0.15
   attackCooldown: 3

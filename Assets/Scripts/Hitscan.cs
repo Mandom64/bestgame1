@@ -1,18 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Hitscan : MonoBehaviour
 {
-    public AudioSource fireSound;
-    public LayerMask EnemiesLayer;
-    public LineRenderer hitRay;
     private Ammo mAmmo;
-    public float cooldownTimer = 0.25f;
-    public float shootDistance = 10f;
-    public float damage = 15f;
+    private LineRenderer hitRay;
+    [Header("Hitscan Weapon Parameters")]
+    [SerializeField] private AudioSource fireSound;
+    [SerializeField] private LayerMask damageLayers;
+    [SerializeField] private float cooldownTimer = 0.25f;
+    [SerializeField] private float shootDistance = 10f;
+    [SerializeField] private Vector2 rayThickness = new Vector2(0.01f, 0.01f);
+    [SerializeField] private float damage = 15f;
+    [SerializeField] private bool canShoot = true;
     private float timer = 0.0f;
-    private bool canShoot = true;
 
     private void Start()
     {
@@ -28,7 +31,7 @@ public class Hitscan : MonoBehaviour
             if (parent.CompareTag("Player") && Time.timeScale == 1)
             {
                 hitRay.enabled = false;
-                EnableAiming();
+                Utils.EnableAiming(this.gameObject);
                 if (Input.GetMouseButton(0) && (timer >= cooldownTimer))
                 {
                     Shoot();
@@ -44,50 +47,46 @@ public class Hitscan : MonoBehaviour
         canShoot = mAmmo.CanShoot();
         if (canShoot)
         {
-            Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
+            Vector3 mousePos = Utils.GetMouseWorldPosition(Input.mousePosition);
             Vector2 shootDir = (mousePos - transform.position).normalized;
-            RaycastHit2D hit = Physics2D.Raycast(transform.position,
-                shootDir, shootDistance, EnemiesLayer);
-            if (hit.collider != null)
+            RaycastHit2D[] hits = Physics2D.BoxCastAll(transform.position,
+                    rayThickness, 0.0f, shootDir, shootDistance, damageLayers);
+            GameObject enemyHit = null;
+            foreach(RaycastHit2D hit in hits)
             {
-                GameObject enemyHit = hit.collider.gameObject;
-                if (enemyHit != null && !enemyHit.CompareTag("Walls"))
+                if (hit.collider != null)
+                    enemyHit = hit.collider.gameObject;
+                if (enemyHit != null)
                 {
-                    DrawRay(enemyHit.transform);
-                    HealthSystem enemyHP = enemyHit.GetComponent<HealthSystem>();
-                    enemyHP.Damage(damage);
-                    enemyHit.GetComponentInChildren<EnemyHealthbar>().UpdateHealthbarUI(enemyHP.getHealth(), enemyHP.getHealthMax());
-                    mAmmo.UseAmmo(1);
+                    if(enemyHit.CompareTag("Walls"))
+                    {
+                        DrawRay(mousePos);
+                        mAmmo.UseAmmo(1);
+                        if (fireSound != null)
+                            fireSound.Play();
+                        break;
+                    }
+                    else
+                    {
+                        DrawRay(enemyHit.transform);
+                        HealthSystem enemyHP = enemyHit.GetComponent<HealthSystem>();
+                        enemyHP.Damage(damage);
+                        EnemyHealthbar enemyHealthbar;
+                        if ((enemyHealthbar = enemyHit.GetComponentInChildren<EnemyHealthbar>()) != null)
+                        {
+                            enemyHealthbar.UpdateHealthbarUI(enemyHP.getHealth(), enemyHP.getHealthMax());
+                        }
+                        mAmmo.UseAmmo(1);
+                        if (fireSound != null)
+                            fireSound.Play();
+                        break;
+                    }
                 }
-                if (fireSound != null)
-                    fireSound.Play();
             }
-            else
-            {
-                DrawRay(mousePos);
-                mAmmo.UseAmmo(1);
-                if (fireSound != null)
-                    fireSound.Play();
-            }
+
         }
     }
-    private void EnableAiming()
-    {
-        Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
-        Vector3 aimDir = (mousePos - transform.position).normalized;
-        float angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
-        if (angle > -90f && angle < 90f)
-            gameObject.GetComponent<SpriteRenderer>().flipY = false;
-        else
-            gameObject.GetComponent<SpriteRenderer>().flipY = true;
-        transform.eulerAngles = new Vector3(0, 0, angle);
-    }
 
-    public Vector3 GetMouseWorldPosition(Vector3 screenPos)
-    {
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
-        return worldPos;
-    }
     public void DrawRay(Transform at)
     {
         hitRay.enabled = true;
@@ -105,5 +104,3 @@ public class Hitscan : MonoBehaviour
         hitRay.SetPosition(1, at);
     }
 }
-
-

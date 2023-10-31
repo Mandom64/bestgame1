@@ -1,41 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
 public class GravityGun : MonoBehaviour
 {
+    private GameObject player;
+    private GameObject objectGrabbed;
+    private LineRenderer lineToMouse;
     private float timer = 0f;
+
+    [Header("Prefabs and Layers")]
     public AudioSource grabAudio;
     public AudioSource fireAudio;
     public Transform holdPosition;
-    public List<LayerMask> grabbableLayers = new List<LayerMask>();
-    public float grabDistance = 2f;
+    public LayerMask grabbableLayers;
 
     [Header("Gravity Gun Parameters")]
-    public float cooldownTimer = 1f;
-    public float shootForce = 50f;
+    [SerializeField] private float grabDistance = 2f;
+    [SerializeField] private float shootForce = 50f;
+    [SerializeField] private Vector2 rayThickness = new Vector2(0.5f, 0.5f);
+    [SerializeField] private float rayDrawTime = 0.1f;
+    [SerializeField] private float cooldownTimer = 1f;
     private bool hasGrabbed = false;
-    private GameObject objectGrabbed;
-    LineRenderer lineToMouse;
 
     void Start()
     {
-        grabbableLayers.Add(LayerMask.GetMask("Enemies"));
-        grabbableLayers.Add(LayerMask.GetMask("Explosives"));
-        lineToMouse = GetComponent<LineRenderer>();   
+        player = GameObject.FindWithTag("Player");
+        lineToMouse = GetComponent<LineRenderer>();
+        lineToMouse.material = new Material(Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply"));
+        lineToMouse.enabled = false;
     }
 
     void Update()
     {
         timer += Time.deltaTime;
-        Transform parent = transform.parent;
-        lineToMouse.enabled = false;
+        Transform parent = this.transform.parent;
+
         if (parent != null)
         {
             if (parent.CompareTag("Player") && Time.timeScale == 1)
             {
-                EnableAiming();
+                Utils.EnableAiming(this.gameObject);
+
                 if(Input.GetMouseButtonDown(0) && hasGrabbed)
                 {
                     Shoot();
@@ -57,29 +65,39 @@ public class GravityGun : MonoBehaviour
 
     private void Grab()
     {
-        foreach(LayerMask layer in grabbableLayers)
+        Vector3 mousePos = Utils.GetMouseWorldPosition(Input.mousePosition);
+        Vector2 rayDir = (mousePos - transform.position).normalized;
+        RaycastHit2D[] hits = Physics2D.BoxCastAll(transform.position,
+            rayThickness, 0.0f, rayDir, grabDistance, grabbableLayers);
+        GameObject objectHit;
+        foreach (RaycastHit2D hit in hits)
         {
-            Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
-            Vector2 rayDir = (mousePos - transform.position).normalized;
-            RaycastHit2D hit = Physics2D.Raycast(transform.position,
-                rayDir, grabDistance, layer);
-
-            if(hit.collider != null) 
+            objectHit = hit.collider.gameObject;
+            if (objectHit != null)
             {
-                Debug.Log(hit.collider.gameObject.layer);
-                objectGrabbed = hit.collider.gameObject;
-                objectGrabbed.transform.parent = transform;
-                hasGrabbed = true;
-                Debug.Log("gravity gun got " +  objectGrabbed.name);
-            }
-            else
-            {
-                DrawLineToMouse();
-            }
-
-            if (fireAudio != null)
-            {
-                grabAudio.Play();
+                if (objectHit.CompareTag("Walls"))
+                {
+                    if(!lineToMouse.enabled)
+                        StartCoroutine(DrawRay(lineToMouse, mousePos));
+                    if (grabAudio != null)
+                    {
+                        grabAudio.Play();
+                    }
+                    break;
+                }
+                else
+                {
+                    Debug.Log(objectHit.layer);
+                    objectGrabbed = objectHit;
+                    objectGrabbed.transform.parent = transform;
+                    hasGrabbed = true;
+                    Debug.Log("gravity gun got " + objectGrabbed.name);
+                    if (grabAudio != null)
+                    {
+                        grabAudio.Play();
+                    }
+                    break;
+                }
             }
         }
     }
@@ -88,7 +106,7 @@ public class GravityGun : MonoBehaviour
     {
         if(objectGrabbed != null)
         {
-            Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
+            Vector3 mousePos = Utils.GetMouseWorldPosition(Input.mousePosition);
             Vector2 shootDir = (mousePos - transform.position).normalized;
             objectGrabbed.isStatic = false;
             objectGrabbed.transform.parent = null;
@@ -106,32 +124,12 @@ public class GravityGun : MonoBehaviour
             hasGrabbed= false;
         }
     }
-    public void DrawLineToMouse()
+    private IEnumerator DrawRay(LineRenderer hitRay, Vector3 at)
     {
-        Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
-        Vector2 shootDir = (mousePos - transform.position).normalized;
-        lineToMouse.enabled = true;
-        lineToMouse.material = new Material(Shader.Find("Sprites/Default"));
-        lineToMouse.material.color = Color.red;
-        lineToMouse.SetPosition(0, transform.position);
-        lineToMouse.SetPosition(1, shootDir);
-    }
-
-    private void EnableAiming()
-    {
-        Vector3 mousePos = GetMouseWorldPosition(Input.mousePosition);
-        Vector3 aimDir = (mousePos - transform.position).normalized;
-        float angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
-        if (angle > -90f && angle < 90f)
-            gameObject.GetComponent<SpriteRenderer>().flipY = false;
-        else
-            gameObject.GetComponent<SpriteRenderer>().flipY = true;
-        transform.eulerAngles = new Vector3(0, 0, angle);
-    }
-
-    public Vector3 GetMouseWorldPosition(Vector3 screenPos)
-    {
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
-        return worldPos;
+        hitRay.enabled = true;
+        hitRay.SetPosition(0, this.transform.position);
+        hitRay.SetPosition(1, at);
+        yield return new WaitForSeconds(rayDrawTime);
+        hitRay.enabled = false;
     }
 }

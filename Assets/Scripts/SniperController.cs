@@ -7,46 +7,49 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-enum SniperState
-{
-    Idle,
-    Run,
-    Aim,
-    Shoot,
-    Dead,
-};
 
 public class SniperController : MonoBehaviour
 {
-    private Rigidbody2D body;
+    private enum State
+    {
+        Idle,
+        Run,
+        Aim,
+        Shoot,
+        Dead,
+    };
+
+    private Rigidbody2D mBody;
     private GameObject player;
     private Animator mAnimator;
-    private float timer = 0.0f;
-    private SniperState currentState = SniperState.Idle;
     private LineRenderer lineToPlayer;
+    private State currentState = State.Idle;
+    private float timer = 0.0f;
+
     [Header("Sniper Parameters")]
-    public float range = 1f;
-    public float idleSpeed = 1f;
-    public float timeToMove = 5f;
-    public float aimTimer = 1f;
-    public bool EnableLine = false;
+    [SerializeField] public float range = 1f;
+    [SerializeField] public float idleSpeed = 1f;
+    [SerializeField] public float timeToMove = 5f;
+    [SerializeField] public float aimTimer = 1f;
+    [SerializeField] public bool EnableLine = false;
+
     [Header("Bullet Parameters")]
-    public GameObject bullet;
-    public float bulletSpeed = 15.0f;
-    public float bulletDeathTimer = 3.0f;
-    public float cooldownTimer = 3f;
+    [SerializeField] public GameObject sniperWeapon;
+    [SerializeField] public GameObject bullet;
+    [SerializeField] public float bulletSpeed = 15.0f;
+    [SerializeField] public float bulletDeathTimer = 3.0f;
+    [SerializeField] public float cooldownTimer = 3f;
     private bool isAttacking = false;
-    public GameObject sniperWeapon;
 
 
 
     void Start()
     {
         player = GameObject.FindWithTag("Player");
-        body = GetComponent<Rigidbody2D>();
+        mBody = GetComponent<Rigidbody2D>();
         lineToPlayer = GetComponent<LineRenderer>();
         mAnimator = GetComponent<Animator>();
-        AnimationState("run");
+        Utils.AnimationState(mAnimator, "run");
     }
 
     private void FixedUpdate()
@@ -60,24 +63,24 @@ public class SniperController : MonoBehaviour
             {
                 switch (currentState)
                 {
-                    case (SniperState.Idle):
+                    case (State.Idle):
                         if (timer >= timeToMove)
                         {
-                            Vector2 randomDir = RandomVector2(3.1415f * 2, 0f);
+                            Vector2 randomDir = Utils.RandomVector2(3.1415f * 2, 0f);
                             randomDir.Normalize();
-                            body.velocity = randomDir * idleSpeed * Time.deltaTime;
+                            mBody.velocity = randomDir * idleSpeed * Time.deltaTime;
                             timer = 0f;
                         }
                         break;
 
-                    case (SniperState.Aim):
-                        body.velocity = Vector2.zero;
+                    case (State.Aim):
+                        mBody.velocity = Vector2.zero;
                         break;
-                    case (SniperState.Shoot):
-                        body.velocity = Vector2.zero;
+                    case (State.Shoot):
+                        mBody.velocity = Vector2.zero;
                         break;
-                    case (SniperState.Dead):
-                        body.velocity = Vector2.zero;
+                    case (State.Dead):
+                        mBody.velocity = Vector2.zero;
                         break;
                 }
 
@@ -87,71 +90,60 @@ public class SniperController : MonoBehaviour
 
     void Update()
     {
-        if (gameObject != null)
+        GameObject mObj = this.gameObject;
+        if (mObj != null)
         {
             timer += Time.deltaTime;
-
-            FlipSprites();
-            if (gameObject.transform.parent == null || !gameObject.transform.parent.CompareTag("Weapon"))
+            bool playerInRange = Utils.isPlayerClose(mObj, player, range);
+            Utils.FlipSprites(mObj, player);
+            if (mObj.transform.parent == null || !mObj.transform.parent.CompareTag("Weapon"))
             {
-                if (!isPlayerClose())
-                    currentState = SniperState.Idle;
-                if(isPlayerClose() && !isAttacking)
-                    currentState = SniperState.Aim;
+                if (!playerInRange)
+                    currentState = State.Idle;
+                if(playerInRange && !isAttacking)
+                    currentState = State.Aim;
                 else
-                    currentState = SniperState.Shoot;
-                float eyeHP = body.GetComponent<HealthSystem>().getHealth();
+                    currentState = State.Shoot;
+                float eyeHP = mBody.GetComponent<HealthSystem>().getHealth();
                 if (eyeHP <= 0)
-                    currentState = SniperState.Dead;
+                    currentState = State.Dead;
 
                 switch (currentState)
                 {
-                    case (SniperState.Idle):
-                        AnimationState("idle");
+                    case (State.Idle):
+                        Utils.AnimationState(mAnimator, "idle");
                         lineToPlayer.enabled = false;
                         break;
 
-                    case (SniperState.Aim):
+                    case (State.Aim):
                             //Debug.Log("hello aim here");
-                        DrawLineToPlayer();
-                        EnableAiming();
+                        Utils.DrawLine(lineToPlayer, mObj, player);
+                        AimAtPlayer(player, sniperWeapon);
                         if (timer >= aimTimer)
                         {
-                            currentState = SniperState.Shoot;
+                            currentState = State.Shoot;
                             isAttacking = true;
                             timer = 0f;
                         }
                         break;
-                    case (SniperState.Shoot):
+                    case (State.Shoot):
                         lineToPlayer.enabled = false;
-                        if(timer >= cooldownTimer && isPlayerClose())
+                        if(timer >= cooldownTimer && playerInRange)
                         {
                             Shoot(player);
-                            currentState = SniperState.Idle;
+                            currentState = State.Idle;
                             isAttacking = false;
                             timer = 0f;
                         }
                         break;
-                    case (SniperState.Dead):
-                        AnimationState("dead");
-                        gameObject.layer = LayerMask.NameToLayer("Dead Objects");
+                    case (State.Dead):
+                        Utils.AnimationState(mAnimator, "dead");
+                        mObj.layer = LayerMask.NameToLayer("Dead Objects");
                         lineToPlayer.enabled = false;
                         break;
                 }
             }
         }
-    }
-
-    private bool isPlayerClose()
-    {
-        if (player == null)
-            return false;
-
-        float distance = Vector3.Distance(transform.position, player.transform.position);
-        if (distance >= range)
-            return false;
-        else
-            return true;
     }
 
     private void Shoot(GameObject objToShoot)
@@ -167,51 +159,16 @@ public class SniperController : MonoBehaviour
             Destroy(bulletInstance, bulletDeathTimer);
         }
     }
-    private void EnableAiming()
+    
+    public void AimAtPlayer(GameObject player, GameObject weapon)
     {
-        Vector3 aimDir = (player.transform.position - transform.position).normalized;
+        Vector3 aimDir = (player.transform.position - weapon.transform.position).normalized;
         float angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
         if (angle > -90f && angle < 90f)
-            sniperWeapon.GetComponent<SpriteRenderer>().flipY = false;
+            weapon.GetComponent<SpriteRenderer>().flipY = false;
         else
-            sniperWeapon.GetComponent<SpriteRenderer>().flipY = true;
-        sniperWeapon.transform.eulerAngles = new Vector3(0, 0, angle);
+            weapon.GetComponent<SpriteRenderer>().flipY = true;
+        weapon.transform.eulerAngles = new Vector3(0, 0, angle);
     }
 
-    public void DrawLineToPlayer()
-    {
-        lineToPlayer.enabled = true;
-        lineToPlayer.material = new Material(Shader.Find("Sprites/Default"));
-        lineToPlayer.material.color = Color.red;
-        lineToPlayer.SetPosition(0, transform.position);
-        lineToPlayer.SetPosition(1, player.transform.position);
-    }
-
-    public Vector3 GetMouseWorldPosition(Vector3 screenPos)
-    {
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
-        return worldPos;
-    }
-
-    public Vector2 RandomVector2(float angle, float angleMin)
-    {
-        float random = UnityEngine.Random.value * angle + angleMin;
-        return new Vector2(Mathf.Cos(random), Mathf.Sin(random));
-    }
-    public void FlipSprites()
-    {
-        body.GetComponent<SpriteRenderer>().flipX = (player.transform.position.x < transform.position.x);
-    }
-
-    private void AnimationState(string currState)
-    {
-        if(mAnimator != null) 
-        {
-            mAnimator.SetBool("idle", false);
-            mAnimator.SetBool("run", false);
-            mAnimator.SetBool("shoot", false);
-            mAnimator.SetBool("dead", false);
-            mAnimator.SetBool(currState, true);
-        }
-    }
 }

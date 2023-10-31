@@ -5,59 +5,72 @@ using UnityEngine;
 
 public class Explosives : MonoBehaviour
 {
-    public float damage = 50f;
-    public float splashRange = 1f;
-    private HealthSystem mHealthSystem;
-    private Rigidbody2D body;
-    public Animator mAnimator;
-    public AudioSource explosionSound;
-    public List<LayerMask> damageLayers = new List<LayerMask>();
+    private Rigidbody2D mBody;
+    private Animator mAnimator;
+    private HealthSystem mHealth;
     private bool hasExploded = false;
+
+    [Header("Explosive Parameters")]
+    [SerializeField] private float damage = 50f;
+    [SerializeField] private float explosionForce = 100f;
+    [SerializeField] private float splashRange = 1f;
+    [SerializeField] private LayerMask damageLayers;
+    public AudioSource explosionSound;
 
     private void Start()
     {
-        mHealthSystem = GetComponent<HealthSystem>();
+        mHealth = GetComponent<HealthSystem>();
         mAnimator = GetComponent<Animator>();
-        body = GetComponent<Rigidbody2D>();
-        damageLayers.Add(LayerMask.NameToLayer("Enemies"));
+        mBody = GetComponent<Rigidbody2D>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Barrel health is " + mHealthSystem.getHealth());
-        if(splashRange > 0 && mHealthSystem.getHealth() <= 50 && !hasExploded)
+        if(splashRange > 0 && mHealth.getHealth() <= 50)
         {
             Explode();
         }
-        
     }
 
     public void Explode()
     {
-        foreach (LayerMask mask in damageLayers)
+        if (!hasExploded)
         {
-            var hitColliders = Physics2D.OverlapCircleAll(this.transform.position, splashRange, mask);
-            foreach (var hitCollider in hitColliders)
+            var hits = Physics2D.OverlapCircleAll(this.transform.position, splashRange, damageLayers);
+            foreach (var hit in hits)
             {
-                var closestPoint = hitCollider.ClosestPoint(this.transform.position);
-                var distance = Vector3.Distance(closestPoint, this.transform.position);
-                var damagePercent = Mathf.InverseLerp(splashRange, 0, distance);
-                HealthSystem enemyHP = hitCollider.gameObject.GetComponent<HealthSystem>();
-                if (enemyHP != null)
+                GameObject objectHit = null;
+                if (hit.gameObject != null)
+                    objectHit = hit.gameObject;
+                if (objectHit != null && objectHit != this.gameObject)
                 {
-                    EnemyHealthbar enemyHealthbar = hitCollider.gameObject.GetComponentInChildren<EnemyHealthbar>();
-                    if (enemyHealthbar != null)
-                        enemyHealthbar.UpdateHealthbarUI(enemyHP.getHealth(), enemyHP.getHealthMax());
-                    enemyHP.Damage(damagePercent * damage);
-                    Debug.Log(enemyHP.name + " took " + damagePercent * damage);
+                    Rigidbody2D objectHitBody = objectHit.GetComponent<Rigidbody2D>();
+                    if(objectHitBody != null)
+                    {
+                        var forceDir = (objectHit.transform.position - this.transform.position).normalized;
+                        objectHitBody.AddForce(explosionForce * forceDir, ForceMode2D.Impulse);
+                    }
+                    var closestPoint = hit.ClosestPoint(this.transform.position);
+                    var distance = Vector3.Distance(closestPoint, this.transform.position);
+                    var damagePercent = Mathf.InverseLerp(splashRange, 0, distance);
+                    HealthSystem enemyHP = objectHit.GetComponent<HealthSystem>();
+                    if (enemyHP != null)
+                    {
+                        enemyHP.Damage(damagePercent * damage);
+                        EnemyHealthbar enemyHealthbar = objectHit.GetComponentInChildren<EnemyHealthbar>();
+                        if (enemyHealthbar != null)
+                            enemyHealthbar.UpdateHealthbarUI(enemyHP.getHealth(), enemyHP.getHealthMax());
+                        Debug.Log(enemyHP.name + " took " + damagePercent * damage + " from a barrel!!!");
+                    }
                 }
             }
+        
+            hasExploded = true;
+            mAnimator.SetBool("explode", true);
+            mBody.velocity = Vector2.zero;
+            if (explosionSound != null)
+                explosionSound.Play();
+            Destroy(this.gameObject, 1f);
         }
-        hasExploded = true;
-        mAnimator.SetBool("explode", true);
-        body.velocity = Vector2.zero;
-        if (explosionSound != null)
-            explosionSound.Play();
-        Destroy(this.gameObject, 1f);
     }
 }

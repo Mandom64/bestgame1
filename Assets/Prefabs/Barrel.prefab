@@ -524,8 +524,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d267893d7ee15d4a8afaa85edf634b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deleteTimer: 2
   deleteOnDeath: 0
+  deleteOnDeathTimer: 3
   healthMax: 50
 --- !u!114 &1524606076179293161
 MonoBehaviour:
@@ -555,12 +555,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 150
+  explosionForce: 5
   splashRange: 5
-  mAnimator: {fileID: 1499730917787611364}
-  explosionSound: {fileID: -3398900420929429338}
   damageLayers:
-  - serializedVersion: 2
-    m_Bits: 512
+    serializedVersion: 2
+    m_Bits: 205320
+  explosionSound: {fileID: -3398900420929429338}
 --- !u!1 &8551426819389615853
 GameObject:
   m_ObjectHideFlags: 0
