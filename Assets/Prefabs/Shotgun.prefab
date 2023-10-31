@@ -373,5 +373,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16418bb1e0c829a40a4673414130e324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAmmo: 300
+  maxAmmo: 3000
   canShoot: 1
