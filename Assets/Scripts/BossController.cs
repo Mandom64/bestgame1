@@ -26,8 +26,9 @@ public class BossController : MonoBehaviour
     private Rigidbody2D mBody;
     private Animator mAnimator;
     private GameObject player;
-    private float timer, timer2;
+    private float timer, timer2, mediumTimer;
     private float lastHP;
+
     [Header("Boss Parameters")]
     [SerializeField] public float overallRange = 20f;
     [SerializeField] public float closeRange = 2.5f;
@@ -36,6 +37,7 @@ public class BossController : MonoBehaviour
     [SerializeField] public float timeToMove = 1f;
     [SerializeField] public float engagedSpeed = 25f;
     [SerializeField] public bool canShoot = true;
+
     [Header("Close Range Attack")]
     [SerializeField] public AudioSource dashSound;
     [SerializeField] public float dashSpeed = 2000f;
@@ -43,20 +45,23 @@ public class BossController : MonoBehaviour
     [SerializeField] public float dashCooldown = 1f;
     [SerializeField] public float pounceTime = 0.25f;
     private bool isDashing = false;
+
     [Header("Medium Range Bullet")]
     [SerializeField] public GameObject bullet;
     [SerializeField] public float bulletSpeed = 50f;
     [SerializeField] public float bulletDeathTimer = 3f;
-    [SerializeField] public float bulletCooldown = 3f;
-    [SerializeField] public int bulletColumns = 6;
     [SerializeField] public int bulletRows = 6;
-    [SerializeField] public float columnDistance = 0.5f;
+    [SerializeField] public float rowDistance = 0.5f;
     [SerializeField] public float bulletSpread = 2.5f;
+
     [Header("Long Range Lance")]
     [SerializeField] public GameObject lance;
     [SerializeField] public float lanceSpeed = 50f;
     [SerializeField] public float lanceDeathTimer = 3f;
     [SerializeField] public float lanceCooldown = 3f;
+
+    [Header("Debug")]
+    [SerializeField] public bool _EditorShowRange = false;
 
     void Start()
     {
@@ -70,7 +75,8 @@ public class BossController : MonoBehaviour
     {
         timer += Time.fixedDeltaTime;
         timer2 += Time.fixedDeltaTime;
-        
+        mediumTimer += Time.fixedDeltaTime;
+
         if (this.gameObject == null)
             return;
         if(!isDashing)
@@ -161,7 +167,6 @@ public class BossController : MonoBehaviour
                     break;
             }
         }
-
     }
 
     private void CloseCharge()
@@ -175,28 +180,26 @@ public class BossController : MonoBehaviour
 
     private void MediumShoot(GameObject objToShoot)
     {
-        if (objToShoot != null)
+        if (objToShoot != null && canShoot)
         {
-            StartCoroutine(ShootCooldown(bulletCooldown));
-            float startAngle = -(bulletColumns / 2 * bulletSpread);
-            float angle;
-            for(int i = 0; i < bulletColumns; i++)
+            int counter = 0;
+            float startAngle = -(bulletRows / 2 * bulletSpread);
+            float angle = startAngle;
+
+            for (int j = 0; j < bulletRows; j++)
             {
-                angle = startAngle;
-                StartCoroutine(ShootCooldown(columnDistance));
-                for(int j = 0; j < bulletRows; j++)
-                {
-                    //Debug.Log(startAngle);
-                    Vector2 shootDir = (objToShoot.transform.position - transform.position).normalized;
-                    shootDir = Utils.RotateVector2(shootDir, angle);
-                    angle += bulletSpread;
-                    GameObject bulletInstance = Instantiate(bullet, transform.position, transform.rotation);
-                    Rigidbody2D bulletBody = bulletInstance.GetComponent<Rigidbody2D>();
-                    bulletInstance.layer = LayerMask.NameToLayer("Enemy Projectiles");
-                    bulletBody.AddForce(shootDir * bulletSpeed);
-                    Destroy(bulletInstance, bulletDeathTimer);
-                }
+                //Debug.Log(startAngle);
+                Vector2 shootDir = (objToShoot.transform.position - transform.position).normalized;
+                shootDir = Utils.RotateVector2(shootDir, angle);
+                angle += bulletSpread;
+                GameObject bulletInstance = Instantiate(bullet, transform.position, transform.rotation);
+                Rigidbody2D bulletBody = bulletInstance.GetComponent<Rigidbody2D>();
+                bulletInstance.layer = LayerMask.NameToLayer("Enemy Projectiles");
+                bulletBody.AddForce(shootDir * bulletSpeed);
+                Destroy(bulletInstance, bulletDeathTimer);
+                counter++;
             }
+            StartCoroutine(ShootCooldown(rowDistance));
         }
     }
 
@@ -204,13 +207,13 @@ public class BossController : MonoBehaviour
     {
         if (objToShoot != null)
         {
-            StartCoroutine(ShootCooldown(lanceCooldown));
             Vector2 shootDir = (objToShoot.transform.position - transform.position).normalized;
             GameObject lanceInstance = Instantiate(lance, transform.position, transform.rotation);
             Rigidbody2D lanceBody = lanceInstance.GetComponent<Rigidbody2D>();
             lanceInstance.layer = LayerMask.NameToLayer("Enemy Projectiles");
             lanceBody.AddForce(shootDir * lanceSpeed);
             Destroy(lanceInstance, lanceDeathTimer);
+            StartCoroutine(ShootCooldown(lanceCooldown));
         }
     }
 
@@ -235,15 +238,16 @@ public class BossController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        // Draw a line between the two positions
-        Gizmos.color = Color.gray;
-        Gizmos.DrawLine(transform.position, transform.position + new Vector3(overallRange, 0, 0));
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(transform.position, transform.position + new Vector3(longRange, 0, 0));
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(transform.position, transform.position + new Vector3(mediumRange, 0, 0));
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + new Vector3(closeRange, 0, 0));
-
+        if (_EditorShowRange)
+        {
+            Gizmos.color = Color.gray;
+            Gizmos.DrawWireSphere(transform.position, overallRange);
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position, longRange);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position, mediumRange);
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, closeRange);
+        }
     }
 }

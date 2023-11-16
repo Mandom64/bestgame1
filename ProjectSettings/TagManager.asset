@@ -8,8 +8,8 @@ TagManager:
   - Bullet
   - Pellet
   - Weapon
-  - SimpleRat
   - Healthpack
+  - Rat
   layers:
   - Default
   - TransparentFX
@@ -29,7 +29,7 @@ TagManager:
   - Healthpacks
   - Explosives
   - Bosses
-  - 
+  - Packs
   - 
   - 
   - 

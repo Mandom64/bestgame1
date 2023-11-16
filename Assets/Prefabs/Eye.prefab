@@ -459,16 +459,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 8
-  idleSpeed: 5
-  engagedSpeed: 1
-  timeToMove: 5
-  healthBar: {fileID: 0}
+  engagedSpeed: 100
+  timeToMove: 1
   EnableLine: 0
   bullet: {fileID: 3261428201285270749, guid: 8d19ea939d264e04295222d97796744c, type: 3}
   bulletSpeed: 6
   bulletDeathTimer: 3
   cooldownTimer: 2.5
   eye_dead: {fileID: -393214449, guid: 58982927945de414b83b75b60bbdd691, type: 3}
+  _EditorShowRange: 0
 --- !u!114 &7562215725066220184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -481,8 +480,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d267893d7ee15d4a8afaa85edf634b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deleteTimer: 3
+  isDead: 0
   deleteOnDeath: 1
+  deleteOnDeathTimer: 3
   healthMax: 120
 --- !u!114 &8267630558220306769
 MonoBehaviour:

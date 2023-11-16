@@ -509,7 +509,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 197376
   grabDistance: 10
-  shootForce: 50
+  shootForce: 25
   rayThickness: {x: 0.5, y: 0.5}
   rayDrawTime: 0.1
   cooldownTimer: 2

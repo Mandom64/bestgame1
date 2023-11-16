@@ -25,11 +25,11 @@ public class ButlerController : MonoBehaviour
     private LineRenderer lineToPlayer;
     private List<GameObject> rats; 
     private float timer = 0.0f;
+    private float spawnTimer = 0.0f;
     private float lastHP;
 
     [Header("Butler Parameters")]
     [SerializeField] private float range = 1f;
-    [SerializeField] private float idleSpeed = 15f;
     [SerializeField] private float engagedSpeed = 1f;
     [SerializeField] private float timeToMove = 5f;
     [SerializeField] private float spawnCooldown = 3f;
@@ -37,7 +37,9 @@ public class ButlerController : MonoBehaviour
     [SerializeField] private int ratLimit = 6;
     [SerializeField] private int RatsToSpawn = 2;
     [SerializeField] private bool EnableLine = false;
-   
+
+    [Header("Debug")]
+    [SerializeField] public bool _EditorShowRange = false;
 
     void Start()
     {
@@ -62,21 +64,18 @@ public class ButlerController : MonoBehaviour
                 switch (currentState)
                 {
                     case (State.Idle):
-                        if (timer >= timeToMove)
-                        {
-                            Vector2 randomDir = Utils.RandomVector2(3.1415f * 2, 0f);
-                            randomDir.Normalize();
-                            mBody.velocity = randomDir * idleSpeed * Time.fixedDeltaTime;
-                            timer = 0f;
-                        }
+                        mBody.velocity = Vector2.zero;
                         break;
                     case (State.Engaged):
-                        Vector2 movement = player.transform.position - mObj.transform.position;
-                        movement.Normalize();
-                        if (mBody.velocity != Vector2.zero)
-                            mBody.velocity = movement * engagedSpeed * Time.fixedDeltaTime;
-                        else
-                            mBody.velocity = Vector2.zero;
+                        if (timer >= timeToMove)
+                        {
+                            Vector3 playerDir = (player.transform.position - transform.position).normalized;
+                            Vector3 randomDir = Utils.RandomVector2(3.1415f * 2, 0f).normalized;
+                            Vector3 moveDir = playerDir + randomDir;
+                            moveDir.Normalize();
+                            mBody.velocity = moveDir * engagedSpeed * Time.fixedDeltaTime;
+                            timer = 0f;
+                        }
                         break;
                     case (State.Dead):
                         mBody.velocity = Vector2.zero;
@@ -87,7 +86,7 @@ public class ButlerController : MonoBehaviour
     }
     private void Update()
     {
-        timer += Time.deltaTime;
+        spawnTimer += Time.deltaTime;
         GameObject mObj = this.gameObject;
 
         if (mObj != null)
@@ -118,11 +117,11 @@ public class ButlerController : MonoBehaviour
                         if(EnableLine)
                             Utils.DrawLine(lineToPlayer, mObj, player);
                         checkAliveRats();
-                        if (timer >= spawnCooldown && rats.Count < ratLimit)
+                        if (spawnTimer >= spawnCooldown && rats.Count < ratLimit)
                         {
                             SpawnRats();
                             Utils.AnimationState(mAnimator, "spawn");
-                            timer = 0f;
+                            spawnTimer = 0f;
                         }
                         else
                         {
@@ -166,6 +165,14 @@ public class ButlerController : MonoBehaviour
                     rats.RemoveAt(i);
                 }
             }
+        }
+    }
+    private void OnDrawGizmos()
+    {
+        if(_EditorShowRange)
+        {
+            Gizmos.color = Color.gray;
+            Gizmos.DrawWireSphere(transform.position, range);
         }
     }
 }

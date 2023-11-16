@@ -23,11 +23,13 @@ public static class Utils
             weapon.GetComponent<SpriteRenderer>().flipY = true;
         weapon.transform.eulerAngles = new Vector3(0, 0, angle);
     }
+
     public static Vector2 RandomVector2(float angle, float angleMin)
     {
         float random = Random.value * angle + angleMin;
         return new Vector2(Mathf.Cos(random), Mathf.Sin(random));
     }
+
     public static Vector2 RotateVector2(Vector2 vector, float angleDegrees)
     {
         // Convert the angle to radians because Mathf.Cos and Mathf.Sin use radians
@@ -54,10 +56,12 @@ public static class Utils
     {
         mObj.GetComponent<SpriteRenderer>().flipX = (player.transform.position.x <= mObj.transform.position.x);
     }
+
     public static float PlayerDistance(GameObject mObj, GameObject player) 
     {
         return Vector3.Distance(mObj.transform.position, player.transform.position); 
     }
+
     public static bool isPlayerClose(GameObject me, GameObject player, float range)
     {
         if (player == null || me == null)
@@ -69,6 +73,7 @@ public static class Utils
         else
             return true;
     }
+
     public static void DrawLine(LineRenderer line, GameObject me, GameObject at)
     {
         line.enabled = true;
@@ -76,5 +81,13 @@ public static class Utils
         line.material.color = Color.red;
         line.SetPosition(0, me.transform.position);
         line.SetPosition(1, at.transform.position);
+    }
+
+    public static IEnumerator PauseMovement(Rigidbody2D body, bool pauseFlag, float timePaused)
+    {
+        pauseFlag = true;
+        body.velocity = Vector2.zero;
+        yield return new WaitForSeconds(timePaused);
+        pauseFlag = false;
     }
 }

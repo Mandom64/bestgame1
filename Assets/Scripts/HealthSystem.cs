@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class HealthSystem : MonoBehaviour
 {
     private float health;
-    private bool isDead = false;
+    public bool isDead = false;
 
     [Header("My health parameters")]
     [SerializeField] private bool deleteOnDeath = true;

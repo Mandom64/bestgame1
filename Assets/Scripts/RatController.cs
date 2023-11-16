@@ -22,6 +22,7 @@ public class RatController : MonoBehaviour
     private LineRenderer lineToPlayer;
     private Animator mAnimator;
     public AudioSource attackSound;
+    private bool pauseMovement = false;
     private bool isAttacking = false;
     private bool isPouncing = false;
     public bool EnableLine = false;
@@ -36,8 +37,9 @@ public class RatController : MonoBehaviour
     [SerializeField] public float attackTime = 1f;
     [SerializeField] public float attackCooldown = 5f;
     [SerializeField] public float pounceTime = 0.25f;
-   
 
+    [Header("Debug")]
+    [SerializeField] public bool _EditorShowRange = false;
     void Start()
     {
         player = GameObject.FindWithTag("Player");
@@ -66,37 +68,41 @@ public class RatController : MonoBehaviour
             Utils.FlipSprites(this.gameObject, player);
 
             // Check if im grabbed by gravity gun
-            if (gameObject.transform.parent == null || !gameObject.transform.parent.CompareTag("Weapon"))
+            if (gameObject.transform.parent == null ||
+                !gameObject.transform.parent.CompareTag("Weapon") &&
+                !pauseMovement)
             {
                 switch (currentState)
                 {
                     case (State.Idle):
                         lineToPlayer.enabled = false;
-                        if (timer >= timeToMove && !isAttacking && !isPouncing)
-                        {
-                            Utils.AnimationState(mAnimator, "run");
-                            Vector2 randomDir = Utils.RandomVector2(3.1415f * 2, 0f);
-                            randomDir.Normalize();
-                            mBody.velocity = randomDir * idleSpeed * Time.fixedDeltaTime;
-                            timer = 0f;
-                        }
+                        //if (timer >= timeToMove && !isAttacking && !isPouncing)
+                        //{
+                        //    Utils.AnimationState(mAnimator, "run");
+                        //    Vector2 randomDir = Utils.RandomVector2(3.1415f * 2, 0f).normalized;
+                        //    mBody.AddForce(randomDir * idleSpeed); 
+                        //    timer = 0f;
+                        //}
+                        mBody.velocity = Vector2.zero;
                         break;
 
                     case (State.Engaged):
                         if (!isAttacking && !isPouncing)
                         {
-                            Vector2 movement = player.transform.position - transform.position;
-                            movement.Normalize();
+                            Vector2 moveDir = (player.transform.position - this.transform.position).normalized;
                             if (mBody.velocity != Vector2.zero)
                             {
-                                var step = engagedSpeed * Time.deltaTime;
-                                transform.position = Vector3.MoveTowards(transform.position,
-                                    player.transform.position, step);
+                                //var step = engagedSpeed * Time.deltaTime;
+                                //transform.position = Vector3.MoveTowards(transform.position,
+                                //    player.transform.position, step);
+                                //mBody.velocity = mBody.velocity * engagedSpeed * Time.fixedDeltaTime;
+                                mBody.AddForce(moveDir * engagedSpeed);
                                 Utils.AnimationState(mAnimator, "run");
                             }
                             else
                             {
-                                mBody.velocity = Vector2.zero;
+                                //mBody.velocity = Vector2.zero;
+                                mBody.AddForce(Vector2.zero);
                                 Utils.AnimationState(mAnimator, "idle");
                             }
                         }
@@ -104,7 +110,7 @@ public class RatController : MonoBehaviour
 
                     case (State.Dead):
                         lineToPlayer.enabled = false;
-                        Utils.AnimationState(mAnimator, "idle");
+                        Utils.AnimationState(mAnimator, "dead");
                         mBody.velocity = Vector2.zero;
                         gameObject.layer = LayerMask.NameToLayer("Dead Objects");
                         break;
@@ -177,5 +183,14 @@ public class RatController : MonoBehaviour
         mBody.velocity = Vector2.zero;
         yield return new WaitForSeconds(pounceTime);
         isPouncing = false;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if(_EditorShowRange)
+        {
+            Gizmos.color = Color.gray;
+            Gizmos.DrawWireSphere(transform.position, range);
+        }
     }
 }

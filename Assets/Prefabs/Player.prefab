@@ -162,7 +162,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 47aab249c3207ba4981c838f7269ad7b, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 65e8d329583a79848b6ed50037f9d4eb, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.5
   m_Pitch: 1
@@ -356,19 +356,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1194320dea466145b713acddfc8953f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 0}
-  inventoryObject: {fileID: 6783265323322517004, guid: 8f6d4aa6ceedf96aa9cd371d8fd97ab7, type: 3}
+  inventoryObj: {fileID: 0}
   moveSpeed: 5
   baseWallDamage: 1
   wallDamageMultiplier: 10
   dashSound: {fileID: -318081515884133566}
   itemTakenSound: {fileID: -3748084567148754692}
+  inventory: []
   currItem: 0
   grabbableLayer:
     serializedVersion: 2
     m_Bits: 1024
   grabDistance: 1
   grabCooldown: 0.5
+  grabRayThickness: {x: 0.5, y: 0.5}
   dashForce: 100
   dashTime: 0.15
   dashCooldown: 0.35
@@ -384,5 +385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d267893d7ee15d4a8afaa85edf634b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDead: 0
+  deleteOnDeath: 1
+  deleteOnDeathTimer: 3
   healthMax: 1000
-  deleteTimer: 3

@@ -7,52 +7,68 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-enum RatEXState
-{
-    Idle,
-    Engaged,
-    Dead,
-};
 
 public class RatEXController : MonoBehaviour
 {
-    private Rigidbody2D body;
-    private GameObject player;
-    private LineRenderer lineToPlayer;
-    private Animator mAnimator;
-    private RatEXState currentState = RatEXState.Idle;
-    public AudioSource explosionSound;
-    [Header("Rat Parameters")]
-    public float range = 1f;
-    public float timeToMove = 5f;
-    public float idleSpeed = 15f;
-    public float engagedSpeed = 1f;
-    public bool EnableLine = false;
-    [Header("Explosion Parameters")]
-    public float damage = 50f;
-    public float splashRange = 1f;
-    public float playerExplosionDistance = 1f;
-    public float flashDistance = 3f;
+    private enum State
+    {
+        Idle,
+        Engaged,
+        Dead,
+    };
+
+    private State currentState = State.Idle;
     private HealthSystem mHealth;
-    public List<LayerMask> damageLayers = new List<LayerMask>();
+    private Rigidbody2D mBody;
+    private GameObject player;
+    private Animator mAnimator;
+    private LineRenderer lineToPlayer;
+    private float timer = 0.0f;
+
+    [Header("Rat Parameters")]
+    [SerializeField] private float range = 1f;
+    [SerializeField] private float timeToMove = 5f;
+    [SerializeField] private float idleSpeed = 15f;
+    [SerializeField] private float engagedSpeed = 1f;
+    [SerializeField] private bool EnableLine = false;
+
+    [Header("Explosion Parameters")]
+    [SerializeField] private AudioSource explosionSound;
+    [SerializeField] private float damage = 50f;
+    [SerializeField] private float explosionForce = 100f;
+    [SerializeField] private float splashRange = 1f;
+    [SerializeField] private float playerExplosionDistance = 1f;
+    [SerializeField] private float flashDistance = 3f;
+    public LayerMask damageLayers;
     private bool hasExploded = false;
-    float timer = 0.0f;
+
+    [Header("Debug")]
+    [SerializeField] public bool _EditorShowRange = false;
 
 
     void Start()
     {
         player = GameObject.FindWithTag("Player");
-        body = GetComponent<Rigidbody2D>();
+        mBody = GetComponent<Rigidbody2D>();
         mHealth = GetComponent<HealthSystem>();
-        damageLayers.Add(LayerMask.NameToLayer("Player"));
         mAnimator = GetComponent<Animator>();
         lineToPlayer = GetComponent<LineRenderer>();
-        body.velocity = new Vector2(1, 1);
+        mBody.velocity = new Vector2(1, 1);
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         timer += Time.deltaTime;
+        FixedBehavior();
+    }
+    void Update()
+    {
+        timer += Time.deltaTime;
+        ContBehavior();
+    }
+
+    private void FixedBehavior()
+    {
         if (gameObject != null)
         {
             // Check if im grabbed by gravity gun
@@ -60,67 +76,68 @@ public class RatEXController : MonoBehaviour
             {
                 switch (currentState)
                 {
-                    case (RatEXState.Idle):
-                        if (timer >= timeToMove)
-                        {
-                            AnimationState("run");
-                            Vector2 randomDir = RandomVector2(3.1415f * 2, 0f);
-                            randomDir.Normalize();
-                            body.velocity = randomDir * idleSpeed * Time.fixedDeltaTime;
-                            timer = 0f;
-                        }
+                    case (State.Idle):
+                        //if (timer >= timeToMove)
+                        //{
+                        //    Utils.AnimationState(mAnimator, "run");
+                        //    Vector2 randomDir = Utils.RandomVector2(3.1415f * 2, 0f);
+                        //    randomDir.Normalize();
+                        //    mBody.velocity = randomDir * idleSpeed * Time.fixedDeltaTime;
+                        //    timer = 0f;
+                        //}
+                        mBody.velocity = Vector2.zero;
                         break;
-                    case (RatEXState.Engaged):
+                    case (State.Engaged):
                         Vector2 movement = player.transform.position - transform.position;
                         movement.Normalize();
-                        if (body.velocity != Vector2.zero)
+                        if (mBody.velocity != Vector2.zero)
                         {
-                            body.velocity = movement * engagedSpeed * Time.fixedDeltaTime;
-                            if (PlayerDistance() <= flashDistance)
-                                AnimationState("flash_run");
+                            mBody.velocity = movement * engagedSpeed * Time.fixedDeltaTime;
+                            if (Utils.PlayerDistance(this.gameObject, player) <= flashDistance)
+                                Utils.AnimationState(mAnimator, "flash_run");
                             else
-                                AnimationState("run");
+                                Utils.AnimationState(mAnimator, "run");
                         }
                         else
                         {
-                            body.velocity = Vector2.zero;
-                            AnimationState("idle");
+                            mBody.velocity = Vector2.zero;
+                            Utils.AnimationState(mAnimator, "idle");
                         }
                         break;
-                    case (RatEXState.Dead):
-                        AnimationState("idle");
-                        body.velocity = Vector2.zero;
+                    case (State.Dead):
+                        Utils.AnimationState(mAnimator, "idle");
+                        mBody.velocity = Vector2.zero;
                         gameObject.layer = LayerMask.NameToLayer("Dead Objects");
                         break;
                 }
             }
         }
     }
-    void Update()
+
+    private void ContBehavior()
     {
-        timer += Time.deltaTime;
         if (gameObject != null)
         {
-            FlipSprites();
+            Utils.FlipSprites(this.gameObject, player);
             if (gameObject.transform.parent == null || !gameObject.transform.parent.CompareTag("Weapon"))
             {
-                if (!isPlayerClose())
-                    currentState = RatEXState.Idle;
+                if (!Utils.isPlayerClose(this.gameObject, player, range))
+                    currentState = State.Idle;
                 else
-                    currentState = RatEXState.Engaged;
-                float butlerHP = body.GetComponent<HealthSystem>().getHealth();
+                    currentState = State.Engaged;
+                float butlerHP = mBody.GetComponent<HealthSystem>().getHealth();
                 if (butlerHP <= 0)
-                    currentState = RatEXState.Dead;
+                    currentState = State.Dead;
 
                 switch (currentState)
                 {
-                    case (RatEXState.Idle):
+                    case (State.Idle):
                         lineToPlayer.enabled = false;
                         break;
-                    case (RatEXState.Engaged):
+                    case (State.Engaged):
                         if (EnableLine)
-                            DrawLineToPlayer();
-                        if(PlayerDistance() <= playerExplosionDistance)
+                            Utils.DrawLine(lineToPlayer, this.gameObject, player);
+                        if (Utils.PlayerDistance(this.gameObject, player) <= playerExplosionDistance)
                         {
                             if (splashRange > 0 && !hasExploded)
                             {
@@ -128,7 +145,7 @@ public class RatEXController : MonoBehaviour
                             }
                         }
                         break;
-                    case (RatEXState.Dead):
+                    case (State.Dead):
                         gameObject.layer = LayerMask.NameToLayer("Dead Objects");
                         lineToPlayer.enabled = false;
                         break;
@@ -136,85 +153,55 @@ public class RatEXController : MonoBehaviour
             }
         }
     }
-    public void Explode()
+
+    private void Explode()
     {
-        foreach (LayerMask mask in damageLayers)
+        if (!hasExploded)
         {
-            var hitColliders = Physics2D.OverlapCircleAll(this.transform.position, splashRange, mask);
-            foreach (var hitCollider in hitColliders)
+            var hits = Physics2D.OverlapCircleAll(this.transform.position, splashRange, damageLayers);
+            foreach (var hit in hits)
             {
-                var closestPoint = hitCollider.ClosestPoint(this.transform.position);
-                var distance = Vector3.Distance(closestPoint, this.transform.position);
-                var damagePercent = Mathf.InverseLerp(splashRange, 0, distance);
-                HealthSystem enemyHP = hitCollider.gameObject.GetComponent<HealthSystem>();
-                Debug.Log(enemyHP.name + "is hit by exploding rat");
-                if (enemyHP != null)
+                GameObject objectHit = null;
+                if (hit.gameObject != null)
+                    objectHit = hit.gameObject;
+                if (objectHit != null && objectHit != this.gameObject)
                 {
-                    enemyHP.Damage(damagePercent * damage);
-                    Debug.Log(enemyHP.name + " took " + damagePercent * damage);
+                    Rigidbody2D objectHitBody = objectHit.GetComponent<Rigidbody2D>();
+                    if (objectHitBody != null)
+                    {
+                        var forceDir = (objectHit.transform.position - this.transform.position).normalized;
+                        objectHitBody.AddForce(explosionForce * forceDir, ForceMode2D.Impulse);
+                    }
+                    var closestPoint = hit.ClosestPoint(this.transform.position);
+                    var distance = Vector3.Distance(closestPoint, this.transform.position);
+                    var damagePercent = Mathf.InverseLerp(splashRange, 0, distance);
+                    HealthSystem enemyHP = objectHit.GetComponent<HealthSystem>();
+                    if (enemyHP != null)
+                    {
+                        enemyHP.Damage(damagePercent * damage);
+                        EnemyHealthbar enemyHealthbar = objectHit.GetComponentInChildren<EnemyHealthbar>();
+                        if (enemyHealthbar != null)
+                            enemyHealthbar.UpdateHealthbarUI(enemyHP.getHealth(), enemyHP.getHealthMax());
+                        Debug.Log(enemyHP.name + " took " + damagePercent * damage + " from an explosive rat!!!");
+                    }
                 }
             }
+
+            hasExploded = true;
+            mAnimator.SetBool("explode", true);
+            mBody.velocity = Vector2.zero;
+            if (explosionSound != null)
+                explosionSound.Play();
+            Destroy(this.gameObject, 0.75f);
         }
-        hasExploded = true;
-        body.velocity = Vector2.zero;
-        currentState = RatEXState.Dead;
-        mAnimator.SetBool("explosion", true);
-        if(explosionSound != null)
-            explosionSound.Play();
-        Destroy(this.gameObject, 1f);
-    }
-    private bool isPlayerClose()
-    {
-        if (player == null)
-            return false;
-
-        float distance = Vector3.Distance(transform.position, player.transform.position);
-        if (distance >= range)
-            return false;
-        else
-            return true;
     }
 
-    private float PlayerDistance()
+    private void OnDrawGizmos()
     {
-        float distance = Vector3.Distance(transform.position, player.transform.position);
-        return distance;
-    }
-
-    public void DrawLineToPlayer()
-    {
-        lineToPlayer.enabled = true;
-        lineToPlayer.material = new Material(Shader.Find("Sprites/Default"));
-        lineToPlayer.material.color = Color.red;
-        lineToPlayer.SetPosition(0, transform.position);
-        lineToPlayer.SetPosition(1, player.transform.position);
-    }
-
-    public Vector3 GetMouseWorldPosition(Vector3 screenPos)
-    {
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
-        return worldPos;
-    }
-
-    public Vector2 RandomVector2(float angle, float angleMin)
-    {
-        float random = UnityEngine.Random.value * angle + angleMin;
-        return new Vector2(Mathf.Cos(random), Mathf.Sin(random));
-    }
-
-    void AnimationState(string currState)
-    {
-        if (mAnimator != null)
+        if (_EditorShowRange)
         {
-            mAnimator.SetBool("idle", false);
-            mAnimator.SetBool("run", false);
-            mAnimator.SetBool("flash_run", false);
-            mAnimator.SetBool("explosion", false);
-            mAnimator.SetBool(currState, true);
+            Gizmos.color = Color.gray;
+            Gizmos.DrawWireSphere(transform.position, range);
         }
-    }
-    public void FlipSprites()
-    {
-        body.GetComponent<SpriteRenderer>().flipX = (player.transform.position.x < transform.position.x);
     }
 }

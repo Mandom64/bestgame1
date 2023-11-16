@@ -408,6 +408,7 @@ GameObject:
   - component: {fileID: 435459477952204786}
   - component: {fileID: 8002670466616402955}
   - component: {fileID: 3621731440101497727}
+  - component: {fileID: -7991705689665894786}
   m_Layer: 9
   m_Name: Butler
   m_TagString: Untagged
@@ -672,14 +673,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 3
-  idleSpeed: 250
   engagedSpeed: 1
   timeToMove: 2
   spawnCooldown: 3
+  rat: {fileID: 1842902642620573894, guid: 672418a26e2630742bb132b699b2d161, type: 3}
   ratLimit: 4
   RatsToSpawn: 2
   EnableLine: 0
-  rat: {fileID: 1842902642620573894, guid: 672418a26e2630742bb132b699b2d161, type: 3}
+  _EditorShowRange: 0
 --- !u!114 &435459477952204786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -692,8 +693,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d267893d7ee15d4a8afaa85edf634b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deleteTimer: 3
+  isDead: 0
   deleteOnDeath: 1
+  deleteOnDeathTimer: 3
   healthMax: 350
 --- !u!114 &8002670466616402955
 MonoBehaviour:
@@ -731,3 +733,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-7991705689665894786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7329148490360803037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6dc086cd54da1498b8089f1aabfc8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ammoPellet: {fileID: 372246593516460149, guid: 2c2add4d278923942b2aa835e131e105, type: 3}
+  minAmmoPellets: 1
+  maxAmmoPellets: 15
+  healthPellet: {fileID: 1604570328555421870, guid: 3972de92d00bd804c9abf75dd72043a2, type: 3}
+  minHealthPellets: 0
+  maxHealthPellets: 1

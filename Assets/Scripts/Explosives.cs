@@ -17,6 +17,9 @@ public class Explosives : MonoBehaviour
     [SerializeField] private LayerMask damageLayers;
     public AudioSource explosionSound;
 
+    [Header("Debug")]
+    [SerializeField] public bool _EditorShowRange = false;
+
     private void Start()
     {
         mHealth = GetComponent<HealthSystem>();
@@ -71,6 +74,14 @@ public class Explosives : MonoBehaviour
             if (explosionSound != null)
                 explosionSound.Play();
             Destroy(this.gameObject, 1f);
+        }
+    }
+    private void OnDrawGizmos()
+    {
+        if (_EditorShowRange)
+        {
+            Gizmos.color = Color.gray;
+            Gizmos.DrawWireSphere(transform.position, splashRange);
         }
     }
 }

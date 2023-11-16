@@ -41,7 +41,8 @@ public class SniperController : MonoBehaviour
     [SerializeField] public float cooldownTimer = 3f;
     private bool isAttacking = false;
 
-
+    [Header("Debug")]
+    [SerializeField] public bool _EditorShowRange = false;
 
     void Start()
     {
@@ -64,13 +65,7 @@ public class SniperController : MonoBehaviour
                 switch (currentState)
                 {
                     case (State.Idle):
-                        if (timer >= timeToMove)
-                        {
-                            Vector2 randomDir = Utils.RandomVector2(3.1415f * 2, 0f);
-                            randomDir.Normalize();
-                            mBody.velocity = randomDir * idleSpeed * Time.deltaTime;
-                            timer = 0f;
-                        }
+                        mBody.velocity = Vector2.zero;
                         break;
 
                     case (State.Aim):
@@ -137,6 +132,8 @@ public class SniperController : MonoBehaviour
                         }
                         break;
                     case (State.Dead):
+                        PackSpawner packSpawner = GetComponent<PackSpawner>();
+                        packSpawner.Spawn();
                         Utils.AnimationState(mAnimator, "dead");
                         mObj.layer = LayerMask.NameToLayer("Dead Objects");
                         lineToPlayer.enabled = false;
@@ -169,6 +166,15 @@ public class SniperController : MonoBehaviour
         else
             weapon.GetComponent<SpriteRenderer>().flipY = true;
         weapon.transform.eulerAngles = new Vector3(0, 0, angle);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (_EditorShowRange)
+        {
+            Gizmos.color = Color.gray;
+            Gizmos.DrawWireSphere(transform.position, range);
+        }
     }
 
 }

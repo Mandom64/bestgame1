@@ -22,15 +22,14 @@ public class EyeController : MonoBehaviour
     private Animator mAnimator;
     private GameObject player;
     private LineRenderer lineToPlayer;
+    private float moveTimer = 0.0f;
     private float timer = 0.0f;
     private float lastHP;
 
     [Header("Eye Parameters")]
     [SerializeField] public float range = 1f;
-    [SerializeField] public float idleSpeed = 1f;
     [SerializeField] public float engagedSpeed = 15f;
     [SerializeField] public float timeToMove = 5f;
-    [SerializeField] public Slider healthBar;
     [SerializeField] public bool EnableLine = false;
 
     [Header("Bullet Parameters")]
@@ -39,8 +38,9 @@ public class EyeController : MonoBehaviour
     [SerializeField] public float bulletDeathTimer = 3.0f;
     [SerializeField] public float cooldownTimer = 0.5f;
     [SerializeField] public Sprite eye_dead;
-    
-    
+
+    [Header("Debug")]
+    [SerializeField] public bool _EditorShowRange = false;
 
     void Start()
     {
@@ -63,32 +63,33 @@ public class EyeController : MonoBehaviour
 
     private void FixedBehavior()
     {
+        moveTimer += Time.deltaTime;
         GameObject mObj = this.gameObject;
+
         if (mObj != null)
         {
-            timer += Time.deltaTime;
             // Check if im grabbed by gravity gun
             if (mObj.transform.parent == null || !mObj.transform.parent.CompareTag("Weapon"))
             {
                 switch (currentState)
                 {
                     case (State.Idle):
-                        if (timer >= timeToMove)
-                        {
-                            Vector2 randomDir = Utils.RandomVector2(3.1415f * 2, 0f);
-                            randomDir.Normalize();
-                            mBody.velocity = randomDir * idleSpeed * Time.deltaTime;
-                            timer = 0f;
-                        }
+                        mBody.velocity = Vector2.zero;
                         break;
 
                     case (State.Engaged):
-                        // calculate distance to move
-                        var step = engagedSpeed * Time.deltaTime;
-                        transform.position = Vector3.MoveTowards(mObj.transform.position,
-                            player.transform.position, step);
+                        if (moveTimer >= timeToMove)
+                        {
+                            Vector3 playerDir = (player.transform.position - transform.position).normalized;
+                            Vector3 randomDir = Utils.RandomVector2(3.1415f * 2, 0f).normalized;
+                            Vector3 moveDir = playerDir + randomDir;
+                            moveDir.Normalize();
+                            mBody.velocity = moveDir * engagedSpeed * Time.fixedDeltaTime;
+                            moveTimer = 0f;
+                        }
                         break;
                     case (State.Struck):
+                        mBody.velocity = Vector2.zero;
                         break;
                     case (State.Dead):
                         mBody.velocity = Vector2.zero;
@@ -161,6 +162,14 @@ public class EyeController : MonoBehaviour
             bulletInstance.layer = LayerMask.NameToLayer("Enemy Projectiles");
             bulletBody.velocity = shootDir * bulletSpeed;
             Destroy(bulletInstance, bulletDeathTimer);
+        }
+    }
+    private void OnDrawGizmos()
+    {
+        if (_EditorShowRange)
+        {
+            Gizmos.color = Color.gray;
+            Gizmos.DrawWireSphere(transform.position, range);
         }
     }
 }

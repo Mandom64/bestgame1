@@ -215,19 +215,19 @@ public class PlayerController : MonoBehaviour
                 {
                     mHealth.Damage(damageAmount);
                     Destroy(objectHit);
-                    Debug.Log(mHealth + " took " + damageAmount + " from a Bullet()");
+                    Debug.Log(mHealth + " took " + damageAmount + " from a Bullet");
                 }
             }
         }
         if(objectHit.layer == LayerMask.NameToLayer("Enemies"))
         {
-            if(objectHit.CompareTag("SimpleRat"))
+            if(objectHit.CompareTag("Rat"))
             {
                 float damageAmount = objectHit.gameObject.GetComponent<Damage>().damage;
                 if (mHealth != null)
                 {
                     mHealth.Damage(damageAmount);
-                    Debug.Log(mHealth + " took " + damageAmount + " from a SIMPLE_RAT");
+                    Debug.Log(mHealth + " took " + damageAmount + " from a Rat");
                 }
             }
         }
