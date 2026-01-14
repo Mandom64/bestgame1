@@ -76,10 +76,11 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]enes/Dev.unity
 
 # TextMesh Pro font thingy
-[Aa]ssets/TextMesh Pro/Examples & Extras/Fonts
-Assets/Scenes/Dev.unity
-Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Bangers SDF.asset
-Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Electronic Highway Sign SDF.asset
-Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Roboto-Bold SDF.asset
-Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Oswald Bold SDF.asset
-log.txt
+/[Aa]ssets/TextMesh Pro/Examples & Extras/Fonts
+/[Aa]ssets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Bangers SDF.asset
+/[Aa]ssets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Electronic Highway Sign SDF.asset
+/[Aa]ssets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Roboto-Bold SDF.asset
+/[Aa]ssets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Oswald Bold SDF.asset
+
+# Vscode settings
+./vscode
