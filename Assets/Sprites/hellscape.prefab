@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3537179239315989307}
   - component: {fileID: 1690008060159841674}
   m_Layer: 0
-  m_Name: hellscape
+  m_Name: Hellscape
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
