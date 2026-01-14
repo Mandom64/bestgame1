@@ -70,3 +70,16 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Scenes
+/[Aa]ssets/[Ss]enes/Dev.unity.meta
+/[Aa]ssets/[Ss]enes/Dev.unity
+
+# TextMesh Pro font thingy
+[Aa]ssets/TextMesh Pro/Examples & Extras/Fonts
+Assets/Scenes/Dev.unity
+Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Bangers SDF.asset
+Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Electronic Highway Sign SDF.asset
+Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Roboto-Bold SDF.asset
+Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Oswald Bold SDF.asset
+log.txt

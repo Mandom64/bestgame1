@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Walls
+  - Bullet
+  - Pellet
+  - Weapon
+  - Healthpack
+  - Rat
   layers:
   - Default
   - TransparentFX
@@ -13,18 +18,18 @@ TagManager:
   - Water
   - UI
   - Ground
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player Projectiles
+  - Walls
+  - Enemies
+  - Grabbable Items
+  - Inventory Items
+  - Enemy Projectiles
+  - Spawners
+  - Dead Objects
+  - Healthpacks
+  - Explosives
+  - Bosses
+  - Packs
   - 
   - 
   - 
